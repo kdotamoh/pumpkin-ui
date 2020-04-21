@@ -1,5 +1,5 @@
-import React from "react";
-import { Alert } from "antd";
+import React from 'react';
+import { Alert } from 'antd';
 
 function App() {
   return (
