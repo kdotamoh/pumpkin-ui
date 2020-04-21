@@ -1,0 +1,19 @@
+.login-page {
+  display: grid;
+  grid-template-areas: 'main image';
+  grid-template-columns: 50% 50%;
+}
+
+.login-page__main {
+  grid-area: main;
+  padding: 4rem;
+}
+
+.login-page__image {
+  grid-area: image;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
