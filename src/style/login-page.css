@@ -2,7 +2,7 @@
   display: grid;
   grid-template-areas: 'main image';
   grid-template-columns: 50% 50%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .login-page__navigation {
@@ -13,6 +13,9 @@
 .login-page__main {
   grid-area: main;
   padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .login-page__image {
@@ -27,7 +30,6 @@
   flex-direction: column;
   width: 40rem;
   margin: 0 auto;
-  margin-top: 15rem;
 }
 
 .login-form__input {

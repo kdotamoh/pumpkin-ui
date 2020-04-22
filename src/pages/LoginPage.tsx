@@ -37,6 +37,15 @@ export const LoginPage: FunctionComponent = () => {
             Login
           </button>
         </form>
+
+        <div className="login-page__navigation">
+          <div>
+            <a href="#/">Impress</a>
+            <span>o</span>
+            <a href="#/">Privacy</a>
+          </div>
+          <a href="#/">oEN</a>
+        </div>
       </div>
       <div className="login-page__image" />
     </div>
