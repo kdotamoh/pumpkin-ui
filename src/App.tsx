@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Alert } from 'antd';
+// import { Alert } from 'antd';
 import { LoginPage } from 'pages/LoginPage';
 
 const App: FunctionComponent = () => {

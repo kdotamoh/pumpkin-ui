@@ -1,0 +1,18 @@
+.button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: var(--border-radius);
+}
+
+.button--primary {
+  background-color: blue;
+  box-shadow: 0 4.2px 2.2px rgba(0, 0, 0, 0.014),
+    0 10px 5.3px rgba(0, 0, 0, 0.02), 0 18.8px 10px rgba(0, 0, 0, 0.025),
+    0 33.5px 17.9px rgba(0, 0, 0, 0.03), 0 62.7px 33.4px rgba(0, 0, 0, 0.036),
+    0 150px 80px rgba(0, 0, 0, 0.05);
+}
