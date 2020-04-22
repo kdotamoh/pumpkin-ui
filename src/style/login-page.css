@@ -2,6 +2,12 @@
   display: grid;
   grid-template-areas: 'main image';
   grid-template-columns: 50% 50%;
+  height: 100vh;
+}
+
+.login-page__navigation {
+  display: flex;
+  justify-content: space-between;
 }
 
 .login-page__main {
@@ -11,9 +17,21 @@
 
 .login-page__image {
   grid-area: image;
+  background-image: url('../assets/beach.jpeg');
+  background-size: cover;
+  background-position: center center;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
+  width: 40rem;
+  margin: 0 auto;
+  margin-top: 15rem;
+}
+
+.login-form__input {
+  border: 1px solid black;
+  background: white;
+  border-radius: var(--border-radius);
 }
