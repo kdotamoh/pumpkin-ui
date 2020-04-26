@@ -10,9 +10,11 @@
 }
 
 .button--primary {
-  background-color: blue;
-  box-shadow: 0 4.2px 2.2px rgba(0, 0, 0, 0.014),
-    0 10px 5.3px rgba(0, 0, 0, 0.02), 0 18.8px 10px rgba(0, 0, 0, 0.025),
-    0 33.5px 17.9px rgba(0, 0, 0, 0.03), 0 62.7px 33.4px rgba(0, 0, 0, 0.036),
-    0 150px 80px rgba(0, 0, 0, 0.05);
+  background-color: rgb(40, 73, 153);
+  box-shadow: 0 2.8px 2.2px rgba(40, 73, 153, 0.045),
+    0 6.7px 5.3px rgba(40, 73, 153, 0.065),
+    0 12.5px 10px rgba(40, 73, 153, 0.08),
+    0 22.3px 17.9px rgba(40, 73, 153, 0.095),
+    0 41.8px 33.4px rgba(40, 73, 153, 0.115),
+    0 100px 80px rgba(40, 73, 153, 0.16);
 }
