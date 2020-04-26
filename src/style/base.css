@@ -1,7 +1,9 @@
 :root {
   --border-radius: 4rem;
 }
-
+.root{
+  height: 100%;
+}
 body {
   font-size: 16px; /* px fallback */
   font-size: 1.6rem; /* default font-size for document */
