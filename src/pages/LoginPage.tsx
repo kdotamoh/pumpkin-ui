@@ -1,9 +1,11 @@
 import React, { FunctionComponent } from 'react';
+import { Link } from 'react-router-dom';
 import 'style/login-page.css';
 
 export const LoginPage: FunctionComponent = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [rememberMe, setRememberMe] = React.useState(false);
 
   return (
     <div className="login-page">
@@ -49,13 +51,15 @@ export const LoginPage: FunctionComponent = () => {
                 name="rememberMe"
                 className="login-form__input"
                 id=""
+                checked={rememberMe}
+                onChange={(): void => setRememberMe(!rememberMe)}
                 style={{ marginRight: '1rem' }}
               />
               Remember me
             </label>
-            <a style={{ color: 'rgb(223, 226, 229)' }} href="#/">
+            <Link style={{ color: 'rgb(223, 226, 229)' }} to="#/">
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
@@ -68,17 +72,17 @@ export const LoginPage: FunctionComponent = () => {
 
         <div className="login-page__navigation">
           <div>
-            <a className="login-form__link" href="#/">
+            <Link className="login-form__link" to="#/">
               Impress
-            </a>
+            </Link>
             <span> • </span>
-            <a className="login-form__link" href="#/">
+            <Link className="login-form__link" to="#/">
               Privacy
-            </a>
+            </Link>
           </div>
-          <a className="login-form__link" href="#/">
+          <Link className="login-form__link" to="#/">
             • EN
-          </a>
+          </Link>
         </div>
       </div>
       <div className="login-page__image" />

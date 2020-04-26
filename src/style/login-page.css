@@ -46,6 +46,7 @@
 .login-form__label {
   font-size: 75%;
   padding-left: 1rem;
+  margin-bottom: 1rem;
 }
 
 .login-form__input {
@@ -55,7 +56,7 @@
   border-radius: var(--border-radius);
   padding: 1rem;
   padding-left: 1.5rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   outline: none;
 }
 

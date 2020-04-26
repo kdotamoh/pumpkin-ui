@@ -1,14 +1,26 @@
 import React, { FunctionComponent } from 'react';
-// import { Alert } from 'antd';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { LoginPage } from 'pages/LoginPage';
 
-const App: FunctionComponent = () => {
+const AuthedApp: FunctionComponent = () => {
   return (
     <div>
-      {/* <Alert message="Hi, I'm from Ant Design" type="success" banner closable /> */}
-      <LoginPage />
+      <div>App goes here</div>
     </div>
   );
+};
+
+const UnauthedApp: FunctionComponent = () => {
+  return (
+    <Router>
+      <LoginPage />
+    </Router>
+  );
+};
+
+const App: FunctionComponent = () => {
+  const [token] = React.useState(false); // bootleg auth
+  return <Router>{token ? <AuthedApp /> : <UnauthedApp />}</Router>;
 };
 
 export default App;
