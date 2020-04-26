@@ -1,26 +1,22 @@
 import React, { FunctionComponent } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { LoginPage } from 'pages/LoginPage';
+import { ManagementScreen } from 'pages/ManagementPage';
 
 const AuthedApp: FunctionComponent = () => {
   return (
-    <div>
-      <div>App goes here</div>
-    </div>
+    <ManagementScreen />
   );
 };
 
 const UnauthedApp: FunctionComponent = () => {
   return (
-    <Router>
       <LoginPage />
-    </Router>
   );
 };
 
 const App: FunctionComponent = () => {
   const [token] = React.useState(false); // bootleg auth
-  return <Router>{token ? <AuthedApp /> : <UnauthedApp />}</Router>;
+  return token ? <AuthedApp /> : <UnauthedApp />;
 };
 
 export default App;
