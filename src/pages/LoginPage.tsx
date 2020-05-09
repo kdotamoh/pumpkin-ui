@@ -1,11 +1,19 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 import 'style/login-page.css';
+import { setUser } from 'store/auth';
+
+import { login } from 'api/auth';
 
 export const LoginPage: FunctionComponent = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [rememberMe, setRememberMe] = React.useState(false);
+
+  const handleLogin = (): void => {
+    const user = login({ username: email, password });
+    setUser(user);
+  };
 
   return (
     <div className="login-page">
@@ -16,7 +24,13 @@ export const LoginPage: FunctionComponent = () => {
             Home
           </a>
         </div>
-        <form className="login-form">
+        <form
+          className="login-form"
+          onSubmit={(e): void => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <h1 className="login-form__h1">ADMIN PORTAL</h1>
           <h3 className="login-form__h3">LOGIN</h3>
 

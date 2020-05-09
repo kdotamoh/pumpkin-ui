@@ -1,22 +1,23 @@
-import { DefaultLayout } from "../layouts/DefaultLayout"
-import { LoginPage } from "pages/LoginPage";
-import App from "App";
-import { ManagementScreen } from "pages/ManagementPage";
+import { DefaultLayout } from '../layouts/DefaultLayout';
+import { LoginPage } from 'pages/LoginPage';
+import App from 'App';
+import { ManagementScreen } from 'pages/ManagementPage';
+
+// import PrivateRoute from 'hocs/PrivateRoute';
 
 export default [
   {
-    path: "/",
+    path: '/',
     exact: true,
-    layout: DefaultLayout,
-    component: App
+    component: App,
   },
   {
-    path: "/login",
-    component: LoginPage
-},
+    path: '/login',
+    component: LoginPage,
+  },
   {
-    path: "/management",
+    path: '/management',
     layout: DefaultLayout,
-    component: ManagementScreen
-  }
+    component: ManagementScreen,
+  },
 ];
