@@ -1,25 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+let seoPumpkinUser = sessionStorage.getItem('seoPumpkinUser');
+if (!seoPumpkinUser) seoPumpkinUser = '{}';
+
 interface InitialState {
-  user: object;
+  seoPumpkinUser: object;
 }
 
-const initialState: InitialState = {
-  user: {},
-};
+const initialState: InitialState = JSON.parse(seoPumpkinUser);
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     setUser(state, action: PayloadAction<any>): void {
-      const { user } = action.payload;
-      state.user = user;
+      sessionStorage.setItem('seoPumpkinUser', JSON.stringify(action.payload));
+      return action.payload;
     },
   },
 });
-
-// ugh
 
 export const { setUser } = authSlice.actions;
 
