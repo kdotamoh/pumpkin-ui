@@ -1,3 +1,5 @@
+import { message } from 'antd';
+
 import client from 'api';
 
 export interface Credentials {
@@ -8,9 +10,15 @@ export interface Credentials {
 export async function login(credentials: Credentials): Promise<any> {
   try {
     const { data } = await client.post('/auth/login', credentials);
-    console.log(data);
-    return data;
+    const { responseBody } = data;
+    const { userToken } = responseBody;
+    sessionStorage.setItem('token', userToken);
+    console.log(responseBody);
+    return responseBody;
   } catch (err) {
-    console.log(err);
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`An error occurred: ${responseMessage}`);
   }
 }

@@ -1,18 +1,28 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
-import 'style/login-page.css';
+import { useDispatch } from 'react-redux';
 import { setUser } from 'store/auth';
+import { useHistory } from 'react-router-dom';
+
+import 'style/login-page.css';
 
 import { login } from 'api/auth';
 
 export const LoginPage: FunctionComponent = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
   const [rememberMe, setRememberMe] = React.useState(false);
 
-  const handleLogin = (): void => {
-    const user = login({ username: email, password });
-    setUser(user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleLogin = async () => {
+    setSubmitting(true);
+    const user = await login({ username: email, password });
+    setSubmitting(false);
+    dispatch(setUser(user));
+    history.push('/management');
   };
 
   return (
@@ -80,7 +90,7 @@ export const LoginPage: FunctionComponent = () => {
             className="button button--primary login-form__button"
             type="submit"
           >
-            Login
+            {submitting ? 'Submitting...' : 'Login'}
           </button>
         </form>
 
