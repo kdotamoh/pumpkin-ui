@@ -1,11 +1,29 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from 'store/auth';
+import { useHistory } from 'react-router-dom';
+
 import 'style/login-page.css';
+
+import { login } from 'api/auth';
 
 export const LoginPage: FunctionComponent = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
   const [rememberMe, setRememberMe] = React.useState(false);
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleLogin = async () => {
+    setSubmitting(true);
+    const user = await login({ username: email, password });
+    setSubmitting(false);
+    dispatch(setUser(user));
+    history.push('/management');
+  };
 
   return (
     <div className="login-page">
@@ -16,7 +34,13 @@ export const LoginPage: FunctionComponent = () => {
             Home
           </a>
         </div>
-        <form className="login-form">
+        <form
+          className="login-form"
+          onSubmit={(e): void => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <h1 className="login-form__h1">ADMIN PORTAL</h1>
           <h3 className="login-form__h3">LOGIN</h3>
 
@@ -66,7 +90,7 @@ export const LoginPage: FunctionComponent = () => {
             className="button button--primary login-form__button"
             type="submit"
           >
-            Login
+            {submitting ? 'Submitting...' : 'Login'}
           </button>
         </form>
 

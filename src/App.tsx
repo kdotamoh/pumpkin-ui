@@ -3,15 +3,11 @@ import { LoginPage } from 'pages/LoginPage';
 import { ManagementScreen } from 'pages/ManagementPage';
 
 const AuthedApp: FunctionComponent = () => {
-  return (
-    <ManagementScreen />
-  );
+  return <ManagementScreen />;
 };
 
 const UnauthedApp: FunctionComponent = () => {
-  return (
-      <LoginPage />
-  );
+  return <LoginPage />;
 };
 
 const App: FunctionComponent = () => {
