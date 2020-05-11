@@ -2,6 +2,7 @@ import { ManagementComponent } from './Management';
 import React from 'react';
 import { ManagementColumnDefinitions } from 'state';
 import { employeeMockDataSource } from 'mockdata';
+import { Input } from 'antd';
 
 const columns: ManagementColumnDefinitions[] = [
   {
@@ -35,10 +36,18 @@ export class EmployeeManagement extends React.Component<
         data={employeeMockDataSource}
         newEntityName="EMPLOYEE"
         onAddNewEntity={this.onAddNewEmployee}
-        newEntityContent={<p>New Contetn</p>}
+        newEntityContent={this.addNewEmployeeContent()}
       />
     );
   }
+  private addNewEmployeeContent = () => {
+    return (
+      <div>
+        <Input placeholder="Email" />
+        <Input placeholder="Full Name" />
+      </div>
+    );
+  };
   private onAddNewEmployee = () => {
     console.log('added');
   };
