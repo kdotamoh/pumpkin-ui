@@ -1,9 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { LoginPage } from 'pages/LoginPage';
-import { ManagementScreen } from 'pages/ManagementPage';
+import { EmployeeManagement } from 'pages/EmployeeManagement';
+import { DefaultLayout } from 'layouts/DefaultLayout';
 
 const AuthedApp: FunctionComponent = () => {
-  return <ManagementScreen />;
+  return (
+    <DefaultLayout>
+      <EmployeeManagement />
+    </DefaultLayout>
+  );
 };
 
 const UnauthedApp: FunctionComponent = () => {
