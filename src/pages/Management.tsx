@@ -30,7 +30,12 @@ export class ManagementComponent extends React.Component<
         <div className="management-component__header">
           <h4 className="management-component__h4">{this.props.headerTitle}</h4>
           <div className="management-component__actions">
-            <Button type="primary" onClick={this.onClickAddNewEntity}>
+            {/* uncomment me */}
+            <Button
+              type="primary"
+              // shape="round"
+              onClick={this.onClickAddNewEntity}
+            >
               ADD NEW
             </Button>
             <Input
