@@ -25,6 +25,7 @@
 .management-component__search {
   width: fit-content;
   margin-left: 1rem;
+  /* uncomment me */
   /* border-radius: var(--border-radius); */
   border: 1px solid rgb(40, 73, 153);
 }
@@ -45,7 +46,14 @@
 .ant-modal-footer .ant-btn-primary:hover {
   color: #ffffff;
 }
-/* .ant-modal-footer .ant-btn-primary; */
+.ant-pagination-item-active {
+  border-color: rgb(40, 73, 153);
+}
+
+.ant-pagination-item-active a {
+  color: rgb(40, 73, 153);
+}
+/* uncomment me */
 /* .ant-modal-footer .ant-btn {
   height: 32px;
   padding: 4px 16px;

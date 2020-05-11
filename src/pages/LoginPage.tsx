@@ -22,7 +22,7 @@ export const LoginPage: FunctionComponent = () => {
     const user = await login({ username: email, password });
     setSubmitting(false);
     dispatch(setUser(user));
-    history.push('/management');
+    history.push('/employees');
   };
 
   return (
