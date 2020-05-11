@@ -18,3 +18,19 @@
     0 41.8px 33.4px rgba(40, 73, 153, 0.115),
     0 100px 80px rgba(40, 73, 153, 0.16);
 }
+
+.ant-btn-primary {
+  background-color: rgb(40, 73, 153);
+  border: none;
+  width: 16rem;
+}
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: rgb(40, 73, 153);
+  border: none;
+}
+.ant-input:hover,
+.ant-input:focus,
+.ant-input-focused {
+  border: 1px solid rgb(40, 73, 153);
+}

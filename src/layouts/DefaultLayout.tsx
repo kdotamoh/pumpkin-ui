@@ -8,13 +8,13 @@ interface DefaultLayoutProps {
 }
 const { Sider, Content } = Layout;
 export const DefaultLayout = (props: DefaultLayoutProps) => (
-  <Layout style={{ height: '100%' }}>
+  <Layout className="default-layout__container">
     <Sider collapsible theme="light">
       <div className="logo">
         <img src={logo} alt={logo} />
       </div>
       <SideBar />
     </Sider>
-    <Content style={{ margin: '16px' }}>{props.children}</Content>
+    <Content className="default-layout__content">{props.children}</Content>
   </Layout>
 );

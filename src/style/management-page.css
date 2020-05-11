@@ -1,0 +1,54 @@
+.ant-table-thead .ant-table-cell {
+  background-color: white;
+  color: #c8c9cb;
+}
+.ant-table-tbody .ant-table-cell {
+  color: #676b6e;
+}
+.management-component__h4 {
+  font-weight: bold;
+}
+.management-component__container {
+  background-color: white;
+  padding: 16px;
+  height: 100%;
+}
+.management-component__header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+.management-component__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.management-component__search {
+  width: fit-content;
+  margin-left: 1rem;
+  /* border-radius: var(--border-radius); */
+  border: 1px solid rgb(40, 73, 153);
+}
+
+.ant-modal-body .ant-input {
+  margin-bottom: 1rem;
+}
+
+.ant-input:focus {
+  box-shadow: 0 0 0 2px rgba(40, 73, 153, 0.2);
+}
+
+.ant-modal-footer .ant-btn:hover {
+  color: rgb(40, 73, 153);
+  border-color: rgb(40, 73, 153);
+}
+
+.ant-modal-footer .ant-btn-primary:hover {
+  color: #ffffff;
+}
+/* .ant-modal-footer .ant-btn-primary; */
+/* .ant-modal-footer .ant-btn {
+  height: 32px;
+  padding: 4px 16px;
+  font-size: 14px;
+  border-radius: 32px;
+} */

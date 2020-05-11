@@ -1,9 +1,11 @@
 @import '~antd/dist/antd.css';
 @import './base.css';
 @import './buttons.css';
+@import './default-layout.css';
+@import './management-page.css';
 
 .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
-  }
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}

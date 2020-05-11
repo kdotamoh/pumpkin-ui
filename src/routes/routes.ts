@@ -1,9 +1,8 @@
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import { LoginPage } from 'pages/LoginPage';
 import App from 'App';
-import { ManagementScreen } from 'pages/ManagementPage';
-
-// import PrivateRoute from 'hocs/PrivateRoute';
+import { EmployeeManagement } from 'pages/EmployeeManagement';
+import { AlumniManagement } from 'pages/AlumniManagement';
 
 export default [
   {
@@ -16,8 +15,13 @@ export default [
     component: LoginPage,
   },
   {
-    path: '/management',
+    path: '/employees',
     layout: DefaultLayout,
-    component: ManagementScreen,
+    component: EmployeeManagement,
+  },
+  {
+    path: '/alumni',
+    layout: DefaultLayout,
+    component: AlumniManagement,
   },
 ];
