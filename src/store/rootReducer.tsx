@@ -3,7 +3,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import authReducer from './auth';
 
 const rootReducer = combineReducers({
-  authReducer,
+  user: authReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
