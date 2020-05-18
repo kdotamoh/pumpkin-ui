@@ -18,7 +18,7 @@ ReactDOM.render(
               key={index}
               path={route.path}
               exact={route.exact}
-              component={(props: any) => {
+              component={(props) => {
                 return route.layout ? (
                   <route.layout {...props}>
                     <route.component {...props} />
