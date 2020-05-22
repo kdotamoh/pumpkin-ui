@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { LoginPage } from 'pages/LoginPage';
-import { EmployeeManagement } from 'pages/EmployeeManagement';
+import { EmployeeManagement } from 'pages/Management/EmployeeManagement';
 import { DefaultLayout } from 'layouts/DefaultLayout';
 
 const AuthedApp: FunctionComponent = () => {

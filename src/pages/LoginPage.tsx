@@ -1,7 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from 'store/auth';
+import {
+  setUser,
+  // fetchUser
+} from 'store/auth';
 import { useHistory } from 'react-router-dom';
 
 import 'style/login-page.css';
@@ -21,7 +24,9 @@ export const LoginPage: FunctionComponent = () => {
     setSubmitting(true);
     const user = await login({ username: email, password });
     setSubmitting(false);
-    dispatch(setUser(user));
+    // await dispatch(fetchUser({ username: email, password }));
+    dispatch(setUser(user)); // TODO: use a thunk instead
+
     history.push('/employees');
   };
 

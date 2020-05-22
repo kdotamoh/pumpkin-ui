@@ -1,13 +1,36 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+// import { AppThunk } from 'store';
+
+// import { Credentials, login } from 'api/auth';
 
 let seoPumpkinUser = sessionStorage.getItem('seoPumpkinUser');
 if (!seoPumpkinUser) seoPumpkinUser = '{}';
 
-interface InitialState {
-  seoPumpkinUser: object;
+interface UserDetails {
+  email: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  phoneNumber: string;
+  resetPassword: string;
+  status: string;
 }
 
-const initialState: InitialState = JSON.parse(seoPumpkinUser);
+type Authorities = string[];
+type Roles = string[];
+
+type UserToken = string;
+
+interface SliceState {
+  // user: {
+  userDetails: UserDetails;
+  userToken: UserToken;
+  roles: Roles;
+  authorities: Authorities;
+  // };
+}
+
+const initialState: SliceState = JSON.parse(seoPumpkinUser);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -23,3 +46,14 @@ const authSlice = createSlice({
 export const { setUser } = authSlice.actions;
 
 export default authSlice.reducer;
+
+// export const fetchUser = (credentials: Credentials): AppThunk => async (
+//   dispatch
+// ) => {
+//   try {
+//     const userDetails = await login(credentials);
+//     dispatch(setUser(userDetails));
+//   } catch {
+//     dispatch(setUser({}));
+//   }
+// };
