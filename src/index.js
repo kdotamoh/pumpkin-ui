@@ -3,15 +3,52 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'style/index.css';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import routes from 'routes/routes';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { unauthorized, authorized } from 'routes/routes';
+
+import PrivateRoute from 'hocs/PrivateRoute';
 
 import store from 'store';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      {routes.map((route, index) => {
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          {unauthorized.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              exact={route.exact}
+              component={(props) => {
+                return route.layout ? (
+                  <route.layout {...props}>
+                    <route.component {...props} />
+                  </route.layout>
+                ) : (
+                  <route.component {...props} />
+                );
+              }}
+            />
+          ))}
+          {authorized.map((route) => (
+            <PrivateRoute
+              key={route.path}
+              path={route.path}
+              exact={route.exact}
+              component={(props) => {
+                return route.layout ? (
+                  <route.layout {...props}>
+                    <route.component {...props} />
+                  </route.layout>
+                ) : (
+                  <route.component {...props} />
+                );
+              }}
+            />
+          ))}
+        </Switch>
+        {/* {routes.map((route, index) => {
         return (
           <React.StrictMode key={index}>
             <Route
@@ -30,9 +67,10 @@ ReactDOM.render(
             />
           </React.StrictMode>
         );
-      })}
-    </Router>
-  </Provider>,
+      })} */}
+      </Router>
+    </Provider>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

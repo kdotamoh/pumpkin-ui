@@ -5,16 +5,7 @@ import { EmployeeManagement } from 'pages/Management/EmployeeManagement';
 import { AlumniManagement } from 'pages/Management/AlumniManagement';
 import ActivationPage from 'pages/ActivationPage';
 
-export default [
-  {
-    path: '/',
-    exact: true,
-    component: App,
-  },
-  {
-    path: '/login',
-    component: LoginPage,
-  },
+export const authorized = [
   {
     path: '/employees',
     layout: DefaultLayout,
@@ -24,6 +15,18 @@ export default [
     path: '/alumni',
     layout: DefaultLayout,
     component: AlumniManagement,
+  },
+];
+
+export const unauthorized = [
+  {
+    path: '/',
+    exact: true,
+    component: App,
+  },
+  {
+    path: '/login',
+    component: LoginPage,
   },
   {
     path: '/activate-account',
