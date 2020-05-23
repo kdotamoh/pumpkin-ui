@@ -2,7 +2,6 @@ import { ManagementComponent } from './Management';
 import React from 'react';
 // import { ManagementColumnDefinitions } from 'state';
 import { employeeMockDataSource } from 'mockdata';
-import { Input } from 'antd';
 
 const columns = [
   {
