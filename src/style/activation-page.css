@@ -1,0 +1,36 @@
+.activation-page {
+  display: grid;
+  grid-template-areas: 'side main';
+  grid-template-columns: 50% 50%;
+  min-height: 100vh;
+}
+
+.activation-page__main {
+  grid-area: main;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.activation-page__side {
+  grid-area: side;
+  background-image: url('../assets/beach.jpeg');
+  background-size: cover;
+  background-position: center center;
+}
+
+.activation-form {
+  display: flex;
+  flex-direction: column;
+  width: 40rem;
+  margin: 0 auto;
+}
+
+.activation-form__header {
+  font-size: 120%;
+}
+
+.activation-page--min-height {
+  min-height: 100vh;
+}
