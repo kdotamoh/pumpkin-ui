@@ -111,12 +111,14 @@ const ActivationPage = () => {
               className="login-form__input"
               name="password"
               placeholder="Password"
+              type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
             <Input
               className="login-form__input"
               name="passwordConfirmation"
               placeholder="Re-enter password"
+              type="password"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
             />
             <button
