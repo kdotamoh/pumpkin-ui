@@ -24,3 +24,9 @@ html {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

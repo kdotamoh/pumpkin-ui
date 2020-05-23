@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from 'antd';
+import { Input, Spin } from 'antd';
 
 import { validateEmployee, activateEmployee } from 'api/employee-management';
+
+import 'style/activation-page.css';
 
 const ActivationPage = () => {
   const [ref, setRef] = React.useState('');
@@ -50,65 +52,87 @@ const ActivationPage = () => {
   };
 
   if (status === 'loading') {
-    return <div>Loading...</div>;
+    return (
+      <div className="center-all activation-page--min-height">
+        <Spin />
+        <div style={{ marginLeft: '1rem' }}>Loading...</div>
+      </div>
+    );
   }
   if (status === 'loaded') {
     return (
-      <div>
-        <div>validating reference...</div>
+      <div className="center-all activation-page--min-height">
+        <Spin />
+        <div style={{ marginLeft: '1rem' }}>Validating reference...</div>
       </div>
     );
   }
   if (status === 'failed') {
     return (
-      <div>
-        <div>Looks like something went wrong</div>
+      <div className="center-all activation-page--min-height">
+        <div>Oops! Something went wrong. Please try again.</div>
       </div>
     );
   }
   if (status === 'success') {
     return (
-      <div>
-        <p>Enter your details to activate your account</p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <Input
-            name="firstName"
-            placeholder="First Name"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <Input
-            name="lastName"
-            placeholder="Last Name"
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <Input
-            name="phoneNumber"
-            placeholder="Phone number"
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-          <Input
-            name="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Input
-            name="passwordConfirmation"
-            placeholder="Re-enter password"
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-          />
-          <button type="submit">Submit</button>
-        </form>
+      <div className="activation-page">
+        <div className="activation-page__side" />
+        <div className="activation-page__main">
+          <form
+            className="activation-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            <p className="activation-form__header">
+              Enter your details to activate your account:
+            </p>
+            <Input
+              className="login-form__input"
+              name="firstName"
+              placeholder="First Name"
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <Input
+              className="login-form__input"
+              name="lastName"
+              placeholder="Last Name"
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <Input
+              className="login-form__input"
+              name="phoneNumber"
+              placeholder="Phone number"
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+            <Input
+              className="login-form__input"
+              name="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Input
+              className="login-form__input"
+              name="passwordConfirmation"
+              placeholder="Re-enter password"
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+            />
+            <button
+              className="button button--primary login-form__button"
+              type="submit"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     );
   }
   if (status === 'activated') {
     return (
-      <div>
+      <div className="center-all activation-page--min-height">
         <p>
           You have successfully activated your account. Please login{' '}
           <Link to="/login">here</Link>
