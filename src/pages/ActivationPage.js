@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Input, Spin } from 'antd';
 
-import { validateEmployee, activateEmployee } from 'api/employee-management';
+import { validateUser, activateUser } from 'api/user-management';
 
 import 'style/activation-page.css';
 
@@ -24,7 +24,7 @@ const ActivationPage = () => {
 
   React.useEffect(() => {
     const validateRef = async () => {
-      const valid = await validateEmployee(ref);
+      const valid = await validateUser(ref);
       if (valid) {
         setStatus('success');
       } else {
@@ -47,7 +47,7 @@ const ActivationPage = () => {
       passwordConfirmation,
     };
     setStatus('loading');
-    const success = await activateEmployee(ref, data);
+    const success = await activateUser(ref, data);
     success ? setStatus('activated') : setStatus('failed');
   };
 

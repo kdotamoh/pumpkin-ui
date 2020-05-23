@@ -27,7 +27,7 @@ export const LoginPage: FunctionComponent = () => {
     // await dispatch(fetchUser({ username: email, password }));
     dispatch(setUser(user)); // TODO: use a thunk instead
 
-    history.push('/employees');
+    history.push('/employees'); // TODO: send alums to the respective page
   };
 
   return (

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Table, Dropdown, Menu, Button, Input, Modal } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { inviteEmployee } from 'api/employee-management';
+import { inviteEmployee, inviteAlum } from 'api/user-management';
 // import { ManagementColumnDefinitions } from 'state';
 
 // export interface ManagementComponentProps {
@@ -37,6 +37,7 @@ export class ManagementComponent extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      isSubmitting: false,
       email: '',
       employeeId: '',
     };
@@ -83,16 +84,27 @@ export class ManagementComponent extends React.Component {
           onOk={() => this.onAddNewEntity(this.props.newEntityName)}
           onCancel={this.onCancelAddEntity}
         >
-          <Input
-            placeholder="Email"
-            onChange={(event) => this.handleInput(event)}
-            name="email"
-          />
-          <Input
-            placeholder="Full Name"
-            onChange={(event) => this.handleInput(event)}
-            name="employeeId"
-          />
+          {this.props.newEntityName === 'EMPLOYEE' && (
+            <>
+              <Input
+                placeholder="Email"
+                onChange={(event) => this.handleInput(event)}
+                name="email"
+              />
+              <Input
+                placeholder="Employee ID"
+                onChange={(event) => this.handleInput(event)}
+                name="employeeId"
+              />
+            </>
+          )}
+          {this.props.newEntityName === 'ALUMNUS' && (
+            <Input
+              placeholder="Email"
+              onChange={(event) => this.handleInput(event)}
+              name="email"
+            />
+          )}
         </Modal>
       </div>
     );
@@ -117,9 +129,11 @@ export class ManagementComponent extends React.Component {
     const data = { email: this.state.email, employeeId: this.state.employeeId };
     if (entityName === 'EMPLOYEE') {
       inviteEmployee(data);
+      this.setState({ email: '', employeeId: '', visible: false });
     }
-    if (entityName === 'ALUMNI') {
-      console.log(this.state);
+    if (entityName === 'ALUMNUS') {
+      inviteAlum(data);
+      this.setState({ email: '', visible: false });
     }
   };
 }

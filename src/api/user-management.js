@@ -31,7 +31,25 @@ export async function inviteEmployee(credentials) {
   }
 }
 
-export async function validateEmployee(reference) {
+export async function inviteAlum(credentials) {
+  try {
+    const { data } = await client.post('/seo-alum/create', credentials, {
+      headers: {
+        // eslint-disable-next-line
+        user_token: token,
+      },
+    });
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`An error occurred: ${responseMessage}`);
+  }
+}
+
+export async function validateUser(reference) {
   try {
     const { data } = await client.get(`/activate/${reference}`);
     const { requestSuccessful } = data;
@@ -45,7 +63,7 @@ export async function validateEmployee(reference) {
   }
 }
 
-export async function activateEmployee(reference, data) {
+export async function activateUser(reference, data) {
   try {
     const { data: res } = await client.post(`/activate/${reference}`, data);
     const { requestSuccessful } = res;
