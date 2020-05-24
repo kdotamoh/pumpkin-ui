@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import client from '../../api';
-import store from '../../store';
+import store from '../../app/store';
 
 const token = store.getState().user.userToken;
 
@@ -63,7 +63,6 @@ export async function searchAlum(searchKey) {
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
-    console.log(err);
     const {
       data: { responseMessage },
     } = err.response;
@@ -89,7 +88,7 @@ export async function deleteAlum(email) {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot delete alumus with email ${email}: ${responseMessage}`
+      `Cannot deactivate alumus with email ${email}: ${responseMessage}`
     );
   }
 }

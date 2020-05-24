@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Input, Spin } from 'antd';
 
-import { validateUser, activateUser } from '../api/user-management/user';
+import { validateUser, activateUser } from '../../api/user-management/user';
 
-import '../style/activation-page.css';
+import '../../style/activation-page.css';
 
 const ActivationPage = () => {
   const [ref, setRef] = React.useState('');

@@ -1,16 +1,17 @@
 import React from 'react';
 import { ManagementComponent } from './Management';
-import { Input } from 'antd';
+import { Input, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
   getEmployees,
   inviteEmployee,
   searchEmployees,
   deleteEmployee,
-} from '../../api/user-management/employee';
+} from '../../../api/user-management/employee';
 import {
   activeIconSVG,
   deactivatedIconSVG,
-} from '../../assets/svg/active-icon';
+} from '../../../assets/svg/active-icon';
 const columns = [
   {
     title: 'First Name',
@@ -72,7 +73,7 @@ export class EmployeeManagement extends React.Component {
         onCancelAddEntity={(callback) => this.onCancelAddEmployee(callback)}
         newEntityContent={this.addNewEmployeeContent()}
         onSearch={this.onSearchEmployees}
-        onDeactivate={this.onDeactivateEmployee}
+        onDeactivate={this.showDeactivateConfirmationModal}
       />
     );
   }
@@ -105,7 +106,7 @@ export class EmployeeManagement extends React.Component {
   };
 
   onAddNewEmployee = async (callback) => {
-    await inviteEmployee(this.state.email, this.state.employeeID);
+    await inviteEmployee(this.state.email, this.state.employeeId);
     this.setState({
       email: '',
       employeeID: '',
@@ -127,8 +128,17 @@ export class EmployeeManagement extends React.Component {
       data: filteredEmployees,
     });
   };
-
-  onDeactivateEmployee = async (record) => {
-    await deleteEmployee(record.email);
-  };
+  showDeactivateConfirmationModal(record) {
+    const { confirm } = Modal;
+    confirm({
+      title: 'Are you sure you want to deactivate this employee?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Caution: This cannot be undone.',
+      okText: 'Deactivate',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk: async () => await deleteEmployee(record.email),
+      centered: true,
+    });
+  }
 }

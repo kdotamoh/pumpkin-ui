@@ -1,7 +1,7 @@
 import React from 'react';
-import { LoginPage } from './pages/LoginPage';
-import { EmployeeManagement } from './pages/Management/EmployeeManagement';
-import { DefaultLayout } from './layouts/DefaultLayout';
+import { LoginPage } from './app/pages/LoginPage';
+import { EmployeeManagement } from './app/pages/Management/EmployeeManagement';
+import { DefaultLayout } from './app/layouts/DefaultLayout';
 
 const AuthedApp = () => {
   return (

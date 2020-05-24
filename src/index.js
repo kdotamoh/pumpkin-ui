@@ -4,11 +4,11 @@ import { Provider } from 'react-redux';
 import './style/index.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { unauthorized, authorized } from './routes/routes';
+import { unauthorized, authorized } from './app/routes/routes';
 
-import PrivateRoute from './hocs/PrivateRoute';
+import PrivateRoute from './app/hocs/PrivateRoute';
 
-import store from './store';
+import store from './app/store';
 
 ReactDOM.render(
   <React.StrictMode>

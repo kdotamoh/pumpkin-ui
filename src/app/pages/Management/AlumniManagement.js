@@ -1,16 +1,17 @@
 import { ManagementComponent } from './Management';
 import React from 'react';
-import { Input } from 'antd';
+import { Input, Modal } from 'antd';
 import {
   activeIconSVG,
   deactivatedIconSVG,
-} from '../../assets/svg/active-icon';
+} from '../../../assets/svg/active-icon';
 import {
   getAlumni,
   inviteAlum,
   searchAlum,
   deleteAlum,
-} from '../../api/user-management/alum';
+} from '../../../api/user-management/alum';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const columns = [
   {
@@ -69,17 +70,19 @@ export class AlumniManagement extends React.Component {
   }
   render() {
     return (
-      <ManagementComponent
-        headerTitle="LIST OF ALUMNI"
-        columnDefs={columns}
-        data={this.state.data}
-        newEntityName="ALUMNUS"
-        onAddNewEntity={this.onAddNewAlum}
-        onCancelAddEntity={this.onCancelAddAlum}
-        newEntityContent={this.addNewAlumniContent()}
-        onSearch={this.onSearchAlumni}
-        onDeactivate={this.onDeactivateAlum}
-      />
+      <React.Fragment>
+        <ManagementComponent
+          headerTitle="LIST OF ALUMNI"
+          columnDefs={columns}
+          data={this.state.data}
+          newEntityName="ALUMNUS"
+          onAddNewEntity={this.onAddNewAlum}
+          onCancelAddEntity={this.onCancelAddAlum}
+          newEntityContent={this.addNewAlumniContent()}
+          onSearch={this.onSearchAlumni}
+          onDeactivate={this.showDeactivateConfirmationModal}
+        />
+      </React.Fragment>
     );
   }
   addNewAlumniContent() {
@@ -132,7 +135,17 @@ export class AlumniManagement extends React.Component {
       data: filteredAlumni,
     });
   };
-  onDeactivateAlum = async (record) => {
-    await deleteAlum(record.email);
-  };
+  showDeactivateConfirmationModal(record) {
+    const { confirm } = Modal;
+    confirm({
+      title: 'Are you sure you want to deactivate this alumni?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Caution: This cannot be undone.',
+      okText: 'Deactivate',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk: async () => await deleteAlum(record.email),
+      centered: true,
+    });
+  }
 }
