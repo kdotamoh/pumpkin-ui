@@ -1,0 +1,18 @@
+image: node:latest
+
+before_script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+
+stages:
+  - deployment
+
+deployment:
+  type: deploy
+  stage: deployment
+  script:
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/seo-pumpkin-ui.git
+    - git push heroku master
+  only:
+    - master
