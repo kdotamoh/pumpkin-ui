@@ -7,9 +7,9 @@ import {
 } from '../store/auth';
 import { useHistory } from 'react-router-dom';
 
-import '../style/login-page.css';
+import '../../style/login-page.css';
 
-import { login } from '../api/auth';
+import { login } from '../../api/auth';
 
 export const LoginPage = () => {
   const [email, setEmail] = React.useState('');

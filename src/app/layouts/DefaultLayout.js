@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Layout } from 'antd';
 import { SideBar } from '../navigation/Sidebar';
-import logo from '../assets/svg/pumpkin-logo.png';
+import logo from '../../assets/svg/pumpkin-logo.png';
 import PropTypes from 'prop-types';
 
 const { Sider, Content } = Layout;
