@@ -1,13 +1,7 @@
 import { message } from 'antd';
+import client from '../api';
 
-import client from 'api';
-
-export interface Credentials {
-  username: string;
-  password: string;
-}
-
-export async function login(credentials: Credentials): Promise<any> {
+export async function login(credentials) {
   try {
     const { data } = await client.post('/auth/login', credentials);
     const { responseBody } = data;

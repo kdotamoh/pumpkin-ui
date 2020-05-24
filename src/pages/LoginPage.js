@@ -1,17 +1,17 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   setUser,
   // fetchUser
-} from 'store/auth';
+} from '../store/auth';
 import { useHistory } from 'react-router-dom';
 
-import 'style/login-page.css';
+import '../style/login-page.css';
 
-import { login } from 'api/auth';
+import { login } from '../api/auth';
 
-export const LoginPage: FunctionComponent = () => {
+export const LoginPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [submitting, setSubmitting] = React.useState(false);
@@ -43,7 +43,7 @@ export const LoginPage: FunctionComponent = () => {
         </div>
         <form
           className="login-form"
-          onSubmit={(e): void => {
+          onSubmit={(e) => {
             e.preventDefault();
             handleLogin();
           }}
@@ -60,7 +60,7 @@ export const LoginPage: FunctionComponent = () => {
             className="login-form__input"
             placeholder="Your E-Mail"
             value={email}
-            onChange={(e): void => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <label className="login-form__label" htmlFor="password">
@@ -72,7 +72,7 @@ export const LoginPage: FunctionComponent = () => {
             className="login-form__input"
             placeholder="Your Password"
             value={password}
-            onChange={(e): void => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -83,7 +83,7 @@ export const LoginPage: FunctionComponent = () => {
                 className="login-form__input"
                 id=""
                 checked={rememberMe}
-                onChange={(): void => setRememberMe(!rememberMe)}
+                onChange={() => setRememberMe(!rememberMe)}
                 style={{ marginRight: '1rem' }}
               />
               Remember me

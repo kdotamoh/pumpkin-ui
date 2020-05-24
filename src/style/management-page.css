@@ -10,7 +10,7 @@
 }
 .management-component__container {
   background-color: white;
-  padding: 16px;
+  padding: 8px;
   height: 100%;
 }
 .management-component__header {
@@ -20,18 +20,16 @@
 }
 .management-component__actions {
   display: flex;
-  justify-content: flex-end;
 }
 .management-component__search {
-  width: fit-content;
   margin-left: 1rem;
-  /* uncomment me */
-  /* border-radius: var(--border-radius); */
+  border-radius: var(--border-radius);
   border: 1px solid rgb(40, 73, 153);
 }
 
 .ant-modal-body .ant-input {
   margin-bottom: 1rem;
+  border-radius: var(--border-radius);
 }
 
 .ant-input:focus {
@@ -53,10 +51,6 @@
 .ant-pagination-item-active a {
   color: rgb(40, 73, 153);
 }
-/* uncomment me */
-/* .ant-modal-footer .ant-btn {
-  height: 32px;
-  padding: 4px 16px;
-  font-size: 14px;
+.ant-modal-footer .ant-btn {
   border-radius: 32px;
-} */
+}
