@@ -11,9 +11,6 @@ export async function login(credentials: Credentials): Promise<any> {
   try {
     const { data } = await client.post('/auth/login', credentials);
     const { responseBody } = data;
-    const { userToken } = responseBody;
-    sessionStorage.setItem('token', userToken);
-    console.log(responseBody);
     return responseBody;
   } catch (err) {
     const {

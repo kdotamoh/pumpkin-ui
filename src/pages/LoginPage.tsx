@@ -1,7 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from 'store/auth';
+import {
+  setUser,
+  // fetchUser
+} from 'store/auth';
 import { useHistory } from 'react-router-dom';
 
 import 'style/login-page.css';
@@ -21,8 +24,12 @@ export const LoginPage: FunctionComponent = () => {
     setSubmitting(true);
     const user = await login({ username: email, password });
     setSubmitting(false);
-    dispatch(setUser(user));
-    history.push('/employees');
+    // await dispatch(fetchUser({ username: email, password }));
+    dispatch(setUser(user)); // TODO: use a thunk instead?
+
+    user.roles.includes('ADMIN')
+      ? history.push('/employees')
+      : history.push('/alumni'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
   };
 
   return (
