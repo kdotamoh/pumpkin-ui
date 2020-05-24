@@ -13,6 +13,6 @@ deployment:
   stage: deployment
   script:
     - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/seo-pumpkin-ui.git
-    - git push heroku -f master
+    - git push -f heroku HEAD:master
   only:
     - master
