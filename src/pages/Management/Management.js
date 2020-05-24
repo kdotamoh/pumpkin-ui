@@ -1,45 +1,13 @@
 import * as React from 'react';
 import { Table, Dropdown, Menu, Button, Input, Modal } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { inviteEmployee, inviteAlum } from 'api/user-management';
-// import { ManagementColumnDefinitions } from 'state';
-
-// export interface ManagementComponentProps {
-//   headerTitle: string;
-//   newEntityName: string;
-//   onAddNewEntity: () => void;
-//   newEntityContent: JSX.Element;
-//   columnDefs: ManagementColumnDefinitions[];
-//   data: any[];
-// }
-// export interface ManagementComponentState {
-//   visible: boolean;
-//   email: string;
-//   employeeId: string;
-// }
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://google.com/">
-        Edit
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener s noreferrer" href="http://google.com/">
-        Deactivate
-      </a>
-    </Menu.Item>
-  </Menu>
-);
+import PropTypes from 'prop-types';
 
 export class ManagementComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      isSubmitting: false,
-      email: '',
-      employeeId: '',
     };
   }
 
@@ -49,10 +17,9 @@ export class ManagementComponent extends React.Component {
         <div className="management-component__header">
           <h4 className="management-component__h4">{this.props.headerTitle}</h4>
           <div className="management-component__actions">
-            {/* uncomment me */}
             <Button
               type="primary"
-              // shape="round"
+              shape="round"
               onClick={this.onClickAddNewEntity}
             >
               ADD NEW
@@ -60,6 +27,8 @@ export class ManagementComponent extends React.Component {
             <Input
               className="management-component__search"
               placeholder="Search by name"
+              value={this.state.searchValue}
+              onChange={(e) => this.props.onSearch(e.target.value)}
             />
           </div>
         </div>
@@ -70,8 +39,8 @@ export class ManagementComponent extends React.Component {
               title: 'Actions',
               dataIndex: 'actions',
               key: 'actions',
-              render: () => (
-                <Dropdown overlay={menu} placement="bottomCenter">
+              render: (text, record) => (
+                <Dropdown overlay={this.menu(record)} placement="bottomCenter">
                   <EllipsisOutlined rotate={90} />
                 </Dropdown>
               ),
@@ -81,59 +50,43 @@ export class ManagementComponent extends React.Component {
         <Modal
           title={`ADD NEW ${this.props.newEntityName}`}
           visible={this.state.visible}
-          onOk={() => this.onAddNewEntity(this.props.newEntityName)}
+          onOk={() =>
+            this.props.onAddNewEntity(() => this.setState({ visible: false }))
+          }
           onCancel={this.onCancelAddEntity}
         >
-          {this.props.newEntityName === 'EMPLOYEE' && (
-            <>
-              <Input
-                placeholder="Email"
-                onChange={(event) => this.handleInput(event)}
-                name="email"
-              />
-              <Input
-                placeholder="Employee ID"
-                onChange={(event) => this.handleInput(event)}
-                name="employeeId"
-              />
-            </>
-          )}
-          {this.props.newEntityName === 'ALUMNUS' && (
-            <Input
-              placeholder="Email"
-              onChange={(event) => this.handleInput(event)}
-              name="email"
-            />
-          )}
+          {this.props.newEntityContent}
         </Modal>
       </div>
     );
   }
-  handleInput = (event) => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  };
   onClickAddNewEntity = () => {
     this.setState({
       visible: true,
     });
   };
   onCancelAddEntity = () => {
-    this.setState({
-      visible: false,
-    });
+    this.props.onCancelAddEntity(() => this.setState({ visible: false }));
   };
-  onAddNewEntity = (entityName) => {
-    const data = { email: this.state.email, employeeId: this.state.employeeId };
-    if (entityName === 'EMPLOYEE') {
-      inviteEmployee(data);
-      this.setState({ email: '', employeeId: '', visible: false });
-    }
-    if (entityName === 'ALUMNUS') {
-      inviteAlum(data);
-      this.setState({ email: '', visible: false });
-    }
-  };
+  menu(record) {
+    return (
+      <Menu>
+        <Menu.Item onClick={() => this.props.onDeactivate(record)}>
+          Deactivate
+        </Menu.Item>
+      </Menu>
+    );
+  }
 }
+
+ManagementComponent.propTypes = {
+  onAddNewEntity: PropTypes.func.isRequired,
+  onCancelAddEntity: PropTypes.func.isRequired,
+  newEntityName: PropTypes.string.isRequired,
+  headerTitle: PropTypes.string.isRequired,
+  columnDefs: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  newEntityContent: PropTypes.element.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  onDeactivate: PropTypes.func.isRequired,
+};
