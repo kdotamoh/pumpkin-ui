@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import 'style/index.css';
-import * as serviceWorker from './serviceWorker';
+import './style/index.css';
+import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { unauthorized, authorized } from 'routes/routes';
+import { unauthorized, authorized } from './app/routes/routes';
 
-import PrivateRoute from 'hocs/PrivateRoute';
+import PrivateRoute from './app/hocs/PrivateRoute';
 
-import store from 'store';
+import store from './app/store';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -36,7 +36,7 @@ ReactDOM.render(
               key={route.path}
               path={route.path}
               exact={route.exact}
-              component={(props) => {
+              Component={(props) => {
                 return route.layout ? (
                   <route.layout {...props}>
                     <route.component {...props} />
@@ -48,26 +48,6 @@ ReactDOM.render(
             />
           ))}
         </Switch>
-        {/* {routes.map((route, index) => {
-        return (
-          <React.StrictMode key={index}>
-            <Route
-              key={index}
-              path={route.path}
-              exact={route.exact}
-              component={(props) => {
-                return route.layout ? (
-                  <route.layout {...props}>
-                    <route.component {...props} />
-                  </route.layout>
-                ) : (
-                  <route.component {...props} />
-                );
-              }}
-            />
-          </React.StrictMode>
-        );
-      })} */}
       </Router>
     </Provider>
   </React.StrictMode>,
@@ -77,4 +57,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+registerServiceWorker();
