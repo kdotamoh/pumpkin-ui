@@ -50,7 +50,7 @@ export async function getAlumni() {
 
 export async function searchAlum(searchKey) {
   try {
-    const { data } = await client.post('/seo-alum/search', {
+    const { data } = await client.get('/seo-alum/search', {
       headers: {
         user_token: token,
       },
@@ -72,15 +72,11 @@ export async function searchAlum(searchKey) {
 
 export async function deleteAlum(email) {
   try {
-    const { data } = await client.post(
-      '/seo-alum/delete',
-      { email },
-      {
-        headers: {
-          user_token: token,
-        },
-      }
-    );
+    const { data } = await client.delete(`/seo-alum/delete/${email}`, {
+      headers: {
+        user_token: token,
+      },
+    });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {

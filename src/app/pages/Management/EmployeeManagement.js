@@ -124,8 +124,9 @@ export class EmployeeManagement extends React.Component {
 
   onSearchEmployees = async (searchKey) => {
     const filteredEmployees = await searchEmployees(searchKey);
+    const employeesContent = filteredEmployees.content;
     this.setState({
-      data: filteredEmployees,
+      data: employeesContent,
     });
   };
   showDeactivateConfirmationModal(record) {

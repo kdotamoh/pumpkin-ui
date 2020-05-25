@@ -50,7 +50,7 @@ export async function getEmployees() {
 
 export async function searchEmployees(searchKey) {
   try {
-    const { data } = await client.post('/seo-employee/search', {
+    const { data } = await client.get('/seo-employee/search', {
       headers: {
         user_token: token,
       },
@@ -72,15 +72,11 @@ export async function searchEmployees(searchKey) {
 
 export async function deleteEmployee(email) {
   try {
-    const { data } = await client.post(
-      '/seo-employee/delete',
-      { email },
-      {
-        headers: {
-          user_token: token,
-        },
-      }
-    );
+    const { data } = await client.delete(`/seo-employee/delete/${email}`, {
+      headers: {
+        user_token: token,
+      },
+    });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {

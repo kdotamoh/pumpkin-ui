@@ -131,8 +131,9 @@ export class AlumniManagement extends React.Component {
   };
   onSearchAlumni = async (searchKey) => {
     const filteredAlumni = await searchAlum(searchKey);
+    const alumniContent = filteredAlumni.content;
     this.setState({
-      data: filteredAlumni,
+      data: alumniContent,
     });
   };
   showDeactivateConfirmationModal(record) {
