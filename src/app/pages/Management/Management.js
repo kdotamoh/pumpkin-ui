@@ -26,7 +26,7 @@ export class ManagementComponent extends React.Component {
             </Button>
             <Input
               className="management-component__search"
-              placeholder="Search by name"
+              placeholder="Search by email address"
               value={this.state.searchValue}
               onChange={(e) => this.props.onSearch(e.target.value)}
             />
