@@ -5,7 +5,12 @@ import {
   AppstoreOutlined,
   GoldOutlined,
   CalendarOutlined,
+  ExportOutlined,
 } from '@ant-design/icons';
+// import { useDispatch } from 'react-redux';
+import store from '../store';
+
+import { unsetUser } from '../store/auth';
 
 const sidebarItems = [
   {
@@ -33,13 +38,30 @@ const sidebarItems = [
     icon: <GoldOutlined />,
     route: '/alumni',
   },
+  {
+    key: '5',
+    name: 'Logout',
+    icon: <ExportOutlined />,
+    route: '/#',
+  },
 ];
+
 export const SideBar = () => (
   <Menu mode="inline">
     {sidebarItems.map(
       (item) => {
         return (
-          <Menu.Item key={item.key}>
+          <Menu.Item
+            onClick={
+              item.name === 'Logout'
+                ? () => {
+                    console.log('clicked');
+                    store.dispatch(unsetUser());
+                  }
+                : null
+            }
+            key={item.key}
+          >
             <NavLink to={item.route}>
               {item.icon}
               <span>{item.name}</span>
