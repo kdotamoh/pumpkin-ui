@@ -18,11 +18,11 @@ export async function validateUser(reference) {
 export async function activateUser(reference, data) {
   try {
     const { data: res } = await client.post(`/activate/${reference}`, data);
-    const { requestSuccessful } = res;
-    return requestSuccessful;
+    const { requestSuccessful, responseMessage } = res;
+    return { requestSuccessful, responseMessage };
   } catch (err) {
     const {
-      data: { responseMessage, requestSuccessful },
+      data: { requestSuccessful, responseMessage },
     } = err.response;
     message.error(`An error occurred: ${responseMessage}`);
     return { requestSuccessful, responseMessage };
