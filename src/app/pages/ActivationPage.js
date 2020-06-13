@@ -10,6 +10,7 @@ import pumpkin from 'assets/logo-large.png';
 const ActivationPage = () => {
   const [ref, setRef] = React.useState('');
   const [status, setStatus] = React.useState('loading');
+  const [countryCode, setCountryCode] = React.useState(233);
 
   const getRef = async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -35,10 +36,11 @@ const ActivationPage = () => {
   }, [ref]);
 
   const handleSubmit = async (values) => {
-    const data = { ...values };
+    const data = { ...values, phoneNumber: countryCode + values.phoneNumber };
+    console.log(data);
     setStatus('loading');
-    const success = await activateUser(ref, data);
-    success.requestSuccesful ? setStatus('activated') : setStatus('failed');
+    const { requestSuccessful } = await activateUser(ref, data);
+    requestSuccessful ? setStatus('activated') : setStatus('failed');
   };
 
   if (status === 'loading') {
@@ -139,12 +141,24 @@ const ActivationPage = () => {
                 },
               ]}
             >
-              <Input
-                className="login-form__input"
-                type="number"
-                name="phoneNumber"
-                placeholder="Phone number"
-              />
+              <label className="login-form__input" style={{ display: 'flex' }}>
+                <select
+                  style={{ WebkitAppearance: 'none', border: 'transparent' }}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  value={countryCode}
+                >
+                  <option value="233">+233</option>
+                  <option value="234">+234</option>
+                </select>
+
+                <Input
+                  style={{ border: 'transparent' }}
+                  type="number"
+                  inputmode="numeric"
+                  name="phoneNumber"
+                  placeholder="Phone number"
+                />
+              </label>
             </Form.Item>
             <Form.Item
               name="password"
@@ -154,11 +168,7 @@ const ActivationPage = () => {
                   required: true,
                   message: 'Password is required.',
                 },
-                { min: 8, message: 'Must be at least 8 characters.' },
-                {
-                  pattern: new RegExp(/\d+/g),
-                  message: 'Must contain at least one number.',
-                },
+                { min: 8, message: 'Must be at least 8 characters long.' },
                 {
                   pattern: new RegExp(/\d+/g),
                   message: 'Must contain at least one number.',
@@ -168,7 +178,7 @@ const ActivationPage = () => {
                   message: 'Must contain at least one uppercase character.',
                 },
                 {
-                  pattern: new RegExp(/\W/g),
+                  pattern: new RegExp(/\W/g), // TODO: match a specific set of characters. this allows '.' for instance, which the server rejects
                   message: 'Must contain at least one special character.',
                 },
               ]}
