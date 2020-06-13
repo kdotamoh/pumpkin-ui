@@ -8,6 +8,7 @@ import {
 import { useHistory } from 'react-router-dom';
 
 import '../../style/login-page.css';
+import pumpkin from 'assets/logo-large.png';
 
 import { login } from '../../api/auth';
 
@@ -36,7 +37,13 @@ export const LoginPage = () => {
     <div className="login-page">
       <div className="login-page__main">
         <div className="login-page__navigation">
-          <div>logo</div>
+          <figure style={{ maxHeight: '10rem' }}>
+            <img
+              src={pumpkin}
+              style={{ height: '100%', width: 'auto' }}
+              alt=""
+            />
+          </figure>
           <a className="login-form__link" href="#/">
             Home
           </a>
@@ -57,7 +64,7 @@ export const LoginPage = () => {
           <input
             type="text"
             name="email"
-            className="login-form__input"
+            className="login-form__input mb-2rem"
             placeholder="Your E-Mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +76,7 @@ export const LoginPage = () => {
           <input
             type="password"
             name="password"
-            className="login-form__input"
+            className="login-form__input mb-2rem"
             placeholder="Your Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

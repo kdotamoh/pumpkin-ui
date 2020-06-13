@@ -5,6 +5,7 @@ import { Input, Spin, Form } from 'antd';
 import { validateUser, activateUser } from '../../api/user-management/user';
 
 import '../../style/activation-page.css';
+import pumpkin from 'assets/logo-large.png';
 
 const ActivationPage = () => {
   const [ref, setRef] = React.useState('');
@@ -14,7 +15,7 @@ const ActivationPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const reference = urlParams.get('ref');
     await setRef(reference);
-    setStatus('loaded');
+    setStatus('success');
   };
 
   React.useEffect(() => {
@@ -79,6 +80,15 @@ const ActivationPage = () => {
       <div className="activation-page">
         <div className="activation-page__side" />
         <div className="activation-page__main">
+          <div className="login-page__navigation">
+            <figure style={{ maxHeight: '10rem' }}>
+              <img
+                src={pumpkin}
+                style={{ height: '100%', width: 'auto' }}
+                alt=""
+              />
+            </figure>
+          </div>
           <Form
             name="activation"
             onFinish={handleSubmit}
@@ -86,6 +96,7 @@ const ActivationPage = () => {
             className="activation-form"
             scrollToFirstError
           >
+            <h1 className="login-form__h1">ACCOUNT ACTIVATION</h1>
             <p className="activation-form__header">
               Enter your details to activate your account:
             </p>
@@ -104,7 +115,6 @@ const ActivationPage = () => {
                 placeholder="First Name"
               />
             </Form.Item>
-
             <Form.Item
               name="lastName"
               rules={[
