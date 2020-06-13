@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Spin } from 'antd';
+import { Input, Spin, Form } from 'antd';
 
 import { validateUser, activateUser } from '../../api/user-management/user';
 
@@ -9,11 +9,6 @@ import '../../style/activation-page.css';
 const ActivationPage = () => {
   const [ref, setRef] = React.useState('');
   const [status, setStatus] = React.useState('loading');
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
 
   const getRef = async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -38,17 +33,11 @@ const ActivationPage = () => {
     }
   }, [ref]);
 
-  const handleSubmit = async () => {
-    const data = {
-      firstName,
-      lastName,
-      phoneNumber,
-      password,
-      passwordConfirmation,
-    };
+  const handleSubmit = async (values) => {
+    const data = { ...values };
     setStatus('loading');
     const success = await activateUser(ref, data);
-    success ? setStatus('activated') : setStatus('failed');
+    success.requestSuccesful ? setStatus('activated') : setStatus('failed');
   };
 
   if (status === 'loading') {
@@ -70,64 +59,152 @@ const ActivationPage = () => {
   if (status === 'failed') {
     return (
       <div className="center-all activation-page--min-height">
-        <div>Oops! Something went wrong. Please try again.</div>
+        <div>
+          Oops! Something went wrong. Please{' '}
+          <a href="#/" onClick={() => window.location.reload()}>
+            refresh
+          </a>{' '}
+          and try again.
+        </div>
       </div>
     );
   }
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
   if (status === 'success') {
     return (
       <div className="activation-page">
         <div className="activation-page__side" />
         <div className="activation-page__main">
-          <form
+          <Form
+            name="activation"
+            onFinish={handleSubmit}
+            onFinishFailed={onFinishFailed}
             className="activation-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
+            scrollToFirstError
           >
             <p className="activation-form__header">
               Enter your details to activate your account:
             </p>
-            <Input
-              className="login-form__input"
+            <Form.Item
               name="firstName"
-              placeholder="First Name"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <Input
-              className="login-form__input"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your first name',
+                },
+              ]}
+            >
+              <Input
+                className="login-form__input"
+                name="firstName"
+                placeholder="First Name"
+              />
+            </Form.Item>
+
+            <Form.Item
               name="lastName"
-              placeholder="Last Name"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <Input
-              className="login-form__input"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your last name',
+                },
+              ]}
+            >
+              <Input
+                className="login-form__input"
+                name="lastName"
+                placeholder="Last Name"
+              />
+            </Form.Item>
+            <Form.Item
               name="phoneNumber"
-              placeholder="Phone number"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <Input
-              className="login-form__input"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your phone number',
+                },
+              ]}
+            >
+              <Input
+                className="login-form__input"
+                type="number"
+                name="phoneNumber"
+                placeholder="Phone number"
+              />
+            </Form.Item>
+            <Form.Item
               name="password"
-              placeholder="Password"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Input
-              className="login-form__input"
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: 'Password is required.',
+                },
+                { min: 8, message: 'Must be at least 8 characters.' },
+                {
+                  pattern: new RegExp(/\d+/g),
+                  message: 'Must contain at least one number.',
+                },
+                {
+                  pattern: new RegExp(/\d+/g),
+                  message: 'Must contain at least one number.',
+                },
+                {
+                  pattern: new RegExp(/[A-Z]/g),
+                  message: 'Must contain at least one uppercase character.',
+                },
+                {
+                  pattern: new RegExp(/\W/g),
+                  message: 'Must contain at least one special character.',
+                },
+              ]}
+            >
+              <Input.Password
+                className="login-form__input"
+                name="password"
+                placeholder="Password"
+                type="password"
+              />
+            </Form.Item>
+            <Form.Item
               name="passwordConfirmation"
-              placeholder="Re-enter password"
-              type="password"
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
-            />
+              dependencies={['password']}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password',
+                },
+
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject('Passwords do not match');
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                className="login-form__input"
+                name="passwordConfirmation"
+                placeholder="Re-enter password"
+                type="password"
+              />
+            </Form.Item>
             <button
               className="button button--primary login-form__button"
               type="submit"
             >
               Submit
             </button>
-          </form>
+          </Form>
         </div>
       </div>
     );
