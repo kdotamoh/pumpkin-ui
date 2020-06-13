@@ -16,10 +16,14 @@ const authSlice = createSlice({
       sessionStorage.setItem('seoPumpkinUser', JSON.stringify(action.payload));
       return action.payload;
     },
+    unsetUser() {
+      sessionStorage.removeItem('seoPumpkinUser');
+      return {};
+    },
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, unsetUser } = authSlice.actions;
 
 export default authSlice.reducer;
 
