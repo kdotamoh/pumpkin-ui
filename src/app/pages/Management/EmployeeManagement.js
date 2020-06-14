@@ -14,6 +14,11 @@ import {
 } from '../../../assets/svg/active-icon';
 const columns = [
   {
+    title: 'Employee ID',
+    dataIndex: 'employeeId',
+    key: 'employeeId',
+  },
+  {
     title: 'First Name',
     dataIndex: 'firstName',
     key: 'firstName',
@@ -48,11 +53,7 @@ const columns = [
 
 export class EmployeeManagement extends React.Component {
   componentDidMount() {
-    this.getEmployees().then((res) => {
-      this.setState({
-        data: res,
-      });
-    });
+    this.setEmployeeData();
   }
   constructor(props) {
     super(props);
@@ -73,7 +74,7 @@ export class EmployeeManagement extends React.Component {
         onCancelAddEntity={(callback) => this.onCancelAddEmployee(callback)}
         newEntityContent={this.addNewEmployeeContent()}
         onSearch={this.onSearchEmployees}
-        onDeactivate={this.showDeactivateConfirmationModal}
+        onDelete={this.showDeleteConfirmationModal}
       />
     );
   }
@@ -112,6 +113,7 @@ export class EmployeeManagement extends React.Component {
       employeeID: '',
     });
     callback();
+    this.setEmployeeData();
   };
 
   onCancelAddEmployee = (callback) => {
@@ -120,6 +122,7 @@ export class EmployeeManagement extends React.Component {
       employeeID: '',
     });
     callback();
+    this.setEmployeeData();
   };
 
   onSearchEmployees = async (searchKey) => {
@@ -129,17 +132,25 @@ export class EmployeeManagement extends React.Component {
       data: employeesContent,
     });
   };
-  showDeactivateConfirmationModal(record) {
+  showDeleteConfirmationModal = (record) => {
     const { confirm } = Modal;
     confirm({
-      title: 'Are you sure you want to deactivate this employee?',
+      title: 'Are you sure you want to remove this employee?',
       icon: <ExclamationCircleOutlined />,
       content: 'Caution: This cannot be undone.',
-      okText: 'Deactivate',
+      okText: 'Remove',
       okType: 'danger',
       cancelText: 'Cancel',
-      onOk: async () => await deleteEmployee(record.email),
+      onOk: async () =>
+        await deleteEmployee(record.email).then(() => this.setEmployeeData()),
       centered: true,
+    });
+  };
+  setEmployeeData() {
+    this.getEmployees().then((res) => {
+      this.setState({
+        data: res,
+      });
     });
   }
 }

@@ -16,6 +16,7 @@ export async function inviteEmployee(email, employeeId) {
       }
     );
     const { responseBody } = data;
+    message.success('Employee added successfully');
     return responseBody;
   } catch (err) {
     const {
@@ -78,13 +79,14 @@ export async function deleteEmployee(email) {
       },
     });
     const { responseBody } = data;
+    message.success('Employee removed successfully');
     return responseBody;
   } catch (err) {
     const {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot deactivate employee with email ${email}: ${responseMessage}`
+      `Cannot remove employee with email ${email}: ${responseMessage}`
     );
   }
 }

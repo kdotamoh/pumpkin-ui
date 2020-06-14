@@ -35,7 +35,7 @@ const columns = [
     key: 'phoneNumber',
   },
   {
-    title: 'SEO Graduation Year',
+    title: 'SEO Year',
     dataIndex: 'seoGraduationYear',
     key: 'seoGraduationYear',
   },
@@ -54,11 +54,7 @@ const columns = [
 
 export class AlumniManagement extends React.Component {
   componentDidMount() {
-    this.getAlumni().then((res) => {
-      this.setState({
-        data: res,
-      });
-    });
+    this.setAlumniData();
   }
   constructor(props) {
     super(props);
@@ -80,7 +76,7 @@ export class AlumniManagement extends React.Component {
           onCancelAddEntity={this.onCancelAddAlum}
           newEntityContent={this.addNewAlumniContent()}
           onSearch={this.onSearchAlumni}
-          onDeactivate={this.showDeactivateConfirmationModal}
+          onDelete={this.showDeleteConfirmationModal}
         />
       </React.Fragment>
     );
@@ -95,7 +91,7 @@ export class AlumniManagement extends React.Component {
             onChange={(e) => this.handleInput(e, 'email')}
           />
           <Input
-            placeholder="SEO Graduation Year"
+            placeholder="SEO Year"
             value={this.state.seoGraduationYear}
             onChange={(e) => this.handleInput(e, 'seoGraduationYear')}
           />
@@ -120,6 +116,7 @@ export class AlumniManagement extends React.Component {
       seoGraduationYear: '',
     });
     callback();
+    this.setAlumniData();
   };
 
   onCancelAddAlum = (callback) => {
@@ -128,6 +125,7 @@ export class AlumniManagement extends React.Component {
       seoGraduationYear: '',
     });
     callback();
+    this.setAlumniData();
   };
   onSearchAlumni = async (searchKey) => {
     const filteredAlumni = await searchAlum(searchKey);
@@ -136,17 +134,25 @@ export class AlumniManagement extends React.Component {
       data: alumniContent,
     });
   };
-  showDeactivateConfirmationModal(record) {
+  showDeleteConfirmationModal = (record) => {
     const { confirm } = Modal;
     confirm({
-      title: 'Are you sure you want to deactivate this alumni?',
+      title: 'Are you sure you want to remove this alumni?',
       icon: <ExclamationCircleOutlined />,
       content: 'Caution: This cannot be undone.',
-      okText: 'Deactivate',
+      okText: 'Remove',
       okType: 'danger',
       cancelText: 'Cancel',
-      onOk: async () => await deleteAlum(record.email),
+      onOk: async () =>
+        await deleteAlum(record.email).then(() => this.setAlumniData()),
       centered: true,
+    });
+  };
+  setAlumniData() {
+    this.getAlumni().then((res) => {
+      this.setState({
+        data: res,
+      });
     });
   }
 }
