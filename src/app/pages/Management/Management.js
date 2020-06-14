@@ -71,8 +71,8 @@ export class ManagementComponent extends React.Component {
   menu(record) {
     return (
       <Menu>
-        <Menu.Item onClick={() => this.props.onDeactivate(record)}>
-          Deactivate
+        <Menu.Item onClick={() => this.props.onDelete(record)}>
+          Remove
         </Menu.Item>
       </Menu>
     );
@@ -88,5 +88,5 @@ ManagementComponent.propTypes = {
   data: PropTypes.array.isRequired,
   newEntityContent: PropTypes.element.isRequired,
   onSearch: PropTypes.func.isRequired,
-  onDeactivate: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };

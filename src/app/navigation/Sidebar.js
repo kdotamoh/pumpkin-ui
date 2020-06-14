@@ -1,30 +1,26 @@
 import { Menu } from 'antd';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  AppstoreOutlined,
-  GoldOutlined,
-  CalendarOutlined,
-  ExportOutlined,
-} from '@ant-design/icons';
+import { GoldOutlined, ExportOutlined } from '@ant-design/icons';
 // import { useDispatch } from 'react-redux';
 import store from '../store';
 
 import { unsetUser } from '../store/auth';
 
 const sidebarItems = [
-  {
-    key: '1',
-    name: 'Dashboard',
-    icon: <AppstoreOutlined />,
-    route: '',
-  },
-  {
-    key: '2',
-    name: 'Cycles',
-    icon: <CalendarOutlined />,
-    route: '',
-  },
+  // commenting out for now until they have screens attached to them
+  // {
+  //   key: '1',
+  //   name: 'Dashboard',
+  //   icon: <AppstoreOutlined />,
+  //   route: '',
+  // },
+  // {
+  //   key: '2',
+  //   name: 'Cycles',
+  //   icon: <CalendarOutlined />,
+  //   route: '',
+  // },
   {
     key: '3',
     name: 'Employees',

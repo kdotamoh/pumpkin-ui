@@ -16,6 +16,7 @@ export async function inviteAlum(email, seoGraduationYear) {
       }
     );
     const { responseBody } = data;
+    message.success('Alumnus added successfully');
     return responseBody;
   } catch (err) {
     const {
@@ -78,13 +79,14 @@ export async function deleteAlum(email) {
       },
     });
     const { responseBody } = data;
+    message.success('Alumnus removed successfully');
     return responseBody;
   } catch (err) {
     const {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot deactivate alumus with email ${email}: ${responseMessage}`
+      `Cannot remove alumus with email ${email}: ${responseMessage}`
     );
   }
 }
