@@ -1,9 +1,11 @@
-import { EmployeeKeys, AlumKeys } from '../actions/action-constants';
+import { EmployeeKeys, AlumKeys, TrackKeys } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
+import * as TrackService from 'api/track';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
+import { setTracks, getTracks } from '../actions/track-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -75,6 +77,40 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(setAlumni(alumniContent));
       } catch (err) {
         message.error(`Cannot search alumni: ${err}`);
+      }
+      break;
+    }
+
+    case TrackKeys.GET_TRACKS:
+      try {
+        const tracks = await TrackService.getTracks();
+        const trackContent = tracks.content;
+        store.dispatch(setTracks(trackContent));
+      } catch (err) {
+        message.error(`Cannot get tracks: ${err}`);
+      }
+      break;
+    case TrackKeys.CREATE_TRACK:
+      try {
+        await TrackService.createTrack(action.name);
+        store.dispatch(getTracks());
+      } catch (err) {
+        message.error(`Cannot create track: ${err}`);
+      }
+      break;
+    case TrackKeys.DELETE_TRACK:
+      try {
+        await TrackService.deleteTrack(action.code);
+      } catch (err) {
+        message.error(`Cannot delete track: ${err}`);
+      }
+      break;
+    case TrackKeys.UPDATE_TRACK: {
+      try {
+        await TrackService.updateTrack(action.name, action.code);
+        store.dispatch(getTracks());
+      } catch (err) {
+        message.error(`Cannot update track: ${err}`);
       }
       break;
     }

@@ -24,3 +24,8 @@ export const searchEmployees = (searchKey) => ({
   type: EmployeeKeys.SEARCH_EMPLOYEES,
   searchKey,
 });
+
+export const setCurrentEmployee = (record) => ({
+  type: EmployeeKeys.SET_CURRENT_EMPLOYEE,
+  record,
+});

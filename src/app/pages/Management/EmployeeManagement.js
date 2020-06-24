@@ -12,6 +12,7 @@ import {
   inviteEmployee,
   deleteEmployee,
   searchEmployees,
+  setCurrentEmployee,
 } from '../../store/actions/employee-actions';
 import PropTypes from 'prop-types';
 const columns = [
@@ -73,9 +74,10 @@ export class EmployeeManagementComponent extends React.Component {
         newEntityName="EMPLOYEE"
         onAddNewEntity={(callback) => this.onAddNewEmployee(callback)}
         onCancelAddEntity={(callback) => this.onCancelAddEmployee(callback)}
-        newEntityContent={this.addNewEmployeeContent()}
+        entityContent={this.addNewEmployeeContent()}
         onSearch={this.onSearchEmployees}
         onDelete={this.showDeleteConfirmationModal}
+        setCurrentEntity={this.props.setCurrentEmployee}
       />
     );
   }
@@ -143,6 +145,7 @@ EmployeeManagementComponent.propTypes = {
   deleteEmployee: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired, //  TODO: make arrayOf
   searchEmployees: PropTypes.func.isRequired,
+  setCurrentEmployee: PropTypes.func,
 };
 
 /**
@@ -157,6 +160,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(inviteEmployee(email, employeeId)),
   deleteEmployee: (email) => dispatch(deleteEmployee(email)),
   searchEmployees: (searchKey) => dispatch(searchEmployees(searchKey)),
+  setCurrentEmployee: (record) => dispatch(setCurrentEmployee(record)),
 });
 
 /**

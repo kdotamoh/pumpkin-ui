@@ -3,6 +3,7 @@ import { message } from 'antd';
 
 export const initialAlumState = {
   available: [],
+  current: null,
 };
 
 /**
@@ -16,6 +17,12 @@ export const alumReducer = (state = initialAlumState, action) => {
       return {
         ...state,
         available: action.alumni,
+      };
+    }
+    case AlumKeys.SET_CURRENT_ALUM: {
+      return {
+        ...state,
+        current: action.record,
       };
     }
     case AlumKeys.DELETE_ALUM: {
