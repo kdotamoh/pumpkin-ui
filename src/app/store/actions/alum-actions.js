@@ -24,3 +24,8 @@ export const searchAlumni = (searchKey) => ({
   type: AlumKeys.SEARCH_ALUMNI,
   searchKey,
 });
+
+export const setCurrentAlum = (record) => ({
+  type: AlumKeys.SET_CURRENT_ALUM,
+  record,
+});

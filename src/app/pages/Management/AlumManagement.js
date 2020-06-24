@@ -13,6 +13,7 @@ import {
   inviteAlum,
   deleteAlum,
   searchAlumni,
+  setCurrentAlum,
 } from 'app/store/actions/alum-actions';
 
 const columns = [
@@ -54,7 +55,7 @@ const columns = [
   },
 ];
 
-export class AlumniManagementComponent extends React.Component {
+export class AlumManagementComponent extends React.Component {
   componentDidMount() {
     this.props.getAlumni(); // TODO: move to root
   }
@@ -75,9 +76,10 @@ export class AlumniManagementComponent extends React.Component {
           newEntityName="ALUMNUS"
           onAddNewEntity={this.onAddNewAlum}
           onCancelAddEntity={this.onCancelAddAlum}
-          newEntityContent={this.addNewAlumniContent()}
+          entityContent={this.addNewAlumniContent()}
           onSearch={this.onSearchAlumni}
           onDelete={this.showDeleteConfirmationModal}
+          setCurrentEntity={this.props.setCurrentAlum}
         />
       </React.Fragment>
     );
@@ -139,12 +141,13 @@ export class AlumniManagementComponent extends React.Component {
     });
   };
 }
-AlumniManagementComponent.propTypes = {
+AlumManagementComponent.propTypes = {
   getAlumni: PropTypes.func.isRequired,
   inviteAlum: PropTypes.func.isRequired,
   deleteAlum: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired, //  TODO: make arrayOf
   searchAlumni: PropTypes.func.isRequired,
+  setCurrentAlum: PropTypes.func,
 };
 
 /**
@@ -159,12 +162,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(inviteAlum(email, seoGraduationYear)),
   deleteAlum: (email) => dispatch(deleteAlum(email)),
   searchAlumni: (searchKey) => dispatch(searchAlumni(searchKey)),
+  setCurrentAlum: (record) => dispatch(setCurrentAlum(record)),
 });
 
 /**
- * The connected AlumniManagementComponent
+ * The connected AlumManagementComponent
  */
-export const AlumniManagement = connect(
+export const AlumManagement = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlumniManagementComponent);
+)(AlumManagementComponent);

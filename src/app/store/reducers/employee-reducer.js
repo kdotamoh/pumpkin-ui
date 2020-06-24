@@ -3,6 +3,7 @@ import { message } from 'antd';
 
 export const initialEmployeeState = {
   available: [],
+  current: null,
 };
 
 /**
@@ -16,6 +17,12 @@ export const employeeReducer = (state = initialEmployeeState, action) => {
       return {
         ...state,
         available: action.employees,
+      };
+    }
+    case EmployeeKeys.SET_CURRENT_EMPLOYEE: {
+      return {
+        ...state,
+        current: action.record,
       };
     }
     case EmployeeKeys.DELETE_EMPLOYEE: {
