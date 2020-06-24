@@ -1,17 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { ManagementComponent } from './Management';
 import { Input, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
-  getEmployees,
-  inviteEmployee,
-  searchEmployees,
-  deleteEmployee,
-} from '../../../api/user-management/employee';
-import {
   activeIconSVG,
   deactivatedIconSVG,
 } from '../../../assets/svg/active-icon';
+import {
+  getEmployees,
+  inviteEmployee,
+  deleteEmployee,
+  searchEmployees,
+} from '../../store/actions/employee-actions';
+import PropTypes from 'prop-types';
 const columns = [
   {
     title: 'Employee ID',
@@ -51,14 +53,13 @@ const columns = [
   },
 ];
 
-export class EmployeeManagement extends React.Component {
+export class EmployeeManagementComponent extends React.Component {
   componentDidMount() {
-    this.setEmployeeData();
+    this.props.getEmployees(); // TODO: move to root
   }
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       email: '',
       employeeId: '',
     };
@@ -68,7 +69,7 @@ export class EmployeeManagement extends React.Component {
       <ManagementComponent
         headerTitle="LIST OF EMPLOYEES"
         columnDefs={columns}
-        data={this.state.data}
+        data={this.props.data}
         newEntityName="EMPLOYEE"
         onAddNewEntity={(callback) => this.onAddNewEmployee(callback)}
         onCancelAddEntity={(callback) => this.onCancelAddEmployee(callback)}
@@ -101,19 +102,13 @@ export class EmployeeManagement extends React.Component {
     });
   };
 
-  getEmployees = async () => {
-    const employees = await getEmployees();
-    return employees.content;
-  };
-
-  onAddNewEmployee = async (callback) => {
-    await inviteEmployee(this.state.email, this.state.employeeId);
+  onAddNewEmployee = (callback) => {
+    this.props.inviteEmployee(this.state.email, this.state.employeeId);
     this.setState({
       email: '',
       employeeID: '',
     });
     callback();
-    this.setEmployeeData();
   };
 
   onCancelAddEmployee = (callback) => {
@@ -122,15 +117,10 @@ export class EmployeeManagement extends React.Component {
       employeeID: '',
     });
     callback();
-    this.setEmployeeData();
   };
 
   onSearchEmployees = async (searchKey) => {
-    const filteredEmployees = await searchEmployees(searchKey);
-    const employeesContent = filteredEmployees.content;
-    this.setState({
-      data: employeesContent,
-    });
+    this.props.searchEmployees(searchKey);
   };
   showDeleteConfirmationModal = (record) => {
     const { confirm } = Modal;
@@ -141,16 +131,38 @@ export class EmployeeManagement extends React.Component {
       okText: 'Remove',
       okType: 'danger',
       cancelText: 'Cancel',
-      onOk: async () =>
-        await deleteEmployee(record.email).then(() => this.setEmployeeData()),
+      onOk: () => this.props.deleteEmployee(record.email),
       centered: true,
     });
   };
-  setEmployeeData() {
-    this.getEmployees().then((res) => {
-      this.setState({
-        data: res,
-      });
-    });
-  }
 }
+
+EmployeeManagementComponent.propTypes = {
+  getEmployees: PropTypes.func.isRequired,
+  inviteEmployee: PropTypes.func.isRequired,
+  deleteEmployee: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired, //  TODO: make arrayOf
+  searchEmployees: PropTypes.func.isRequired,
+};
+
+/**
+ * Redux
+ */
+const mapStateToProps = (state) => ({
+  data: state.employees.available,
+});
+const mapDispatchToProps = (dispatch) => ({
+  getEmployees: () => dispatch(getEmployees()),
+  inviteEmployee: (email, employeeId) =>
+    dispatch(inviteEmployee(email, employeeId)),
+  deleteEmployee: (email) => dispatch(deleteEmployee(email)),
+  searchEmployees: (searchKey) => dispatch(searchEmployees(searchKey)),
+});
+
+/**
+ * The connected EmployeeManagementComponent
+ */
+export const EmployeeManagement = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EmployeeManagementComponent);

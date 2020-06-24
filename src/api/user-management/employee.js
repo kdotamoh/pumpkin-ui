@@ -2,7 +2,10 @@ import { message } from 'antd';
 import client from '../../api';
 import store from '../../app/store';
 
-const token = store.getState().user.userToken;
+let token;
+if (store) {
+  token = store.getState().user.userToken;
+}
 
 export async function inviteEmployee(email, employeeId) {
   try {

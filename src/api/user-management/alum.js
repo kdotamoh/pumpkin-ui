@@ -2,7 +2,10 @@ import { message } from 'antd';
 import client from '../../api';
 import store from '../../app/store';
 
-const token = store.getState().user.userToken;
+let token;
+if (store) {
+  token = store.getState().user.userToken;
+}
 
 export async function inviteAlum(email, seoGraduationYear) {
   try {
@@ -49,7 +52,7 @@ export async function getAlumni() {
   }
 }
 
-export async function searchAlum(searchKey) {
+export async function searchAlumni(searchKey) {
   try {
     const { data } = await client.get('/seo-alum/search', {
       headers: {
