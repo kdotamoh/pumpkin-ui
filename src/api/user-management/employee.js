@@ -2,7 +2,10 @@ import { message } from 'antd';
 import client from '../../api';
 import store from '../../app/store';
 
-const token = store.getState().user.userToken;
+let token;
+if (store) {
+  token = store.getState().user.userToken;
+}
 
 export async function inviteEmployee(email, employeeId) {
   try {
@@ -16,6 +19,7 @@ export async function inviteEmployee(email, employeeId) {
       }
     );
     const { responseBody } = data;
+    message.success('Employee added successfully');
     return responseBody;
   } catch (err) {
     const {
@@ -78,13 +82,14 @@ export async function deleteEmployee(email) {
       },
     });
     const { responseBody } = data;
+    message.success('Employee removed successfully');
     return responseBody;
   } catch (err) {
     const {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot deactivate employee with email ${email}: ${responseMessage}`
+      `Cannot remove employee with email ${email}: ${responseMessage}`
     );
   }
 }

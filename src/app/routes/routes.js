@@ -1,7 +1,8 @@
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import { LoginPage } from '../pages/LoginPage';
 import { EmployeeManagement } from '../pages/Management/EmployeeManagement';
-import { AlumniManagement } from '../pages/Management/AlumniManagement';
+import { AlumManagement } from '../pages/Management/AlumManagement';
+import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
 import ActivationPage from '../pages/ActivationPage';
 
 export const authorized = [
@@ -13,7 +14,12 @@ export const authorized = [
   {
     path: '/alumni',
     layout: DefaultLayout,
-    component: AlumniManagement,
+    component: AlumManagement,
+  },
+  {
+    path: '/tracks',
+    layout: DefaultLayout,
+    component: ApplicationTrackManagement,
   },
 ];
 

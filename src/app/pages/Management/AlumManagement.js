@@ -5,13 +5,16 @@ import {
   activeIconSVG,
   deactivatedIconSVG,
 } from '../../../assets/svg/active-icon';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   getAlumni,
   inviteAlum,
-  searchAlum,
   deleteAlum,
-} from '../../../api/user-management/alum';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+  searchAlumni,
+  setCurrentAlum,
+} from 'app/store/actions/alum-actions';
 
 const columns = [
   {
@@ -35,7 +38,7 @@ const columns = [
     key: 'phoneNumber',
   },
   {
-    title: 'SEO Graduation Year',
+    title: 'SEO Year',
     dataIndex: 'seoGraduationYear',
     key: 'seoGraduationYear',
   },
@@ -52,18 +55,13 @@ const columns = [
   },
 ];
 
-export class AlumniManagement extends React.Component {
+export class AlumManagementComponent extends React.Component {
   componentDidMount() {
-    this.getAlumni().then((res) => {
-      this.setState({
-        data: res,
-      });
-    });
+    this.props.getAlumni(); // TODO: move to root
   }
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       email: '',
       seoGraduationYear: '',
     };
@@ -74,13 +72,14 @@ export class AlumniManagement extends React.Component {
         <ManagementComponent
           headerTitle="LIST OF ALUMNI"
           columnDefs={columns}
-          data={this.state.data}
+          data={this.props.data}
           newEntityName="ALUMNUS"
           onAddNewEntity={this.onAddNewAlum}
           onCancelAddEntity={this.onCancelAddAlum}
-          newEntityContent={this.addNewAlumniContent()}
+          entityContent={this.addNewAlumniContent()}
           onSearch={this.onSearchAlumni}
-          onDeactivate={this.showDeactivateConfirmationModal}
+          onDelete={this.showDeleteConfirmationModal}
+          setCurrentEntity={this.props.setCurrentAlum}
         />
       </React.Fragment>
     );
@@ -95,7 +94,7 @@ export class AlumniManagement extends React.Component {
             onChange={(e) => this.handleInput(e, 'email')}
           />
           <Input
-            placeholder="SEO Graduation Year"
+            placeholder="SEO Year"
             value={this.state.seoGraduationYear}
             onChange={(e) => this.handleInput(e, 'seoGraduationYear')}
           />
@@ -109,12 +108,8 @@ export class AlumniManagement extends React.Component {
       [name]: value,
     });
   };
-  async getAlumni() {
-    const alumni = await getAlumni();
-    return alumni.content;
-  }
-  onAddNewAlum = async (callback) => {
-    await inviteAlum(this.state.email, this.state.seoGraduationYear);
+  onAddNewAlum = (callback) => {
+    this.props.inviteAlum(this.state.email, this.state.seoGraduationYear);
     this.setState({
       email: '',
       seoGraduationYear: '',
@@ -129,24 +124,51 @@ export class AlumniManagement extends React.Component {
     });
     callback();
   };
-  onSearchAlumni = async (searchKey) => {
-    const filteredAlumni = await searchAlum(searchKey);
-    const alumniContent = filteredAlumni.content;
-    this.setState({
-      data: alumniContent,
-    });
+  onSearchAlumni = (searchKey) => {
+    this.props.searchAlumni(searchKey);
   };
-  showDeactivateConfirmationModal(record) {
+  showDeleteConfirmationModal = (record) => {
     const { confirm } = Modal;
     confirm({
-      title: 'Are you sure you want to deactivate this alumni?',
+      title: 'Are you sure you want to remove this alumni?',
       icon: <ExclamationCircleOutlined />,
       content: 'Caution: This cannot be undone.',
-      okText: 'Deactivate',
+      okText: 'Remove',
       okType: 'danger',
       cancelText: 'Cancel',
-      onOk: async () => await deleteAlum(record.email),
+      onOk: () => this.props.deleteAlum(record.email),
       centered: true,
     });
-  }
+  };
 }
+AlumManagementComponent.propTypes = {
+  getAlumni: PropTypes.func.isRequired,
+  inviteAlum: PropTypes.func.isRequired,
+  deleteAlum: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired, //  TODO: make arrayOf
+  searchAlumni: PropTypes.func.isRequired,
+  setCurrentAlum: PropTypes.func,
+};
+
+/**
+ * Redux
+ */
+const mapStateToProps = (state) => ({
+  data: state.alumni.available,
+});
+const mapDispatchToProps = (dispatch) => ({
+  getAlumni: () => dispatch(getAlumni()),
+  inviteAlum: (email, seoGraduationYear) =>
+    dispatch(inviteAlum(email, seoGraduationYear)),
+  deleteAlum: (email) => dispatch(deleteAlum(email)),
+  searchAlumni: (searchKey) => dispatch(searchAlumni(searchKey)),
+  setCurrentAlum: (record) => dispatch(setCurrentAlum(record)),
+});
+
+/**
+ * The connected AlumManagementComponent
+ */
+export const AlumManagement = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AlumManagementComponent);

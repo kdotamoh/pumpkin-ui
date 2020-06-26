@@ -1,17 +1,17 @@
 import { message } from 'antd';
-import client from '../../api';
-import store from '../../app/store';
+import client from '../api';
+import store from '../app/store';
 
 let token;
 if (store) {
   token = store.getState().user.userToken;
 }
 
-export async function inviteAlum(email, seoGraduationYear) {
+export async function createTrack(name) {
   try {
     const { data } = await client.post(
-      '/seo-alum/create',
-      { email, seoGraduationYear },
+      '/application-track/create',
+      { name },
       {
         headers: {
           user_token: token,
@@ -19,21 +19,21 @@ export async function inviteAlum(email, seoGraduationYear) {
       }
     );
     const { responseBody } = data;
-    message.success('Alumnus added successfully');
+    message.success('Application track added successfully');
     return responseBody;
   } catch (err) {
     const {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot invite alumus with email - ${email}: ${responseMessage}`
+      `Cannot create application track with name - ${name}: ${responseMessage}`
     );
   }
 }
 
-export async function getAlumni() {
+export async function getTracks() {
   try {
-    const { data } = await client.get('/seo-alum', {
+    const { data } = await client.get('/application-track', {
       headers: {
         user_token: token,
       },
@@ -48,48 +48,49 @@ export async function getAlumni() {
     const {
       data: { responseMessage },
     } = err.response;
-    message.error(`Cannot get alumni: ${responseMessage}`);
+    message.error(`Cannot get application tracks: ${responseMessage}`);
   }
 }
 
-export async function searchAlumni(searchKey) {
+export async function deleteTrack(code) {
   try {
-    const { data } = await client.get('/seo-alum/search', {
-      headers: {
-        user_token: token,
-      },
-      params: {
-        page: 0,
-        size: 20,
-        searchKey,
-      },
-    });
-    const { responseBody } = data;
-    return responseBody;
-  } catch (err) {
-    const {
-      data: { responseMessage },
-    } = err.response;
-    message.error(`Cannot search alumni: ${responseMessage}`);
-  }
-}
-
-export async function deleteAlum(email) {
-  try {
-    const { data } = await client.delete(`/seo-alum/delete/${email}`, {
+    const { data } = await client.delete(`/application-track/delete/${code}`, {
       headers: {
         user_token: token,
       },
     });
     const { responseBody } = data;
-    message.success('Alumnus removed successfully');
+    message.success('Application track removed successfully');
     return responseBody;
   } catch (err) {
     const {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot remove alumus with email ${email}: ${responseMessage}`
+      `Cannot remove application track with code ${code}: ${responseMessage}`
+    );
+  }
+}
+
+export async function updateTrack(name, code) {
+  try {
+    const { data } = await client.put(
+      '/application-track/update',
+      { name, code },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot update application track with code ${code}: ${responseMessage}`
     );
   }
 }
