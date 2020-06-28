@@ -4,6 +4,7 @@ import { EmployeeManagement } from '../pages/Management/EmployeeManagement';
 import { AlumManagement } from '../pages/Management/AlumManagement';
 import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
 import ActivationPage from '../pages/ActivationPage';
+import { RecruitmentCycleManagement } from 'app/pages/Management/CycleManagement';
 
 export const authorized = [
   {
@@ -20,6 +21,11 @@ export const authorized = [
     path: '/tracks',
     layout: DefaultLayout,
     component: ApplicationTrackManagement,
+  },
+  {
+    path: '/cycles',
+    layout: DefaultLayout,
+    component: RecruitmentCycleManagement,
   },
 ];
 
