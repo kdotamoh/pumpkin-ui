@@ -1,11 +1,18 @@
-import { EmployeeKeys, AlumKeys, TrackKeys } from '../actions/action-constants';
+import {
+  EmployeeKeys,
+  AlumKeys,
+  TrackKeys,
+  CycleKeys,
+} from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
 import * as TrackService from 'api/track';
+import * as CycleService from 'api/cycle';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
 import { setTracks, getTracks } from '../actions/track-actions';
+import { setCycles, getCycles } from '../actions/cycle-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -111,6 +118,40 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(getTracks());
       } catch (err) {
         message.error(`Cannot update track: ${err}`);
+      }
+      break;
+    }
+
+    case CycleKeys.GET_CYCLES:
+      try {
+        const cycles = await CycleService.getCycles();
+        const cycleContent = cycles.content;
+        store.dispatch(setCycles(cycleContent));
+      } catch (err) {
+        message.error(`Cannot get cycles: ${err}`);
+      }
+      break;
+    case CycleKeys.CREATE_CYCLE:
+      try {
+        await CycleService.createCycle(action.name);
+        store.dispatch(getCycles());
+      } catch (err) {
+        message.error(`Cannot create cycle: ${err}`);
+      }
+      break;
+    case CycleKeys.DELETE_CYCLE:
+      try {
+        await CycleService.deleteCycle(action.code);
+      } catch (err) {
+        message.error(`Cannot delete cycle: ${err}`);
+      }
+      break;
+    case CycleKeys.UPDATE_CYCLE: {
+      try {
+        await CycleService.updateCycle(action.name, action.code);
+        store.dispatch(getCycles());
+      } catch (err) {
+        message.error(`Cannot update cycle: ${err}`);
       }
       break;
     }
