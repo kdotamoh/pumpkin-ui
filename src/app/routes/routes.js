@@ -1,13 +1,13 @@
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import { ApplicationLayout } from '../layouts/ApplicationLayout';
 import { LoginPage } from '../pages/LoginPage';
-import App from '../../App';
 import { EmployeeManagement } from '../pages/Management/EmployeeManagement';
 import { AlumManagement } from '../pages/Management/AlumManagement';
 import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
 import { ApplicationPage } from '../pages/Application/ApplicationPage';
 import ActivationPage from '../pages/ActivationPage';
 import { ApplicationSteps } from 'app/pages/Application/ApplicationSteps';
+import { RecruitmentCycleManagement } from 'app/pages/Management/CycleManagement';
 
 export const authorized = [
   {
@@ -25,13 +25,18 @@ export const authorized = [
     layout: DefaultLayout,
     component: ApplicationTrackManagement,
   },
+  {
+    path: '/cycles',
+    layout: DefaultLayout,
+    component: RecruitmentCycleManagement,
+  },
 ];
 
 export const unauthorized = [
   {
     path: '/',
     exact: true,
-    component: App,
+    component: LoginPage,
   },
   {
     path: '/login',

@@ -2,7 +2,12 @@ import { Menu } from 'antd';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { GoldOutlined, ExportOutlined, RiseOutlined } from '@ant-design/icons';
+import {
+  GoldOutlined,
+  LogoutOutlined,
+  RiseOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
 import PropTypes from 'prop-types';
 // import { useDispatch } from 'react-redux';
 import store from '../store';
@@ -56,17 +61,25 @@ export class SideBarComponent extends React.Component {
       },
     ];
     if (this.props.user.roles.includes('SUPER_ADMIN')) {
-      sidebarItems.push({
-        key: 'tracks',
-        name: 'Tracks',
-        icon: <RiseOutlined />,
-        route: '/tracks',
-      });
+      sidebarItems.push(
+        {
+          key: 'tracks',
+          name: 'Tracks',
+          icon: <RiseOutlined />,
+          route: '/tracks',
+        },
+        {
+          key: 'cycles',
+          name: 'Cycles',
+          icon: <SyncOutlined />,
+          route: '/cycles',
+        }
+      );
     }
     sidebarItems.push({
       key: 'logout',
       name: 'Logout',
-      icon: <ExportOutlined />,
+      icon: <LogoutOutlined />,
       route: '/#',
     });
     return sidebarItems;
