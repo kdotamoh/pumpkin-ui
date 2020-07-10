@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './style/index.css';
 import registerServiceWorker from './registerServiceWorker';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { unauthorized, authorized } from './app/routes/routes';
 
 import PrivateRoute from './app/hocs/PrivateRoute';
 
 import store from './app/store';
+import PublicRoute from 'app/hocs/PublicRoute';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,11 +17,11 @@ ReactDOM.render(
       <Router>
         <Switch>
           {unauthorized.map((route) => (
-            <Route
+            <PublicRoute
               key={route.path}
               path={route.path}
               exact={route.exact}
-              component={(props) => {
+              Component={(props) => {
                 return route.layout ? (
                   <route.layout {...props}>
                     <route.component {...props} />

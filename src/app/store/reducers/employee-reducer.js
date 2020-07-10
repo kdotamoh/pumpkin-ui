@@ -25,6 +25,7 @@ export const employeeReducer = (state = initialEmployeeState, action) => {
         current: action.record,
       };
     }
+    // TODO: add employee should happen here too
     case EmployeeKeys.DELETE_EMPLOYEE: {
       const employeeToDelete = state.available.find(
         (employee) => employee.email === action.email

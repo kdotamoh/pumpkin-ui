@@ -1,11 +1,30 @@
-import { EmployeeKeys, AlumKeys, TrackKeys } from '../actions/action-constants';
+import {
+  EmployeeKeys,
+  AlumKeys,
+  TrackKeys,
+  ApplicationFormKeys,
+  UniversityKeys,
+} from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
 import * as TrackService from 'api/track';
+import * as ApplicationFormService from 'api/application-form';
+import * as UniversityService from 'api/universities';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
 import { setTracks, getTracks } from '../actions/track-actions';
+import {
+  setUniversities,
+  setUniversityMajors,
+} from '../actions/university-actions';
+import {
+  setCountries,
+  setGenders,
+  setAcademicStandings,
+  setApplicationTracks,
+  setApplicationEssayQuestions,
+} from '../actions/application-form-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -111,6 +130,150 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(getTracks());
       } catch (err) {
         message.error(`Cannot update track: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.VALIDATE_APPLICATION_FORM: {
+      try {
+        await ApplicationFormService.validateForm(action.reference);
+        // dispatch an action
+      } catch (err) {
+        message.error(`Cannot validate application form: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_COUNTRIES: {
+      try {
+        const countries = await ApplicationFormService.getCountries();
+        store.dispatch(setCountries(countries));
+      } catch (err) {
+        message.error(`Cannot get countries: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_GENDERS: {
+      try {
+        const genders = await ApplicationFormService.getGenders();
+        store.dispatch(setGenders(genders));
+      } catch (err) {
+        message.error(`Cannot get genders: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_ACADEMIC_STANDINGS: {
+      try {
+        const academicStandings = await ApplicationFormService.getAcademicStandings();
+        store.dispatch(setAcademicStandings(academicStandings));
+      } catch (err) {
+        message.error(`Cannot get academic standings: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_APPLICATION_TRACKS: {
+      try {
+        const applicationTracks = await ApplicationFormService.getApplicationTracks();
+        store.dispatch(setApplicationTracks(applicationTracks));
+      } catch (err) {
+        message.error(`Cannot get application tracks: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_APPLICATION_ESSAY_QUESTIONS: {
+      try {
+        const applicationEssayQuestions = await ApplicationFormService.getApplicationEssayQuestions(
+          action.cycleReference
+        );
+        store.dispatch(setApplicationEssayQuestions(applicationEssayQuestions));
+      } catch (err) {
+        message.error(`Cannot get application essay questions: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.GET_UNIVERSITIES: {
+      try {
+        const universities = await UniversityService.getUniversities();
+        const universitiesContent = universities.content;
+        store.dispatch(setUniversities(universitiesContent));
+      } catch (err) {
+        message.error(`Cannot get universities: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.ADD_UNIVERSITY: {
+      try {
+        await UniversityService.addUniversity(action.name, action.country);
+      } catch (err) {
+        message.error(`Cannot add university: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.UPDATE_UNIVERSITY: {
+      try {
+        await UniversityService.updateUniversity(
+          action.code,
+          action.name,
+          action.country
+        );
+      } catch (err) {
+        message.error(`Cannot update university: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.DELETE_UNIVERSITY: {
+      try {
+        await UniversityService.deleteUniversity(action.code);
+      } catch (err) {
+        message.error(`Cannot delete university: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.ACTIVATE_UNIVERSITY: {
+      try {
+        await UniversityService.activateUniversity(action.code);
+      } catch (err) {
+        message.error(`Cannot activate university: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.GET_UNIVERSITY_MAJORS: {
+      try {
+        const universityMajors = await UniversityService.getUniversityMajors();
+        const universityMajorsContent = universityMajors.content;
+        store.dispatch(setUniversityMajors(universityMajorsContent));
+      } catch (err) {
+        message.error(`Cannot get university majors: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.ADD_UNIVERSITY_MAJOR: {
+      try {
+        await UniversityService.addUniversityMajor(action.name, action.country);
+      } catch (err) {
+        message.error(`Cannot add university major: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.UPDATE_UNIVERSITY_MAJOR: {
+      try {
+        await UniversityService.updateUniversityMajor(action.code, action.name);
+      } catch (err) {
+        message.error(`Cannot update university major: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.DELETE_UNIVERSITY_MAJOR: {
+      try {
+        await UniversityService.deleteUniversityMajor(action.code);
+      } catch (err) {
+        message.error(`Cannot delete university major: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.ACTIVATE_UNIVERSITY_MAJOR: {
+      try {
+        await UniversityService.activateUniversityMajor(action.code);
+      } catch (err) {
+        message.error(`Cannot activate university major: ${err}`);
       }
       break;
     }
