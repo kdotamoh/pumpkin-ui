@@ -8,10 +8,8 @@ import {
   getCountries,
   getApplicationEssayQuestions,
 } from 'app/store/actions/application-form-actions';
-import {
-  getUniversities,
-  getUniversityMajors,
-} from 'app/store/actions/university-actions';
+import { getUniversities } from 'app/store/actions/university-actions';
+import { getMajors } from 'app/store/actions/major-actions';
 
 export class PublicRoute extends React.Component {
   componentDidMount() {
@@ -19,7 +17,7 @@ export class PublicRoute extends React.Component {
     this.props.getCountries();
     this.props.getAcademicStandings();
     this.props.getUniversities();
-    this.props.getUniversityMajors();
+    this.props.getMajors();
     // this.props.getApplicationEssayQuestions('J6PNN4SG5U5K975KMGKQ');
   }
   render() {
@@ -39,7 +37,7 @@ PublicRoute.propTypes = {
   getGenders: PropTypes.func.isRequired,
   getCountries: PropTypes.func.isRequired,
   getAcademicStandings: PropTypes.func.isRequired,
-  getUniversityMajors: PropTypes.func.isRequired,
+  getMajors: PropTypes.func.isRequired,
   getUniversities: PropTypes.func.isRequired,
   getApplicationEssayQuestions: PropTypes.func.isRequired,
   path: PropTypes.string,
@@ -57,7 +55,7 @@ const mapDispatchToProps = (dispatch) => ({
   getCountries: () => dispatch(getCountries()),
   getAcademicStandings: () => dispatch(getAcademicStandings()),
   getUniversities: () => dispatch(getUniversities()),
-  getUniversityMajors: () => dispatch(getUniversityMajors()),
+  getMajors: () => dispatch(getMajors()),
   getApplicationEssayQuestions: (cycleReference) =>
     dispatch(getApplicationEssayQuestions(cycleReference)),
 });

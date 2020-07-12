@@ -23,14 +23,18 @@ export const LoginPage = () => {
 
   const handleLogin = async () => {
     setSubmitting(true);
-    const user = await login({ username: email, password });
-    setSubmitting(false);
-    // await dispatch(fetchUser({ username: email, password }));
-    dispatch(setUser(user)); // TODO: use a thunk instead?
+    try {
+      const user = await login({ username: email, password });
+      // await dispatch(fetchUser({ username: email, password }));
+      dispatch(setUser(user)); // TODO: use a thunk instead?
 
-    user.roles.includes('ADMIN')
-      ? history.push('/employees')
-      : history.push('/alumni'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
+      user.roles.includes('ADMIN')
+        ? history.push('/employees')
+        : history.push('/alumni'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
+    } catch (err) {
+      console.error(err);
+    }
+    setSubmitting(false);
   };
 
   return (

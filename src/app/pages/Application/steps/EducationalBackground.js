@@ -26,9 +26,7 @@ const GetAcademicStandings = () => {
   });
 };
 const GetUniversities = () => {
-  const universities = useSelector(
-    (state) => state.universities.availableUniversities
-  );
+  const universities = useSelector((state) => state.universities.available);
   if (universities) {
     return universities.map((university) => {
       return (
@@ -39,15 +37,13 @@ const GetUniversities = () => {
     });
   }
 };
-const GetUniversityMajors = () => {
-  const universityMajors = useSelector(
-    (state) => state.universities.availableUniversityMajors
-  );
+const GetMajors = () => {
+  const majors = useSelector((state) => state.majors.available);
 
-  return universityMajors.map((universityMajor) => {
+  return majors.map((major) => {
     return (
-      <Option key={universityMajor.code} value={universityMajor.code}>
-        {universityMajor.name}
+      <Option key={major.code} value={major.code}>
+        {major.name}
       </Option>
     );
   });
@@ -79,7 +75,7 @@ export const EducationalBackground = (params) => {
         <Select placeholder="Select your university" allowClear>
           {
             GetUniversities()
-            // might have to append otehr
+            // might have to append other
           }
         </Select>
       </Form.Item>
@@ -90,7 +86,7 @@ export const EducationalBackground = (params) => {
         }
       >
         {({ getFieldValue }) =>
-          getFieldValue('universityName') === 'other' ? (
+          getFieldValue('universityName') === 'OTHER' ? (
             <Form.Item
               name="newUniversity"
               label="If 'other', state name of university"
@@ -132,7 +128,7 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Select allowClear>{GetUniversityMajors()}</Select>
+        <Select allowClear>{GetMajors()}</Select>
       </Form.Item>
       <Form.Item
         noStyle

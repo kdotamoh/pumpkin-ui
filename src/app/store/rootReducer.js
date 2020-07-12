@@ -7,6 +7,7 @@ import { trackReducer } from './reducers/track-reducer';
 import { applicationFormReducer } from './reducers/application-form-reducer';
 import { universityReducer } from './reducers/university-reducer';
 import { cycleReducer } from './reducers/cycle-reducer';
+import { majorReducer } from './reducers/major-reducer';
 
 const rootReducer = combineReducers({
   user: authReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   applicationForm: applicationFormReducer,
   universities: universityReducer,
   cycles: cycleReducer,
+  majors: majorReducer,
 });
 
 export default rootReducer;

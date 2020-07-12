@@ -8,6 +8,8 @@ import { ApplicationPage } from '../pages/Application/ApplicationPage';
 import ActivationPage from '../pages/ActivationPage';
 import { ApplicationSteps } from 'app/pages/Application/ApplicationSteps';
 import { RecruitmentCycleManagement } from 'app/pages/Management/CycleManagement';
+import { UniversitySetupManagement } from 'app/pages/Management/UniversitySetupManagement';
+import { MajorManagement } from 'app/pages/Management/MajorManagement';
 
 export const authorized = [
   {
@@ -29,6 +31,16 @@ export const authorized = [
     path: '/cycles',
     layout: DefaultLayout,
     component: RecruitmentCycleManagement,
+  },
+  {
+    path: '/university-majors',
+    layout: DefaultLayout,
+    component: MajorManagement,
+  },
+  {
+    path: '/university-setup',
+    layout: DefaultLayout,
+    component: UniversitySetupManagement,
   },
 ];
 
