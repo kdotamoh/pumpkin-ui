@@ -13,14 +13,12 @@ export const initialUniversityState = {
 export const universityReducer = (state = initialUniversityState, action) => {
   switch (action.type) {
     case UniversityKeys.SET_UNIVERSITIES: {
-      console.log(action);
       return {
         ...state,
         availableUniversities: action.universities,
       };
     }
     case UniversityKeys.SET_UNIVERSITY_MAJORS: {
-      console.log(action);
       return {
         ...state,
         availableUniversityMajors: action.universityMajors,

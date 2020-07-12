@@ -7,16 +7,14 @@ import { ApplicationInformation } from './ApplicationInformation';
 export const ApplicationConfirmation = (params) => {
   return (
     <React.Fragment>
-      {ApplicationSection('Basic Information', BasicInformation(params), 0)}
+      {ApplicationSection('Basic Information', BasicInformation(params))}
       {ApplicationSection(
         'Educational Background',
-        EducationalBackground(params),
-        1
+        EducationalBackground(params)
       )}
       {ApplicationSection(
         'Application Information',
-        ApplicationInformation(params),
-        2
+        ApplicationInformation(params)
       )}
     </React.Fragment>
   );

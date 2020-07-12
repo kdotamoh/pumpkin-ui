@@ -59,6 +59,7 @@ export const EducationalBackground = (params) => {
       form={params.form}
       name="educational-background-form"
       size={params.size}
+      onFinish={params.onFinish}
       labelCol={{
         sm: {
           span: 4,
@@ -67,7 +68,7 @@ export const EducationalBackground = (params) => {
       labelAlign="left"
     >
       <Form.Item
-        name="universityName"
+        name="universityCode"
         label="Name of University"
         rules={[
           {
@@ -76,7 +77,10 @@ export const EducationalBackground = (params) => {
         ]}
       >
         <Select placeholder="Select your university" allowClear>
-          {GetUniversities()}
+          {
+            GetUniversities()
+            // might have to append otehr
+          }
         </Select>
       </Form.Item>
       <Form.Item
@@ -88,7 +92,7 @@ export const EducationalBackground = (params) => {
         {({ getFieldValue }) =>
           getFieldValue('universityName') === 'other' ? (
             <Form.Item
-              name="otherUniversity"
+              name="newUniversity"
               label="If 'other', state name of university"
             >
               <Input />
@@ -97,7 +101,7 @@ export const EducationalBackground = (params) => {
         }
       </Form.Item>
       <Form.Item
-        name="universityCountry"
+        name="countryOfStudy"
         label="Country of University"
         rules={[
           {
@@ -109,7 +113,7 @@ export const EducationalBackground = (params) => {
       </Form.Item>
 
       <Form.Item
-        name="highSchoolName"
+        name="highSchoolAttended"
         label="Name of High School"
         rules={[
           {
@@ -120,7 +124,7 @@ export const EducationalBackground = (params) => {
         <Input />
       </Form.Item>
       <Form.Item
-        name="universityMajor"
+        name="courseOfStudyCode"
         label="University Major"
         rules={[
           {
@@ -137,9 +141,9 @@ export const EducationalBackground = (params) => {
         }
       >
         {({ getFieldValue }) =>
-          getFieldValue('universityMajor') === 'other' ? (
+          getFieldValue('courseOfStudyCode') === 'other' ? (
             <Form.Item
-              name="otherUniversityMajor"
+              name="newCourseOfStudy"
               label="If 'other', state university major"
             >
               <Input />
@@ -160,7 +164,7 @@ export const EducationalBackground = (params) => {
         <Select allowClear>{GetAcademicStandings()}</Select>
       </Form.Item>
       <Form.Item
-        name="cgpa"
+        name="currentGPA"
         label="CGPA"
         rules={[
           {

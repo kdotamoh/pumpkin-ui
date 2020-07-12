@@ -17,6 +17,9 @@ export const ApplicationSteps = () => {
       message.success('Processing complete!');
     }
   };
+  const done = (values) => {
+    console.log(values, 'hi');
+  };
   const stepInformation = {
     layout: 'vertical',
     form: form,
@@ -40,6 +43,7 @@ export const ApplicationSteps = () => {
       content: ApplicationConfirmation({
         ...stepInformation,
         layout: 'horizontal',
+        onFinish: done,
       }),
     },
   ];
@@ -77,7 +81,7 @@ export const ApplicationSteps = () => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button type="primary" onClick={form.submit}>
+            <Button type="primary" htmlType="submit" onClick={form.submit}>
               Done
             </Button>
           )}

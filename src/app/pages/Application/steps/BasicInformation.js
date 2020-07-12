@@ -21,6 +21,7 @@ export const BasicInformation = (params) => {
       form={params.form}
       name="basic-information-form"
       size={params.size}
+      onFinish={params.onFinish}
       labelCol={{
         sm: {
           span: 3,
@@ -64,7 +65,7 @@ export const BasicInformation = (params) => {
         </Select>
       </Form.Item>
       <Form.Item
-        name="emailAddress"
+        name="email"
         label="Email Address"
         rules={[
           {
@@ -76,7 +77,7 @@ export const BasicInformation = (params) => {
         <Input />
       </Form.Item>
       <Form.Item
-        name="phoneNum"
+        name="phoneNumber"
         label="Phone Number"
         rules={[
           {
@@ -86,7 +87,7 @@ export const BasicInformation = (params) => {
       >
         <Input type="number" />
       </Form.Item>
-      <Form.Item name="otherNum" label="Other Phone Number">
+      <Form.Item name="secondaryPhoneNumber" label="Other Phone Number">
         <Input type="number" />
       </Form.Item>
     </Form>
