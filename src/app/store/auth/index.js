@@ -13,7 +13,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser(state, action) {
-      sessionStorage.setItem('seoPumpkinUser', JSON.stringify(action.payload));
+      if (action.payload !== undefined) {
+        sessionStorage.setItem(
+          'seoPumpkinUser',
+          JSON.stringify(action.payload)
+        );
+      }
       return action.payload;
     },
     unsetUser() {

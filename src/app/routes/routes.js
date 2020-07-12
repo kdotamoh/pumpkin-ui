@@ -5,6 +5,7 @@ import { AlumManagement } from '../pages/Management/AlumManagement';
 import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
 import ActivationPage from '../pages/ActivationPage';
 import { RecruitmentCycleManagement } from 'app/pages/Management/CycleManagement';
+import { UniversitySetupManagement } from 'app/pages/Management/UniversitySetupManagement';
 
 export const authorized = [
   {
@@ -26,6 +27,16 @@ export const authorized = [
     path: '/cycles',
     layout: DefaultLayout,
     component: RecruitmentCycleManagement,
+  },
+  // {
+  //   path: '/university-majors',
+  //   layout: DefaultLayout,
+  //   component: RecruitmentCycleManagement,
+  // },
+  {
+    path: '/university-setup',
+    layout: DefaultLayout,
+    component: UniversitySetupManagement,
   },
 ];
 

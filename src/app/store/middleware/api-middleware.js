@@ -3,16 +3,22 @@ import {
   AlumKeys,
   TrackKeys,
   CycleKeys,
+  UniversityKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
 import * as TrackService from 'api/track';
 import * as CycleService from 'api/cycle';
+import * as UniversityService from 'api/university';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
 import { setTracks, getTracks } from '../actions/track-actions';
 import { setCycles, getCycles } from '../actions/cycle-actions';
+import {
+  setUniversities,
+  getUniversities,
+} from '../actions/university-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -118,6 +124,40 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(getTracks());
       } catch (err) {
         message.error(`Cannot update track: ${err}`);
+      }
+      break;
+    }
+
+    case UniversityKeys.GET_UNIVERSITIES:
+      try {
+        const universities = await UniversityService.getUniversities();
+        const universityContent = universities.content;
+        store.dispatch(setUniversities(universityContent));
+      } catch (err) {
+        message.error(`Cannot get universities: ${err}`);
+      }
+      break;
+    case UniversityKeys.CREATE_UNIVERSITY:
+      try {
+        await UniversityService.createUniversity(action.name, action.country);
+        store.dispatch(getUniversities());
+      } catch (err) {
+        message.error(`Cannot create university: ${err}`);
+      }
+      break;
+    case UniversityKeys.DELETE_UNIVERSITY:
+      try {
+        await UniversityService.deleteUniversity(action.code);
+      } catch (err) {
+        message.error(`Cannot delete university: ${err}`);
+      }
+      break;
+    case UniversityKeys.UPDATE_UNIVERSITY: {
+      try {
+        await UniversityService.updateUniversity(action.name, action.code);
+        store.dispatch(getUniversities());
+      } catch (err) {
+        message.error(`Cannot update university: ${err}`);
       }
       break;
     }
