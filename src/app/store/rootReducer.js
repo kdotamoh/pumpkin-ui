@@ -4,8 +4,9 @@ import authReducer from './auth';
 import { employeeReducer } from './reducers/employee-reducer';
 import { alumReducer } from './reducers/alum-reducer';
 import { trackReducer } from './reducers/track-reducer';
-import { cycleReducer } from './reducers/cycle-reducer';
+import { applicationFormReducer } from './reducers/application-form-reducer';
 import { universityReducer } from './reducers/university-reducer';
+import { cycleReducer } from './reducers/cycle-reducer';
 import { majorReducer } from './reducers/major-reducer';
 
 const rootReducer = combineReducers({
@@ -13,8 +14,9 @@ const rootReducer = combineReducers({
   employees: employeeReducer,
   alumni: alumReducer,
   tracks: trackReducer,
-  cycles: cycleReducer,
+  applicationForm: applicationFormReducer,
   universities: universityReducer,
+  cycles: cycleReducer,
   majors: majorReducer,
 });
 

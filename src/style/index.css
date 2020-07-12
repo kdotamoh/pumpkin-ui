@@ -3,7 +3,8 @@
 @import './buttons.css';
 @import './default-layout.css';
 @import './management-page.css';
-
+@import './application-layout.css';
+@import './application-page.css';
 .logo {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);

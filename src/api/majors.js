@@ -90,3 +90,21 @@ export async function updateMajor(name, code) {
     message.error(`Cannot update major with code ${code}: ${responseMessage}`);
   }
 }
+
+export async function activateMajor(code) {
+  try {
+    const { data } = await client.put(`/course-of-study/activate/${code}`, {
+      headers: {
+        user_token: token,
+      },
+    });
+    const { responseBody } = data;
+    message.success('University major activated successfully');
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot activate university major: ${responseMessage}`);
+  }
+}

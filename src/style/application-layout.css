@@ -1,0 +1,14 @@
+.application-layout__hero {
+  background-color: rgb(40, 73, 153);
+  padding: 4rem;
+  margin: 2rem 4rem;
+  color: white;
+}
+
+.application-layout__content {
+  margin: 0 10rem;
+  overflow: initial;
+}
+.application-layout__container {
+  background-color: white;
+}
