@@ -6,6 +6,7 @@ import { alumReducer } from './reducers/alum-reducer';
 import { trackReducer } from './reducers/track-reducer';
 import { cycleReducer } from './reducers/cycle-reducer';
 import { universityReducer } from './reducers/university-reducer';
+import { majorReducer } from './reducers/major-reducer';
 
 const rootReducer = combineReducers({
   user: authReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   tracks: trackReducer,
   cycles: cycleReducer,
   universities: universityReducer,
+  majors: majorReducer,
 });
 
 export default rootReducer;

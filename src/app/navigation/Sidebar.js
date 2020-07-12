@@ -74,12 +74,12 @@ export class SideBarComponent extends React.Component {
           icon: <SyncOutlined />,
           route: '/cycles',
         },
-        // {
-        //   key: 'majors',
-        //   name: 'University Majors',
-        //   icon: <RiseOutlined />,
-        //   route: '/university-majors',
-        // },
+        {
+          key: 'majors',
+          name: 'University Majors',
+          icon: <RiseOutlined />,
+          route: '/university-majors',
+        },
 
         {
           key: 'setup',
