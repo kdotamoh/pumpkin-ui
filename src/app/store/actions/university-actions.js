@@ -4,6 +4,16 @@ export const getUniversities = () => ({
   type: UniversityKeys.GET_UNIVERSITIES,
 });
 
+export const deleteUniversity = (code) => ({
+  type: UniversityKeys.DELETE_UNIVERSITY,
+  code,
+});
+
+export const activateUniversity = (code) => ({
+  type: UniversityKeys.ACTIVATE_UNIVERSITY,
+  code,
+});
+
 export const setUniversities = (universities) => ({
   type: UniversityKeys.SET_UNIVERSITIES,
   universities,
@@ -19,11 +29,6 @@ export const createUniversity = (name, country) => ({
   type: UniversityKeys.CREATE_UNIVERSITY,
   name,
   country,
-});
-
-export const deleteUniversity = (code) => ({
-  type: UniversityKeys.DELETE_UNIVERSITY,
-  code,
 });
 
 export const setCurrentUniversity = (record) => ({

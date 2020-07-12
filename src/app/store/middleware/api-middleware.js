@@ -2,13 +2,15 @@ import {
   EmployeeKeys,
   AlumKeys,
   TrackKeys,
-  CycleKeys,
+  ApplicationFormKeys,
   UniversityKeys,
+  CycleKeys,
   MajorKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
 import * as TrackService from 'api/track';
+import * as ApplicationFormService from 'api/application-form';
 import * as CycleService from 'api/cycle';
 import * as UniversityService from 'api/university';
 import * as MajorService from 'api/majors';
@@ -16,6 +18,13 @@ import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
 import { setTracks, getTracks } from '../actions/track-actions';
+import {
+  setCountries,
+  setGenders,
+  setAcademicStandings,
+  setApplicationTracks,
+  setApplicationEssayQuestions,
+} from '../actions/application-form-actions';
 import { setCycles, getCycles } from '../actions/cycle-actions';
 import {
   setUniversities,
@@ -130,16 +139,72 @@ export const appMiddleware = (store) => (next) => async (action) => {
       }
       break;
     }
-
-    case UniversityKeys.GET_UNIVERSITIES:
+    case ApplicationFormKeys.VALIDATE_APPLICATION_FORM: {
+      try {
+        await ApplicationFormService.validateForm(action.reference);
+        // dispatch an action
+      } catch (err) {
+        message.error(`Cannot validate application form: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_COUNTRIES: {
+      try {
+        const countries = await ApplicationFormService.getCountries();
+        store.dispatch(setCountries(countries));
+      } catch (err) {
+        message.error(`Cannot get countries: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_GENDERS: {
+      try {
+        const genders = await ApplicationFormService.getGenders();
+        store.dispatch(setGenders(genders));
+      } catch (err) {
+        message.error(`Cannot get genders: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_ACADEMIC_STANDINGS: {
+      try {
+        const academicStandings = await ApplicationFormService.getAcademicStandings();
+        store.dispatch(setAcademicStandings(academicStandings));
+      } catch (err) {
+        message.error(`Cannot get academic standings: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_APPLICATION_TRACKS: {
+      try {
+        const applicationTracks = await ApplicationFormService.getApplicationTracks();
+        store.dispatch(setApplicationTracks(applicationTracks));
+      } catch (err) {
+        message.error(`Cannot get application tracks: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_APPLICATION_ESSAY_QUESTIONS: {
+      try {
+        const applicationEssayQuestions = await ApplicationFormService.getApplicationEssayQuestions(
+          action.cycleReference
+        );
+        store.dispatch(setApplicationEssayQuestions(applicationEssayQuestions));
+      } catch (err) {
+        message.error(`Cannot get application essay questions: ${err}`);
+      }
+      break;
+    }
+    case UniversityKeys.GET_UNIVERSITIES: {
       try {
         const universities = await UniversityService.getUniversities();
-        const universityContent = universities.content;
-        store.dispatch(setUniversities(universityContent));
+        const universitiesContent = universities.content;
+        store.dispatch(setUniversities(universitiesContent));
       } catch (err) {
         message.error(`Cannot get universities: ${err}`);
       }
       break;
+    }
     case UniversityKeys.CREATE_UNIVERSITY:
       try {
         await UniversityService.createUniversity(action.name, action.country);
@@ -148,13 +213,23 @@ export const appMiddleware = (store) => (next) => async (action) => {
         message.error(`Cannot create university: ${err}`);
       }
       break;
-    case UniversityKeys.DELETE_UNIVERSITY:
+    case UniversityKeys.DELETE_UNIVERSITY: {
       try {
         await UniversityService.deleteUniversity(action.code);
       } catch (err) {
         message.error(`Cannot delete university: ${err}`);
       }
       break;
+    }
+    case UniversityKeys.ACTIVATE_UNIVERSITY: {
+      try {
+        await UniversityService.activateUniversity(action.code);
+      } catch (err) {
+        message.error(`Cannot activate university: ${err}`);
+      }
+      break;
+    }
+
     case UniversityKeys.UPDATE_UNIVERSITY: {
       try {
         await UniversityService.updateUniversity(action.name, action.code);
@@ -198,7 +273,14 @@ export const appMiddleware = (store) => (next) => async (action) => {
       }
       break;
     }
-
+    case MajorKeys.ACTIVATE_MAJOR: {
+      try {
+        await MajorService.activateMajor(action.code);
+      } catch (err) {
+        message.error(`Cannot activate university major: ${err}`);
+      }
+      break;
+    }
     case CycleKeys.GET_CYCLES:
       try {
         const cycles = await CycleService.getCycles();

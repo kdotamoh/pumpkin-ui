@@ -16,7 +16,11 @@ PrivateRoute.propTypes = {
   token: PropTypes.string.isRequired,
   Component: PropTypes.func.isRequired,
 };
-
-export default connect((state) => ({
+/**
+ * Redux
+ */
+const mapStateToProps = (state) => ({
   token: state.user.userToken,
-}))(PrivateRoute);
+});
+
+export default connect(mapStateToProps, {})(PrivateRoute);

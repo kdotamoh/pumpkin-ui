@@ -5,6 +5,11 @@ export const initialUniversityState = {
   available: [],
   current: null,
 };
+/**
+ * Manages the SEO Approved Universities
+ * @param {*} state state of the universities
+ * @param {*} action Redux action to perform on the state
+ */
 
 export const universityReducer = (state = initialUniversityState, action) => {
   switch (action.type) {

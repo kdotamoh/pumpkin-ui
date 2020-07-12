@@ -1,0 +1,75 @@
+.application-page-component__track-name {
+  padding: 3rem 2rem;
+  margin-bottom: 4rem;
+  border-left: 2px solid rgb(40, 73, 153);
+  color: rgb(40, 73, 153);
+}
+
+.application-page-component__primary {
+  float: right;
+  color: rgb(40, 73, 153);
+  background-color: white;
+  border: 1px solid rgb(40, 73, 153);
+}
+
+.application-page-component__body {
+  margin-bottom: 8rem;
+}
+
+.ant-steps-item-process .ant-steps-item-icon {
+  background: rgb(40, 73, 153);
+  border-color: rgb(40, 73, 153);
+}
+
+.ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  background: rgb(40, 73, 153);
+}
+
+.ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  background: rgb(40, 73, 153);
+}
+
+.application-page-component__steps__content {
+  min-height: 50vh;
+  margin-bottom: 4rem;
+}
+
+.application-page-component__steps__header {
+  margin-bottom: 4rem;
+}
+
+.application-page-component__steps__action {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.ant-form.ant-form-horizontal.ant-form-middle .ant-form-item-label > label {
+  display: inline-block;
+  white-space: normal;
+}
+/**
+Application Section
+*/
+
+.application-section__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.application-section__section-name {
+  color: rgb(40, 73, 153);
+  border-bottom: 1px solid rgb(40, 73, 153);
+  margin-bottom: 2rem;
+}
+
+.application-section__edit-section-btn {
+  color: rgb(40, 73, 153);
+  border: none;
+}

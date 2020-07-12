@@ -34,3 +34,7 @@
 .ant-input-focused {
   border: 1px solid rgb(40, 73, 153);
 }
+
+.ant-layout a {
+  color: rgb(40, 73, 153);
+}

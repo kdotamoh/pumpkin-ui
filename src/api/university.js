@@ -94,3 +94,21 @@ export async function updateUniversity(name, code) {
     );
   }
 }
+
+export async function activateUniversity(code) {
+  try {
+    const { data } = await client.put(`/universities/activate/${code}`, {
+      headers: {
+        user_token: token,
+      },
+    });
+    const { responseBody } = data;
+    message.success('University activated successfully');
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot activate university: ${responseMessage}`);
+  }
+}
