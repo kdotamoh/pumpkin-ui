@@ -3,16 +3,25 @@ import {
   AlumKeys,
   TrackKeys,
   CycleKeys,
+  UniversityKeys,
+  MajorKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
 import * as TrackService from 'api/track';
 import * as CycleService from 'api/cycle';
+import * as UniversityService from 'api/university';
+import * as MajorService from 'api/majors';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
 import { setTracks, getTracks } from '../actions/track-actions';
 import { setCycles, getCycles } from '../actions/cycle-actions';
+import {
+  setUniversities,
+  getUniversities,
+} from '../actions/university-actions';
+import { setMajors, getMajors } from '../actions/major-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -118,6 +127,74 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(getTracks());
       } catch (err) {
         message.error(`Cannot update track: ${err}`);
+      }
+      break;
+    }
+
+    case UniversityKeys.GET_UNIVERSITIES:
+      try {
+        const universities = await UniversityService.getUniversities();
+        const universityContent = universities.content;
+        store.dispatch(setUniversities(universityContent));
+      } catch (err) {
+        message.error(`Cannot get universities: ${err}`);
+      }
+      break;
+    case UniversityKeys.CREATE_UNIVERSITY:
+      try {
+        await UniversityService.createUniversity(action.name, action.country);
+        store.dispatch(getUniversities());
+      } catch (err) {
+        message.error(`Cannot create university: ${err}`);
+      }
+      break;
+    case UniversityKeys.DELETE_UNIVERSITY:
+      try {
+        await UniversityService.deleteUniversity(action.code);
+      } catch (err) {
+        message.error(`Cannot delete university: ${err}`);
+      }
+      break;
+    case UniversityKeys.UPDATE_UNIVERSITY: {
+      try {
+        await UniversityService.updateUniversity(action.name, action.code);
+        store.dispatch(getUniversities());
+      } catch (err) {
+        message.error(`Cannot update university: ${err}`);
+      }
+      break;
+    }
+
+    case MajorKeys.GET_MAJORS:
+      try {
+        const majors = await MajorService.getMajors();
+        const majorContent = majors.content;
+        store.dispatch(setMajors(majorContent));
+      } catch (err) {
+        message.error(`Cannot get majors: ${err}`);
+      }
+      break;
+    case MajorKeys.CREATE_MAJOR:
+      try {
+        await MajorService.createMajor(action.name);
+        store.dispatch(getMajors());
+      } catch (err) {
+        message.error(`Cannot create major: ${err}`);
+      }
+      break;
+    case MajorKeys.DELETE_MAJOR:
+      try {
+        await MajorService.deleteMajor(action.code);
+      } catch (err) {
+        message.error(`Cannot delete major: ${err}`);
+      }
+      break;
+    case MajorKeys.UPDATE_MAJOR: {
+      try {
+        await MajorService.deleteMajor(action.name, action.code);
+        store.dispatch(getMajors());
+      } catch (err) {
+        message.error(`Cannot update major: ${err}`);
       }
       break;
     }
