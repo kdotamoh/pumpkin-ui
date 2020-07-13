@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ManagementComponent } from './Management';
+import ManagementComponent from './Management';
 import { Input, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {

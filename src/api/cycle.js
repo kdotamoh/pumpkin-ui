@@ -7,11 +7,11 @@ if (store) {
   token = store.getState().user.userToken;
 }
 
-export async function createCycle(name) {
+export async function createCycle(cycle) {
   try {
     const { data } = await client.post(
-      '/recruitment-cycle/create',
-      { name },
+      '/recruitment/cycle/create',
+      { ...cycle },
       {
         headers: {
           user_token: token,
@@ -26,14 +26,14 @@ export async function createCycle(name) {
       data: { responseMessage },
     } = err.response;
     message.error(
-      `Cannot create recruitment cycle with name - ${name}: ${responseMessage}`
+      `Cannot create recruitment cycle with name - ${cycle.recruitmentCycleName}: ${responseMessage}`
     );
   }
 }
 
 export async function getCycles() {
   try {
-    const { data } = await client.get('/recruitment-cycle', {
+    const { data } = await client.get('/recruitment/cycle/all', {
       headers: {
         user_token: token,
       },
@@ -54,7 +54,7 @@ export async function getCycles() {
 
 export async function deleteCycle(code) {
   try {
-    const { data } = await client.delete(`/recruitment-cycle/delete/${code}`, {
+    const { data } = await client.delete(`/recruitment/cycle/delete/${code}`, {
       headers: {
         user_token: token,
       },
@@ -75,7 +75,7 @@ export async function deleteCycle(code) {
 export async function updateCycle(name, code) {
   try {
     const { data } = await client.put(
-      '/recruitment-cycle/update',
+      '/recruitment/cycle/update',
       { name, code },
       {
         headers: {

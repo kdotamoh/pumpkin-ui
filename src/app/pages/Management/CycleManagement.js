@@ -4,7 +4,7 @@ import { Input, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
-import { ManagementComponent } from './Management';
+import ManagementComponent from './Management';
 import {
   getCycles,
   createCycle,
@@ -56,6 +56,8 @@ export class RecruitmentCycleManagementComponent extends React.Component {
         onDelete={this.showDeleteConfirmationModal}
         onEditEntity={this.onEditCycle}
         setCurrentEntity={this.props.setCurrentCycle}
+        willNavigate={true}
+        navigateTo="/cycles/add-new"
       />
     );
   }
