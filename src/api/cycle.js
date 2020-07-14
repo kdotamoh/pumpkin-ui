@@ -72,6 +72,25 @@ export async function deleteCycle(code) {
   }
 }
 
+export async function getCycleByCode(code) {
+  try {
+    const { data } = await client.get(`/recruitment/cycle/${code}`, {
+      headers: {
+        user_token: token,
+      },
+    });
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot get recruitment cycle with code ${code}: ${responseMessage}`
+    );
+  }
+}
+
 export async function updateCycle(name, code) {
   try {
     const { data } = await client.put(
@@ -92,5 +111,281 @@ export async function updateCycle(name, code) {
     message.error(
       `Cannot update recruitment cycle with code ${code}: ${responseMessage}`
     );
+  }
+}
+
+export async function updateCycleStage(name, code) {
+  try {
+    const { data } = await client.put(
+      `/recruitment/cycle/${code}/update/stage`,
+      { name, code },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot update recruitment cycle stage: ${responseMessage}`);
+  }
+}
+
+export async function deleteCycleStage(code, stageCode) {
+  try {
+    const { data } = await client.delete(
+      `/recruitment/cycle/${code}/delete/stage?stageCode=${stageCode}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot delete recruitment cycle stage: ${responseMessage}`);
+  }
+}
+
+export async function addCycleStage(name, code) {
+  try {
+    const { data } = await client.post(
+      `/recruitment/cycle/${code}/add/stage`,
+      { name },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot add recruitment cycle stage: ${responseMessage}`);
+  }
+}
+
+export async function deactivateCycle(code) {
+  try {
+    const { data } = await client.patch(
+      `/recruitment/cycle/deactivate/${code}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot deactivate recruitment cycle with code ${code}: ${responseMessage}`
+    );
+  }
+}
+
+export async function reactivateCycle(code) {
+  try {
+    const { data } = await client.delete(
+      `/recruitment/cycle/reactivate/${code}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot reactivate recruitment cycle with code ${code}: ${responseMessage}`
+    );
+  }
+}
+
+export async function addCycleForm(code, form) {
+  try {
+    const { data } = await client.post(
+      `/recruitment/cycle/${code}/add/form`,
+      { form },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot add recruitment cycle form: ${responseMessage}`);
+  }
+}
+
+export async function updateCycleForm(code, form) {
+  try {
+    const { data } = await client.put(
+      `/recruitment/cycle/${code}/update/form`,
+      { form },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot update recruitment cycle form: ${responseMessage}`);
+  }
+}
+
+export async function deleteCycleForm(code, formCode) {
+  try {
+    const { data } = await client.delete(
+      `/recruitment/cycle/${code}/delete/form?formCode=${formCode}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot delete recruitment cycle form: ${responseMessage}`);
+  }
+}
+
+export async function deactivateCycleForm(code, formCode) {
+  try {
+    const { data } = await client.patch(
+      `/recruitment/cycle/${code}/deactivate/form?formCode=${formCode}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot deactivate recruitment cycle form: ${responseMessage}`
+    );
+  }
+}
+
+export async function addCycleEssayQuestion(code, question) {
+  try {
+    const { data } = await client.post(
+      `/recruitment/cycle/${code}/add/essay-question`,
+      { ...question },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot add recruitment cycle question: ${responseMessage}`);
+  }
+}
+
+export async function updateCycleEssayQuestion(code, question) {
+  try {
+    const { data } = await client.put(
+      `/recruitment/cycle/${code}/update/essay-question`,
+      { ...question },
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot update recruitment cycle question: ${responseMessage}`
+    );
+  }
+}
+
+export async function deleteCycleEssayQuestion(code, essayCode) {
+  try {
+    const { data } = await client.delete(
+      `/recruitment/cycle/${code}/delete/essay-question?essayCode=${essayCode}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(
+      `Cannot delete recruitment cycle question: ${responseMessage}`
+    );
+  }
+}
+
+export async function addCycleTrack(code, trackCode) {
+  try {
+    const { data } = await client.post(
+      `/recruitment/cycle/${code}/delete/essay-question?essayCode=${trackCode}`,
+      {
+        headers: {
+          user_token: token,
+        },
+      }
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot add recruitment cycle track: ${responseMessage}`);
   }
 }
