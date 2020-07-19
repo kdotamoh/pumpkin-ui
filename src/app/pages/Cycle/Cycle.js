@@ -5,38 +5,44 @@ import { getTracks } from 'app/store/actions/track-actions';
 import { createCycle } from 'app/store/actions/cycle-actions';
 import { Select } from 'antd';
 
-// const initialState = {
-//   status: 'loading',
-//   recruitmentCycleName: '',
-//   year: '',
-//   listOfStages: [this.stage],
-//   listOfEssays: [this.essay],
-//   listOfApplicationForms: [this.form],
-//   listOfApplicationTrackCodes: [''],
-// }
+import {
+  getCycleByCode,
+  updateCycle,
+  updateCycleStage,
+  updateCycleEssayQuestion,
+  addCycleEssayQuestion,
+  deleteCycleEssayQuestion,
+} from 'api/cycle';
 
-class AddCycle extends React.Component {
-  stage = { name: '' };
-  essay = {
-    question: '',
-    wordCount: '',
-    showInApplicationForm: false,
-    compulsoryQuestion: false,
-  };
-  form = { name: 'test' };
+const initialState = {
+  recruitmentCycleName: '',
+  year: '',
+  listOfStages: [{ name: '' }],
+  listOfEssays: [
+    {
+      question: '',
+      wordCount: '',
+      showInApplicationForm: false,
+      compulsoryQuestion: false,
+    },
+  ],
+  listOfApplicationForms: [{ name: 'test' }],
+  listOfApplicationTrackCodes: [],
+};
 
+class Cycle extends React.Component {
   state = {
     status: 'loading',
-    recruitmentCycleName: '',
-    year: '',
-    listOfStages: [this.stage],
-    listOfEssays: [this.essay],
-    listOfApplicationForms: [this.form],
-    listOfApplicationTrackCodes: [''],
+    ...initialState,
   };
 
   async componentDidMount() {
     await this.props.getTracks();
+
+    if (this.props.editMode) {
+      await this.handleSetCycle();
+    }
+
     this.setState({ status: 'loaded' });
   }
 
@@ -52,31 +58,38 @@ class AddCycle extends React.Component {
     this.setState({ [stateName]: newArr });
   };
 
+  handleUpdateCycle = async () => {
+    updateCycle(
+      { name: this.state.recruitmentCycleName, year: this.state.year },
+      this.props.id
+    );
+  };
+
+  handleSetCycle = async () => {
+    let { status, ...data } = await getCycleByCode(this.props.id);
+    this.setState(data);
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     // eslint-disable-next-line
     const { status, ...cycle } = this.state;
     this.props.createCycle(cycle);
 
-    this.setState({
-      recruitmentCycleName: '',
-      year: '',
-      listOfStages: [this.stage],
-      listOfEssays: [this.essay],
-      listOfApplicationForms: [this.form],
-      listOfApplicationTrackCodes: [''],
-    });
+    this.setState(...initialState);
   };
 
   render() {
     const { Option } = Select;
+
+    const isUpdating = this.props.editMode;
 
     if (this.state.status === 'loading') return 'Loading...';
     if (this.state.status === 'loaded')
       return (
         <div>
           <div>
-            <p>Add cycle</p>
+            <p>{isUpdating ? 'Update cycle' : 'Add cycle'}</p>
             <input
               type="text"
               placeholder="name"
@@ -93,6 +106,10 @@ class AddCycle extends React.Component {
             />
           </div>
 
+          {isUpdating && (
+            <button onClick={() => this.handleUpdateCycle()}>Update</button>
+          )}
+
           <div>Stages</div>
           {this.state.listOfStages.map((stage, index) => (
             <div key={index}>
@@ -102,6 +119,18 @@ class AddCycle extends React.Component {
                 value={stage.name}
                 onChange={this.handleInput('listOfStages', index)}
               />
+              {isUpdating && (
+                <button
+                  onClick={() => {
+                    let stage = this.state.listOfStages.find(
+                      (stage, stageId) => index === stageId
+                    );
+                    updateCycleStage(stage, this.props.id);
+                  }}
+                >
+                  Update
+                </button>
+              )}
               <button
                 onClick={() =>
                   this.setState({
@@ -118,7 +147,7 @@ class AddCycle extends React.Component {
           <button
             onClick={() =>
               this.setState({
-                listOfStages: this.state.listOfStages.concat(this.stage),
+                listOfStages: this.state.listOfStages.concat({ name: '' }),
               })
             }
           >
@@ -148,11 +177,7 @@ class AddCycle extends React.Component {
                     type="checkbox"
                     name="showInApplicationForm"
                     id=""
-                    checked={
-                      this.state.listOfEssays.find(
-                        (essay, essayId) => index === essayId
-                      ).showInApplicationForm
-                    }
+                    checked={essay.showInApplicationForm}
                     onChange={this.handleInput('listOfEssays', index)}
                   />
                   Show in application form
@@ -162,34 +187,69 @@ class AddCycle extends React.Component {
                     type="checkbox"
                     name="compulsoryQuestion"
                     id=""
-                    checked={
-                      this.state.listOfEssays.find(
-                        (essay, essayId) => index === essayId
-                      ).compulsoryQuestion
-                    }
+                    checked={essay.compulsoryQuestion}
                     onChange={this.handleInput('listOfEssays', index)}
                   />
                   Compulsory question
                 </label>
-                <button
-                  onClick={() =>
-                    this.setState({
-                      listOfStages: this.state.listOfEssays.filter(
-                        (essay, essayId) => index !== essayId
-                      ),
-                    })
-                  }
-                >
-                  Remove
-                </button>
+                {isUpdating && (
+                  <button
+                    onClick={() => {
+                      essay.new
+                        ? addCycleEssayQuestion(essay, this.props.id)
+                        : updateCycleEssayQuestion(essay, this.props.id);
+                    }}
+                  >
+                    {essay.new ? 'Add to cycle' : 'Update'}
+                  </button>
+                )}
+                {!essay.new && (
+                  <button
+                    onClick={async () => {
+                      if (isUpdating) {
+                        await deleteCycleEssayQuestion(
+                          essay.code,
+                          this.props.id
+                        );
+                        this.handleSetCycle();
+                      } else {
+                        this.setState({
+                          listOfStages: this.state.listOfEssays.filter(
+                            (essay, essayId) => index !== essayId
+                          ),
+                        });
+                      }
+                    }}
+                  >
+                    Remove
+                  </button>
+                )}
+                {/* //Todo: Handle both local and server-side deletion */}
               </div>
             ))}
             <button
-              onClick={() =>
-                this.setState({
-                  listOfEssays: this.state.listOfEssays.concat(this.essay),
-                })
-              }
+              onClick={() => {
+                if (isUpdating) {
+                  this.setState({
+                    listOfEssays: this.state.listOfEssays.concat({
+                      question: '',
+                      wordCount: '',
+                      showInApplicationForm: false,
+                      compulsoryQuestion: false,
+                      new: true,
+                    }),
+                  });
+                } else {
+                  this.setState({
+                    listOfEssays: this.state.listOfEssays.concat({
+                      question: '',
+                      wordCount: '',
+                      showInApplicationForm: false,
+                      compulsoryQuestion: false,
+                    }),
+                  });
+                }
+              }}
             >
               Add question
             </button>
@@ -198,6 +258,7 @@ class AddCycle extends React.Component {
           <Select
             mode="multiple"
             style={{ width: '100%' }}
+            value={this.state.listOfApplicationTrackCodes}
             onChange={(value) => {
               this.setState({
                 listOfApplicationTrackCodes: value,
@@ -216,9 +277,11 @@ class AddCycle extends React.Component {
       );
   }
 }
-AddCycle.propTypes = {
+Cycle.propTypes = {
   getTracks: PropTypes.func.isRequired,
   createCycle: PropTypes.func.isRequired,
+  editMode: PropTypes.bool,
+  id: PropTypes.string,
   tracks: PropTypes.array.isRequired, //  TODO: make arrayOf
 };
 
@@ -231,4 +294,4 @@ const mapDispatchToProps = (dispatch) => ({
   createCycle: (cycle) => dispatch(createCycle(cycle)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddCycle);
+export default connect(mapStateToProps, mapDispatchToProps)(Cycle);

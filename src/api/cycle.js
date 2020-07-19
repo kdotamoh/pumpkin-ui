@@ -91,11 +91,11 @@ export async function getCycleByCode(code) {
   }
 }
 
-export async function updateCycle(name, code) {
+export async function updateCycle(details, code) {
   try {
     const { data } = await client.put(
       '/recruitment/cycle/update',
-      { name, code },
+      { ...details, code },
       {
         headers: {
           user_token: token,
@@ -103,6 +103,7 @@ export async function updateCycle(name, code) {
       }
     );
     const { responseBody } = data;
+    message.success('Update success');
     return responseBody;
   } catch (err) {
     const {
@@ -114,11 +115,11 @@ export async function updateCycle(name, code) {
   }
 }
 
-export async function updateCycleStage(name, code) {
+export async function updateCycleStage(details, code) {
   try {
     const { data } = await client.put(
       `/recruitment/cycle/${code}/update/stage`,
-      { name, code },
+      { ...details },
       {
         headers: {
           user_token: token,
@@ -126,6 +127,7 @@ export async function updateCycleStage(name, code) {
       }
     );
     const { responseBody } = data;
+    message.success('Update success');
     return responseBody;
   } catch (err) {
     const {
@@ -139,6 +141,7 @@ export async function deleteCycleStage(code, stageCode) {
   try {
     const { data } = await client.delete(
       `/recruitment/cycle/${code}/delete/stage?stageCode=${stageCode}`,
+      null,
       {
         headers: {
           user_token: token,
@@ -178,11 +181,13 @@ export async function addCycleStage(name, code) {
 
 export async function deactivateCycle(code) {
   try {
+    console.log(store.getState().user.userToken);
     const { data } = await client.patch(
       `/recruitment/cycle/deactivate/${code}`,
+      null,
       {
         headers: {
-          user_token: token,
+          user_token: store.getState().user.userToken,
         },
       }
     );
@@ -304,7 +309,7 @@ export async function deactivateCycleForm(code, formCode) {
   }
 }
 
-export async function addCycleEssayQuestion(code, question) {
+export async function addCycleEssayQuestion(question, code) {
   try {
     const { data } = await client.post(
       `/recruitment/cycle/${code}/add/essay-question`,
@@ -316,6 +321,7 @@ export async function addCycleEssayQuestion(code, question) {
       }
     );
     const { responseBody } = data;
+    message.success('Update success');
     return responseBody;
   } catch (err) {
     const {
@@ -325,11 +331,11 @@ export async function addCycleEssayQuestion(code, question) {
   }
 }
 
-export async function updateCycleEssayQuestion(code, question) {
+export async function updateCycleEssayQuestion(details, code) {
   try {
     const { data } = await client.put(
       `/recruitment/cycle/${code}/update/essay-question`,
-      { ...question },
+      { ...details },
       {
         headers: {
           user_token: token,
@@ -337,6 +343,7 @@ export async function updateCycleEssayQuestion(code, question) {
       }
     );
     const { responseBody } = data;
+    message.success('Update success');
     return responseBody;
   } catch (err) {
     const {
@@ -348,7 +355,7 @@ export async function updateCycleEssayQuestion(code, question) {
   }
 }
 
-export async function deleteCycleEssayQuestion(code, essayCode) {
+export async function deleteCycleEssayQuestion(essayCode, code) {
   try {
     const { data } = await client.delete(
       `/recruitment/cycle/${code}/delete/essay-question?essayCode=${essayCode}`,
@@ -359,6 +366,7 @@ export async function deleteCycleEssayQuestion(code, essayCode) {
       }
     );
     const { responseBody } = data;
+    message.success('Delete success');
     return responseBody;
   } catch (err) {
     const {
