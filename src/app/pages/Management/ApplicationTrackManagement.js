@@ -1,4 +1,4 @@
-import { ManagementComponent } from './Management';
+import ManagementComponent from './Management';
 import React from 'react';
 import { Input, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';

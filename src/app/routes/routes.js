@@ -10,6 +10,8 @@ import { ApplicationSteps } from 'app/pages/Application/ApplicationSteps';
 import { RecruitmentCycleManagement } from 'app/pages/Management/CycleManagement';
 import { UniversitySetupManagement } from 'app/pages/Management/UniversitySetupManagement';
 import { MajorManagement } from 'app/pages/Management/MajorManagement';
+import AddCycle from 'app/pages/Cycle/AddCycle';
+import UpdateCycle from 'app/pages/Cycle/UpdateCycle';
 
 export const authorized = [
   {
@@ -26,6 +28,16 @@ export const authorized = [
     path: '/tracks',
     layout: DefaultLayout,
     component: ApplicationTrackManagement,
+  },
+  {
+    path: '/cycles/new',
+    layout: DefaultLayout,
+    component: AddCycle,
+  },
+  {
+    path: '/cycles/update/:id',
+    layout: DefaultLayout,
+    component: UpdateCycle,
   },
   {
     path: '/cycles',

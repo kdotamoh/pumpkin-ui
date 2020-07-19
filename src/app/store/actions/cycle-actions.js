@@ -25,6 +25,16 @@ export const deleteCycle = (code) => ({
   code,
 });
 
+export const activateCycle = (code) => ({
+  type: CycleKeys.ACTIVATE_CYCLE,
+  code,
+});
+
+export const deactivateCycle = (code) => ({
+  type: CycleKeys.DEACTIVATE_CYCLE,
+  code,
+});
+
 export const setCurrentCycle = (record) => ({
   type: CycleKeys.SET_CURRENT_CYCLE,
   record,

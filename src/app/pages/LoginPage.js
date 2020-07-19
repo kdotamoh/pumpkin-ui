@@ -62,25 +62,25 @@ export const LoginPage = () => {
           <h1 className="login-form__h1">ADMIN PORTAL</h1>
           <h3 className="login-form__h3">LOGIN</h3>
 
-          <label className="login-form__label" htmlFor="email">
+          <label className="form__label" htmlFor="email">
             E-Mail
           </label>
           <input
             type="text"
             name="email"
-            className="login-form__input mb-2rem"
+            className="form__input mb-2rem"
             placeholder="Your E-Mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label className="login-form__label" htmlFor="password">
+          <label className="form__label" htmlFor="password">
             Password
           </label>
           <input
             type="password"
             name="password"
-            className="login-form__input mb-2rem"
+            className="form__input mb-2rem"
             placeholder="Your Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -91,7 +91,7 @@ export const LoginPage = () => {
               <input
                 type="checkbox"
                 name="rememberMe"
-                className="login-form__input"
+                className="form__input"
                 id=""
                 checked={rememberMe}
                 onChange={() => setRememberMe(!rememberMe)}

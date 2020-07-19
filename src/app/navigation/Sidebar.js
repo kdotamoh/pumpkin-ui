@@ -7,6 +7,9 @@ import {
   LogoutOutlined,
   RiseOutlined,
   SyncOutlined,
+  SettingOutlined,
+  ReadOutlined,
+  BankOutlined,
 } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 // import { useDispatch } from 'react-redux';
@@ -14,89 +17,68 @@ import store from '../store';
 
 import { unsetUser } from '../store/auth';
 
+const { SubMenu } = Menu;
+
 export class SideBarComponent extends React.Component {
   render() {
+    const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
     return (
       <Menu mode="inline">
-        {this.getSidebarItems().map(
-          (item) => {
-            return (
-              <Menu.Item
-                onClick={
-                  item.name === 'Logout'
-                    ? () => {
-                        console.log('clicked');
-                        store.dispatch(unsetUser());
-                      }
-                    : null
-                }
-                key={item.key}
-              >
-                <NavLink to={item.route}>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </NavLink>
-              </Menu.Item>
-            );
-          }
-          // {item.withBreak ? <hr style={{ width: '80%' }}/> : null}
+        <Menu.Item key="employees">
+          <NavLink to="/employees">
+            <GoldOutlined />
+            <span>Employees</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="alumni">
+          <NavLink to="/alumni">
+            <GoldOutlined />
+            <span>Alumni</span>
+          </NavLink>
+        </Menu.Item>
+        {isSuperAdmin && (
+          <Menu.Item key="cycles">
+            <NavLink to="/cycles">
+              <SyncOutlined />
+              <span>Cycles</span>
+            </NavLink>
+          </Menu.Item>
         )}
+        {isSuperAdmin && (
+          <SubMenu title="Settings" icon={<SettingOutlined />}>
+            <Menu.Item key="majors">
+              <NavLink to="/university-majors">
+                <ReadOutlined />
+                <span>Majors</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="setup">
+              <NavLink to="/university-setup">
+                <BankOutlined />
+                <span>Universities</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="tracks">
+              <NavLink to="/tracks">
+                <RiseOutlined />
+                <span>Tracks</span>
+              </NavLink>
+            </Menu.Item>
+          </SubMenu>
+        )}
+        <Menu.Item
+          onClick={() => {
+            console.log('clicked');
+            store.dispatch(unsetUser());
+          }}
+          key="logout"
+        >
+          <LogoutOutlined />
+          <span>Logout</span>
+        </Menu.Item>
       </Menu>
     );
   }
-  getSidebarItems = () => {
-    const sidebarItems = [
-      {
-        key: 'employees',
-        name: 'Employees',
-        icon: <GoldOutlined />,
-        route: '/employees',
-        withBreak: true,
-      },
-      {
-        key: 'alumni',
-        name: 'Alumni',
-        icon: <GoldOutlined />,
-        route: '/alumni',
-      },
-    ];
-    if (this.props.user.roles.includes('SUPER_ADMIN')) {
-      sidebarItems.push(
-        {
-          key: 'tracks',
-          name: 'Tracks',
-          icon: <RiseOutlined />,
-          route: '/tracks',
-        },
-        {
-          key: 'cycles',
-          name: 'Cycles',
-          icon: <SyncOutlined />,
-          route: '/cycles',
-        },
-        {
-          key: 'majors',
-          name: 'University Majors',
-          icon: <RiseOutlined />,
-          route: '/university-majors',
-        },
-
-        {
-          key: 'setup',
-          name: 'University Setup',
-          icon: <RiseOutlined />,
-          route: '/university-setup',
-        }
-      );
-    }
-    sidebarItems.push({
-      key: 'logout',
-      name: 'Logout',
-      icon: <LogoutOutlined />,
-      route: '/#',
-    });
-    return sidebarItems;
-  };
 }
 
 SideBarComponent.propTypes = {

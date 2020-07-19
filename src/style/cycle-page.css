@@ -1,0 +1,10 @@
+.cycle__container {
+  background-color: white;
+  padding: 24px;
+  min-height: 100%;
+}
+
+.cycle__heading {
+  font-weight: bold;
+  text-transform: uppercase;
+}
