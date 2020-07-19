@@ -12,6 +12,8 @@ import {
   updateCycleEssayQuestion,
   addCycleEssayQuestion,
   deleteCycleEssayQuestion,
+  addCycleStage,
+  deleteCycleStage,
 } from 'api/cycle';
 
 const initialState = {
@@ -66,6 +68,7 @@ class Cycle extends React.Component {
   };
 
   handleSetCycle = async () => {
+    // eslint-disable-next-line
     let { status, ...data } = await getCycleByCode(this.props.id);
     this.setState(data);
   };
@@ -121,35 +124,51 @@ class Cycle extends React.Component {
               />
               {isUpdating && (
                 <button
-                  onClick={() => {
-                    let stage = this.state.listOfStages.find(
-                      (stage, stageId) => index === stageId
-                    );
-                    updateCycleStage(stage, this.props.id);
+                  onClick={async () => {
+                    stage.new
+                      ? await addCycleStage(stage, this.props.id)
+                      : await updateCycleStage(stage, this.props.id);
+                    this.handleSetCycle();
                   }}
                 >
-                  Update
+                  {stage.new ? 'Add to cycle' : 'Update'}
                 </button>
               )}
-              <button
-                onClick={() =>
-                  this.setState({
-                    listOfStages: this.state.listOfStages.filter(
-                      (stage, stageId) => index !== stageId
-                    ),
-                  })
-                }
-              >
-                Remove
-              </button>
+              {!stage.new && (
+                <button
+                  onClick={async () => {
+                    if (isUpdating) {
+                      await deleteCycleStage(stage.code, this.props.id);
+                      this.handleSetCycle();
+                    } else {
+                      this.setState({
+                        listOfStages: this.state.listOfStages.filter(
+                          (stage, stageId) => index !== stageId
+                        ),
+                      });
+                    }
+                  }}
+                >
+                  Remove
+                </button>
+              )}
             </div>
           ))}
           <button
-            onClick={() =>
-              this.setState({
-                listOfStages: this.state.listOfStages.concat({ name: '' }),
-              })
-            }
+            onClick={() => {
+              if (isUpdating) {
+                this.setState({
+                  listOfStages: this.state.listOfStages.concat({
+                    name: '',
+                    new: true,
+                  }),
+                });
+              } else {
+                this.setState({
+                  listOfStages: this.state.listOfStages.concat({ name: '' }),
+                });
+              }
+            }}
           >
             Add stage
           </button>
@@ -194,10 +213,11 @@ class Cycle extends React.Component {
                 </label>
                 {isUpdating && (
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       essay.new
-                        ? addCycleEssayQuestion(essay, this.props.id)
-                        : updateCycleEssayQuestion(essay, this.props.id);
+                        ? await addCycleEssayQuestion(essay, this.props.id)
+                        : await updateCycleEssayQuestion(essay, this.props.id);
+                      this.handleSetCycle();
                     }}
                   >
                     {essay.new ? 'Add to cycle' : 'Update'}

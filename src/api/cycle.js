@@ -137,11 +137,10 @@ export async function updateCycleStage(details, code) {
   }
 }
 
-export async function deleteCycleStage(code, stageCode) {
+export async function deleteCycleStage(stageCode, code) {
   try {
     const { data } = await client.delete(
       `/recruitment/cycle/${code}/delete/stage?stageCode=${stageCode}`,
-      null,
       {
         headers: {
           user_token: token,
@@ -149,6 +148,7 @@ export async function deleteCycleStage(code, stageCode) {
       }
     );
     const { responseBody } = data;
+    message.success('Stage deleted');
     return responseBody;
   } catch (err) {
     const {
@@ -158,11 +158,11 @@ export async function deleteCycleStage(code, stageCode) {
   }
 }
 
-export async function addCycleStage(name, code) {
+export async function addCycleStage(details, code) {
   try {
     const { data } = await client.post(
       `/recruitment/cycle/${code}/add/stage`,
-      { name },
+      { ...details },
       {
         headers: {
           user_token: token,
@@ -170,6 +170,7 @@ export async function addCycleStage(name, code) {
       }
     );
     const { responseBody } = data;
+    message.success('Stage added to cycle');
     return responseBody;
   } catch (err) {
     const {
