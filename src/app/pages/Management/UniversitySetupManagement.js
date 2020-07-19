@@ -79,7 +79,7 @@ export class UniversitySetupManagementComponent extends React.Component {
             onChange={(e) => this.handleInput(e, 'name')}
           />
           <select
-            className="login-form__input"
+            className="form__input"
             style={{ width: '100%' }}
             onChange={(e) => this.handleInput(e, 'country')}
             value={this.state.country}

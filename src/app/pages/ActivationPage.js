@@ -112,7 +112,7 @@ const ActivationPage = () => {
               ]}
             >
               <Input
-                className="login-form__input"
+                className="form__input"
                 name="firstName"
                 placeholder="First Name"
               />
@@ -127,7 +127,7 @@ const ActivationPage = () => {
               ]}
             >
               <Input
-                className="login-form__input"
+                className="form__input"
                 name="lastName"
                 placeholder="Last Name"
               />
@@ -141,7 +141,7 @@ const ActivationPage = () => {
                 },
               ]}
             >
-              <label className="login-form__input" style={{ display: 'flex' }}>
+              <label className="form__input" style={{ display: 'flex' }}>
                 <select
                   style={{ WebkitAppearance: 'none', border: 'transparent' }}
                   onChange={(e) => setCountryCode(e.target.value)}
@@ -184,7 +184,7 @@ const ActivationPage = () => {
               ]}
             >
               <Input.Password
-                className="login-form__input"
+                className="form__input"
                 name="password"
                 placeholder="Password"
                 type="password"
@@ -212,7 +212,7 @@ const ActivationPage = () => {
               ]}
             >
               <Input.Password
-                className="login-form__input"
+                className="form__input"
                 name="passwordConfirmation"
                 placeholder="Re-enter password"
                 type="password"
