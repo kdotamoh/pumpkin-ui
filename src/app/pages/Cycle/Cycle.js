@@ -14,6 +14,7 @@ import {
   deleteCycleEssayQuestion,
   addCycleStage,
   deleteCycleStage,
+  deleteCycleTrack,
 } from 'api/cycle';
 
 const initialState = {
@@ -275,14 +276,31 @@ class Cycle extends React.Component {
             </button>
           </div>
           <div>Tracks</div>
+          {this.state.listOfApplicationTrackCodes.map((track, index) => (
+            <div key={index}>
+              <span>{track}</span>
+              <button
+                onClick={async () => {
+                  await deleteCycleTrack(track, this.props.id);
+                  this.handleSetCycle();
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
           <Select
-            mode="multiple"
+            // mode="multiple"
             style={{ width: '100%' }}
             value={this.state.listOfApplicationTrackCodes}
             onChange={(value) => {
               this.setState({
-                listOfApplicationTrackCodes: value,
+                listOfApplicationTrackCodes: [
+                  ...this.state.listOfApplicationTrackCodes,
+                  value,
+                ],
               });
+              this.state.listOfApplicationTrackCodes.concat(value);
             }}
           >
             {this.props.tracks.map((track) => (
