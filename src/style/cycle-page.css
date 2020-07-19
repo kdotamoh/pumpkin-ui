@@ -1,7 +1,7 @@
 .cycle__container {
   background-color: white;
   padding: 24px;
-  height: 100%;
+  min-height: 100%;
 }
 
 .cycle__heading {
