@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom';
 const ModalActions = {
   ADD: 'ADD',
   UPDATE: 'UPDATE',
+  ACTIVATE: 'ACTIVATE',
+  DEACTIVATE: 'DEACTIVATE',
 };
 class ManagementComponent extends React.Component {
   constructor(props) {
@@ -98,6 +100,31 @@ class ManagementComponent extends React.Component {
             Edit
           </Menu.Item>
         )}
+        {this.props.newEntityName === 'CYCLE' && (
+          <Menu.Item
+            onClick={() => {
+              this.props.onEditEntity(record);
+            }}
+          >
+            Edit
+          </Menu.Item>
+        )}
+        {/* <Menu.Item
+          onClick={() => {
+            this.props.setCurrentEntity(record);
+            this.props.onActivateEntity();
+          }}
+        >
+          Activate
+        </Menu.Item> */}
+        <Menu.Item
+          onClick={() => {
+            // this.props.setCurrentEntity(record);
+            this.props.onDeactivateEntity(record);
+          }}
+        >
+          Deactivate
+        </Menu.Item>
         <Menu.Item
           onClick={() => {
             this.props.setCurrentEntity(record);
@@ -114,6 +141,7 @@ class ManagementComponent extends React.Component {
 ManagementComponent.propTypes = {
   onAddNewEntity: PropTypes.func.isRequired,
   onCancelAddEntity: PropTypes.func.isRequired,
+  onDeactivateEntity: PropTypes.func.isRequired,
   newEntityName: PropTypes.string.isRequired,
   headerTitle: PropTypes.string.isRequired,
   columnDefs: PropTypes.array.isRequired,

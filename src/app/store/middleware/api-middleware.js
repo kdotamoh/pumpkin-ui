@@ -305,6 +305,20 @@ export const appMiddleware = (store) => (next) => async (action) => {
         message.error(`Cannot delete cycle: ${err}`);
       }
       break;
+    case CycleKeys.DEACTIVATE_CYCLE:
+      try {
+        await CycleService.deactivateCycle(action.code);
+      } catch (err) {
+        message.error(`Cannot deactivate cycle: ${err}`);
+      }
+      break;
+    case CycleKeys.REACTIVATE_CYCLE:
+      try {
+        await CycleService.reactivateCycle(action.code);
+      } catch (err) {
+        message.error(`Cannot reactivate cycle: ${err}`);
+      }
+      break;
     case CycleKeys.UPDATE_CYCLE: {
       try {
         await CycleService.updateCycle(action.name, action.code);

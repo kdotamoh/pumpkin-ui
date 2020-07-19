@@ -182,7 +182,6 @@ export async function addCycleStage(details, code) {
 
 export async function deactivateCycle(code) {
   try {
-    console.log(store.getState().user.userToken);
     const { data } = await client.patch(
       `/recruitment/cycle/deactivate/${code}`,
       null,
@@ -193,6 +192,7 @@ export async function deactivateCycle(code) {
       }
     );
     const { responseBody } = data;
+    message.success('Cycle deactivated');
     return responseBody;
   } catch (err) {
     const {

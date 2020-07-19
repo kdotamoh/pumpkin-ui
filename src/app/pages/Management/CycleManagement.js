@@ -10,6 +10,7 @@ import {
   createCycle,
   deleteCycle,
   updateCycle,
+  deactivateCycle,
   setCurrentCycle,
 } from 'app/store/actions/cycle-actions';
 
@@ -55,9 +56,11 @@ export class RecruitmentCycleManagementComponent extends React.Component {
         entityContent={this.addNewCycleContent()}
         onDelete={this.showDeleteConfirmationModal}
         onEditEntity={this.onEditCycle}
+        onActivateEntity={this.onActivateCycle}
+        onDeactivateEntity={this.onDeactivateCycle}
         setCurrentEntity={this.props.setCurrentCycle}
         willNavigate={true}
-        navigateTo="/cycles/add-new"
+        navigateTo="/cycles/new"
       />
     );
   }
@@ -83,12 +86,20 @@ export class RecruitmentCycleManagementComponent extends React.Component {
     });
     callback();
   };
-  onEditCycle = (callback) => {
-    this.props.updateCycle(this.state.name, this.props.currentCycle.code);
-    this.setState({
-      name: '',
-    });
+  onEditCycle = (record) => {
+    // this.props.updateCycle(this.state.name, this.props.currentCycle.code);
+    // this.setState({
+    //   name: '',
+    // });
+    this.props.history.push(`/cycles/update/${record.code}`);
+    // callback();
+  };
+  onActivateCycle = (callback) => {
     callback();
+  };
+  onDeactivateCycle = (record) => {
+    this.props.deactivateCycle(record.code);
+    // callback();
   };
   onCancelAddCycle = (callback) => {
     this.setState({
@@ -115,9 +126,11 @@ RecruitmentCycleManagementComponent.propTypes = {
   createCycle: PropTypes.func.isRequired,
   deleteCycle: PropTypes.func.isRequired,
   updateCycle: PropTypes.func.isRequired,
+  deactivateCycle: PropTypes.func.isRequired,
   setCurrentCycle: PropTypes.func.isRequired,
   currentCycle: PropTypes.object,
   data: PropTypes.array.isRequired,
+  history: PropTypes.object,
 };
 
 /**
@@ -132,6 +145,7 @@ const mapDispatchToProps = (dispatch) => ({
   createCycle: (name) => dispatch(createCycle(name)),
   deleteCycle: (code) => dispatch(deleteCycle(code)),
   updateCycle: (name, code) => dispatch(updateCycle(name, code)),
+  deactivateCycle: (code) => dispatch(deactivateCycle(code)),
   setCurrentCycle: (record) => dispatch(setCurrentCycle(record)),
 });
 
