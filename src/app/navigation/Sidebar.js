@@ -37,14 +37,6 @@ export class SideBarComponent extends React.Component {
           </NavLink>
         </Menu.Item>
         {isSuperAdmin && (
-          <Menu.Item key="tracks">
-            <NavLink to="/tracks">
-              <RiseOutlined />
-              <span>Tracks</span>
-            </NavLink>
-          </Menu.Item>
-        )}
-        {isSuperAdmin && (
           <Menu.Item key="cycles">
             <NavLink to="/cycles">
               <SyncOutlined />
@@ -63,7 +55,13 @@ export class SideBarComponent extends React.Component {
             <Menu.Item key="setup">
               <NavLink to="/university-setup">
                 <BankOutlined />
-                <span>Setup</span>
+                <span>Universities</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="tracks">
+              <NavLink to="/tracks">
+                <RiseOutlined />
+                <span>Tracks</span>
               </NavLink>
             </Menu.Item>
           </SubMenu>
