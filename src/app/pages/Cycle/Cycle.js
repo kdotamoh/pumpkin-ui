@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getTracks } from 'app/store/actions/track-actions';
 import { createCycle } from 'app/store/actions/cycle-actions';
-import { Select } from 'antd';
+import { Select, Row, Col, Button } from 'antd';
 
 import {
   getCycleByCode,
@@ -16,6 +16,8 @@ import {
   deleteCycleStage,
   deleteCycleTrack,
 } from 'api/cycle';
+
+import 'style/cycle-page.css';
 
 const initialState = {
   recruitmentCycleName: '',
@@ -88,229 +90,277 @@ class Cycle extends React.Component {
 
     const isUpdating = this.props.editMode;
 
-    if (this.state.status === 'loading') return 'Loading...';
+    if (this.state.status === 'loading')
+      return <div className="cycle__container">Loading...</div>;
     if (this.state.status === 'loaded')
       return (
-        <div>
-          <div>
-            <p>{isUpdating ? 'Update cycle' : 'Add cycle'}</p>
-            <input
-              type="text"
-              placeholder="name"
-              value={this.state.recruitmentCycleName}
-              onChange={(e) =>
-                this.setState({ recruitmentCycleName: e.target.value })
-              }
-            />
-            <input
-              type="number"
-              placeholder="year"
-              value={this.state.year}
-              onChange={(e) => this.setState({ year: e.target.value })}
-            />
-          </div>
+        <div className="cycle__container">
+          <h4 className="cycle__heading">
+            {isUpdating ? 'Update cycle' : 'Add cycle'}
+          </h4>
+          <Row>
+            <Col span={12} className="pr-15rem">
+              <div>
+                <div className="flex-column">
+                  <label htmlFor="recruitmentCycleName">Cycle Name</label>
+                  <input
+                    type="text"
+                    className="form__input"
+                    placeholder="name"
+                    name="recruitmentCycleName"
+                    value={this.state.recruitmentCycleName}
+                    onChange={(e) =>
+                      this.setState({ recruitmentCycleName: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="flex-column">
+                  <label htmlFor="recruitmentCycleName">Cycle Year</label>
+                  <input
+                    type="number"
+                    className="form__input"
+                    placeholder="year"
+                    value={this.state.year}
+                    onChange={(e) => this.setState({ year: e.target.value })}
+                  />
+                </div>
+              </div>
 
-          {isUpdating && (
-            <button onClick={() => this.handleUpdateCycle()}>Update</button>
-          )}
-
-          <div>Stages</div>
-          {this.state.listOfStages.map((stage, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                name="name"
-                value={stage.name}
-                onChange={this.handleInput('listOfStages', index)}
-              />
               {isUpdating && (
-                <button
-                  onClick={async () => {
-                    stage.new
-                      ? await addCycleStage(stage, this.props.id)
-                      : await updateCycleStage(stage, this.props.id);
-                    this.handleSetCycle();
-                  }}
-                >
-                  {stage.new ? 'Add to cycle' : 'Update'}
-                </button>
+                <Button onClick={() => this.handleUpdateCycle()}>Update</Button>
               )}
-              {!stage.new && (
-                <button
-                  onClick={async () => {
-                    if (isUpdating) {
-                      await deleteCycleStage(stage.code, this.props.id);
+            </Col>
+            <Col span={12} className="pr-15rem">
+              <div>Stages</div>
+              {this.state.listOfStages.map((stage, index) => (
+                <div key={index}>
+                  <input
+                    type="text"
+                    className="form__input"
+                    name="name"
+                    value={stage.name}
+                    onChange={this.handleInput('listOfStages', index)}
+                  />
+                  {isUpdating && (
+                    <Button
+                      type="primary"
+                      shape="round"
+                      onClick={async () => {
+                        stage.new
+                          ? await addCycleStage(stage, this.props.id)
+                          : await updateCycleStage(stage, this.props.id);
+                        this.handleSetCycle();
+                      }}
+                    >
+                      {stage.new ? 'Add to cycle' : 'Update'}
+                    </Button>
+                  )}
+                  {!stage.new && (
+                    <Button
+                      type="danger"
+                      shape="round"
+                      onClick={async () => {
+                        if (isUpdating) {
+                          await deleteCycleStage(stage.code, this.props.id);
+                          this.handleSetCycle();
+                        } else {
+                          this.setState({
+                            listOfStages: this.state.listOfStages.filter(
+                              (stage, stageId) => index !== stageId
+                            ),
+                          });
+                        }
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button
+                type="primary"
+                shape="round"
+                onClick={() => {
+                  if (isUpdating) {
+                    this.setState({
+                      listOfStages: this.state.listOfStages.concat({
+                        name: '',
+                        new: true,
+                      }),
+                    });
+                  } else {
+                    this.setState({
+                      listOfStages: this.state.listOfStages.concat({
+                        name: '',
+                      }),
+                    });
+                  }
+                }}
+              >
+                Add stage
+              </Button>
+            </Col>
+          </Row>
+
+          <hr />
+
+          <Row>
+            <Col span={12} className="pr-15rem">
+              <div>Tracks</div>
+              {this.state.listOfApplicationTrackCodes.map((track, index) => (
+                <div key={index}>
+                  <span>{track}</span>
+                  <Button
+                    onClick={async () => {
+                      await deleteCycleTrack(track, this.props.id);
                       this.handleSetCycle();
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              ))}
+              <Select
+                // mode="multiple"
+                style={{ width: '100%' }}
+                value={this.state.listOfApplicationTrackCodes}
+                onChange={(value) => {
+                  this.setState({
+                    listOfApplicationTrackCodes: [
+                      ...this.state.listOfApplicationTrackCodes,
+                      value,
+                    ],
+                  });
+                  this.state.listOfApplicationTrackCodes.concat(value);
+                }}
+              >
+                {this.props.tracks.map((track) => (
+                  <Option key={track.code} value={track.code}>
+                    {track.name}
+                  </Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={12} className="pr-15rem">
+              <div>
+                <p>Essay questions</p>
+                {this.state.listOfEssays.map((essay, index) => (
+                  <div className="flex-column" key={index}>
+                    <input
+                      type="text"
+                      className="form__input"
+                      name="question"
+                      placeholder="question"
+                      value={essay.question}
+                      onChange={this.handleInput('listOfEssays', index)}
+                    />
+                    <input
+                      type="number"
+                      className="form__input"
+                      name="wordCount"
+                      placeholder="word count"
+                      value={essay.wordCount}
+                      onChange={this.handleInput('listOfEssays', index)}
+                    />
+                    <label htmlFor="">
+                      <input
+                        type="checkbox"
+                        name="showInApplicationForm"
+                        id=""
+                        checked={essay.showInApplicationForm}
+                        onChange={this.handleInput('listOfEssays', index)}
+                      />
+                      Show in application form
+                    </label>
+                    <label htmlFor="">
+                      <input
+                        type="checkbox"
+                        name="compulsoryQuestion"
+                        id=""
+                        checked={essay.compulsoryQuestion}
+                        onChange={this.handleInput('listOfEssays', index)}
+                      />
+                      Compulsory question
+                    </label>
+                    {isUpdating && (
+                      <Button
+                        type="primary"
+                        shape="round"
+                        onClick={async () => {
+                          essay.new
+                            ? await addCycleEssayQuestion(essay, this.props.id)
+                            : await updateCycleEssayQuestion(
+                                essay,
+                                this.props.id
+                              );
+                          this.handleSetCycle();
+                        }}
+                      >
+                        {essay.new ? 'Add to cycle' : 'Update'}
+                      </Button>
+                    )}
+                    {!essay.new && (
+                      <Button
+                        type="danger"
+                        shape="round"
+                        onClick={async () => {
+                          if (isUpdating) {
+                            await deleteCycleEssayQuestion(
+                              essay.code,
+                              this.props.id
+                            );
+                            this.handleSetCycle();
+                          } else {
+                            this.setState({
+                              listOfStages: this.state.listOfEssays.filter(
+                                (essay, essayId) => index !== essayId
+                              ),
+                            });
+                          }
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                    {/* //Todo: Handle both local and server-side deletion */}
+                  </div>
+                ))}
+                <Button
+                  type="primary"
+                  shape="round"
+                  onClick={() => {
+                    if (isUpdating) {
+                      this.setState({
+                        listOfEssays: this.state.listOfEssays.concat({
+                          question: '',
+                          wordCount: '',
+                          showInApplicationForm: false,
+                          compulsoryQuestion: false,
+                          new: true,
+                        }),
+                      });
                     } else {
                       this.setState({
-                        listOfStages: this.state.listOfStages.filter(
-                          (stage, stageId) => index !== stageId
-                        ),
+                        listOfEssays: this.state.listOfEssays.concat({
+                          question: '',
+                          wordCount: '',
+                          showInApplicationForm: false,
+                          compulsoryQuestion: false,
+                        }),
                       });
                     }
                   }}
                 >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            onClick={() => {
-              if (isUpdating) {
-                this.setState({
-                  listOfStages: this.state.listOfStages.concat({
-                    name: '',
-                    new: true,
-                  }),
-                });
-              } else {
-                this.setState({
-                  listOfStages: this.state.listOfStages.concat({ name: '' }),
-                });
-              }
-            }}
-          >
-            Add stage
-          </button>
-
-          <div>
-            <p>Essay questions</p>
-            {this.state.listOfEssays.map((essay, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  name="question"
-                  placeholder="question"
-                  value={essay.question}
-                  onChange={this.handleInput('listOfEssays', index)}
-                />
-                <input
-                  type="number"
-                  name="wordCount"
-                  placeholder="word count"
-                  value={essay.wordCount}
-                  onChange={this.handleInput('listOfEssays', index)}
-                />
-                <label htmlFor="">
-                  <input
-                    type="checkbox"
-                    name="showInApplicationForm"
-                    id=""
-                    checked={essay.showInApplicationForm}
-                    onChange={this.handleInput('listOfEssays', index)}
-                  />
-                  Show in application form
-                </label>
-                <label htmlFor="">
-                  <input
-                    type="checkbox"
-                    name="compulsoryQuestion"
-                    id=""
-                    checked={essay.compulsoryQuestion}
-                    onChange={this.handleInput('listOfEssays', index)}
-                  />
-                  Compulsory question
-                </label>
-                {isUpdating && (
-                  <button
-                    onClick={async () => {
-                      essay.new
-                        ? await addCycleEssayQuestion(essay, this.props.id)
-                        : await updateCycleEssayQuestion(essay, this.props.id);
-                      this.handleSetCycle();
-                    }}
-                  >
-                    {essay.new ? 'Add to cycle' : 'Update'}
-                  </button>
-                )}
-                {!essay.new && (
-                  <button
-                    onClick={async () => {
-                      if (isUpdating) {
-                        await deleteCycleEssayQuestion(
-                          essay.code,
-                          this.props.id
-                        );
-                        this.handleSetCycle();
-                      } else {
-                        this.setState({
-                          listOfStages: this.state.listOfEssays.filter(
-                            (essay, essayId) => index !== essayId
-                          ),
-                        });
-                      }
-                    }}
-                  >
-                    Remove
-                  </button>
-                )}
-                {/* //Todo: Handle both local and server-side deletion */}
+                  Add question
+                </Button>
               </div>
-            ))}
-            <button
-              onClick={() => {
-                if (isUpdating) {
-                  this.setState({
-                    listOfEssays: this.state.listOfEssays.concat({
-                      question: '',
-                      wordCount: '',
-                      showInApplicationForm: false,
-                      compulsoryQuestion: false,
-                      new: true,
-                    }),
-                  });
-                } else {
-                  this.setState({
-                    listOfEssays: this.state.listOfEssays.concat({
-                      question: '',
-                      wordCount: '',
-                      showInApplicationForm: false,
-                      compulsoryQuestion: false,
-                    }),
-                  });
-                }
-              }}
-            >
-              Add question
-            </button>
-          </div>
-          <div>Tracks</div>
-          {this.state.listOfApplicationTrackCodes.map((track, index) => (
-            <div key={index}>
-              <span>{track}</span>
-              <button
-                onClick={async () => {
-                  await deleteCycleTrack(track, this.props.id);
-                  this.handleSetCycle();
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-          <Select
-            // mode="multiple"
-            style={{ width: '100%' }}
-            value={this.state.listOfApplicationTrackCodes}
-            onChange={(value) => {
-              this.setState({
-                listOfApplicationTrackCodes: [
-                  ...this.state.listOfApplicationTrackCodes,
-                  value,
-                ],
-              });
-              this.state.listOfApplicationTrackCodes.concat(value);
-            }}
-          >
-            {this.props.tracks.map((track) => (
-              <Option key={track.code} value={track.code}>
-                {track.name}
-              </Option>
-            ))}
-          </Select>
-          <div>Application forms</div>
-          <button onClick={this.handleSubmit}>Submit</button>
+            </Col>
+          </Row>
+
+          {/* <div>Application forms</div> */}
+          <Button type="primary" shape="round" onClick={this.handleSubmit}>
+            Submit
+          </Button>
         </div>
       );
   }
