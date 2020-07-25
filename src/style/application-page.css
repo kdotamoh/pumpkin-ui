@@ -37,7 +37,7 @@
 
 .application-page-component__steps__content {
   min-height: 50vh;
-  margin-bottom: 4rem;
+  margin: 0 15rem 4rem 15rem;
 }
 
 .application-page-component__steps__header {
@@ -72,4 +72,8 @@ Application Section
 .application-section__edit-section-btn {
   color: rgb(40, 73, 153);
   border: none;
+}
+
+.ant-input[disabled] {
+  color: black;
 }

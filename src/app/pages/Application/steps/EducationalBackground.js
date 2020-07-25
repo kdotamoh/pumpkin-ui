@@ -3,46 +3,54 @@ import { Form, Input, Select } from 'antd';
 import { useSelector } from 'react-redux';
 
 const { Option } = Select;
-const GetCountries = () => {
+const GetCountries = (disabled) => {
   const countries = useSelector((state) => state.applicationForm.countries);
   return countries.map((country) => {
     return (
-      <Option key={country} value={country}>
+      <Option key={country} value={country} disabled={disabled}>
         {country}
       </Option>
     );
   });
 };
-const GetAcademicStandings = () => {
+const GetAcademicStandings = (disabled) => {
   const academicStandings = useSelector(
     (state) => state.applicationForm.academicStandings
   );
   return academicStandings.map((academicStanding) => {
     return (
-      <Option key={academicStanding} value={academicStanding}>
-        {academicStanding}
+      <Option
+        key={academicStanding}
+        value={academicStanding}
+        disabled={disabled}
+      >
+        {academicStanding.replace(/_/g, ' ')}
       </Option>
     );
   });
 };
-const GetUniversities = () => {
+const GetUniversities = (disabled) => {
   const universities = useSelector((state) => state.universities.available);
   if (universities) {
     return universities.map((university) => {
       return (
-        <Option key={university.code} value={university.code}>
+        <Option
+          key={university.code}
+          value={university.code}
+          disabled={disabled}
+        >
           {university.name}
         </Option>
       );
     });
   }
 };
-const GetMajors = () => {
+const GetMajors = (disabled) => {
   const majors = useSelector((state) => state.majors.available);
 
   return majors.map((major) => {
     return (
-      <Option key={major.code} value={major.code}>
+      <Option key={major.code} value={major.code} disabled={disabled}>
         {major.name}
       </Option>
     );
@@ -64,6 +72,17 @@ export const EducationalBackground = (params) => {
       labelAlign="left"
     >
       <Form.Item
+        name="countryOfStudy"
+        label="Country of University"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Select allowClear>{GetCountries(params.disabled)}</Select>
+      </Form.Item>
+      <Form.Item
         name="universityCode"
         label="Name of University"
         rules={[
@@ -74,7 +93,7 @@ export const EducationalBackground = (params) => {
       >
         <Select placeholder="Select your university" allowClear>
           {
-            GetUniversities()
+            GetUniversities(params.disabled)
             // might have to append other
           }
         </Select>
@@ -91,21 +110,10 @@ export const EducationalBackground = (params) => {
               name="newUniversity"
               label="If 'other', state name of university"
             >
-              <Input />
+              <Input disabled={params.disabled} />
             </Form.Item>
           ) : null
         }
-      </Form.Item>
-      <Form.Item
-        name="countryOfStudy"
-        label="Country of University"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Select allowClear>{GetCountries()}</Select>
       </Form.Item>
 
       <Form.Item
@@ -117,7 +125,7 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Input />
+        <Input disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         name="courseOfStudyCode"
@@ -128,7 +136,7 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Select allowClear>{GetMajors()}</Select>
+        <Select allowClear>{GetMajors(params.disabled)}</Select>
       </Form.Item>
       <Form.Item
         noStyle
@@ -142,7 +150,7 @@ export const EducationalBackground = (params) => {
               name="newCourseOfStudy"
               label="If 'other', state university major"
             >
-              <Input />
+              <Input disabled={params.disabled} />
             </Form.Item>
           ) : null
         }
@@ -157,7 +165,7 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Select allowClear>{GetAcademicStandings()}</Select>
+        <Select allowClear>{GetAcademicStandings(params.disabled)}</Select>
       </Form.Item>
       <Form.Item
         name="currentGPA"
@@ -168,7 +176,7 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Input />
+        <Input disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         name="graduationDate"
@@ -179,7 +187,7 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Input type="date" />
+        <Input type="date" disabled={params.disabled} />
       </Form.Item>
     </Form>
   );

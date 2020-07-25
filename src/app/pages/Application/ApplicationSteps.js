@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { Button, Steps, message, Form } from 'antd';
-import { BasicInformation } from './steps/BasicInformation';
-import { EducationalBackground } from './steps/EducationalBackground';
-import { ApplicationInformation } from './steps/ApplicationInformation';
 import { ApplicationConfirmation } from './steps/ApplicationConfirmation';
 import { useHistory } from 'react-router-dom';
 const { Step } = Steps;
-export const ApplicationSteps = () => {
+
+export const ApplicationSteps = (params) => {
   const history = useHistory();
   const [form] = Form.useForm();
   const [current, setCurrent] = React.useState(0);
+  const formReference = sessionStorage.getItem('applicationFormReference');
   const next = () => {
     if (current < steps.length - 1) {
       setCurrent(current + 1);
@@ -17,41 +16,36 @@ export const ApplicationSteps = () => {
       message.success('Processing complete!');
     }
   };
-  const done = (values) => {
-    console.log(values, 'hi');
-  };
   const stepInformation = {
     layout: 'vertical',
     form: form,
     size: 'middle',
+    disabled: false,
   };
-  const steps = [
-    {
-      title: 'Basic Information',
-      content: BasicInformation({ ...stepInformation }),
-    },
-    {
-      title: 'Educational Background',
-      content: EducationalBackground({ ...stepInformation }),
-    },
-    {
-      title: 'Application Information',
-      content: ApplicationInformation({ ...stepInformation }),
-    },
-    {
-      title: 'Application Confirmation',
-      content: ApplicationConfirmation({
-        ...stepInformation,
-        layout: 'horizontal',
-        onFinish: done,
-      }),
-    },
-  ];
+  const steps = params.steps.map((step) => {
+    return {
+      title: step.title,
+      content: step.content(stepInformation),
+    };
+  });
+  steps.push({
+    title: 'Application Confirmation',
+    content: ApplicationConfirmation(params.steps, {
+      ...stepInformation,
+      layout: 'horizontal',
+      onFinish: params.onFinish,
+      disabled: true,
+    }),
+  });
+  const onStepChange = (current) => {
+    setCurrent(current);
+  };
 
   return (
     <React.Fragment>
       <Steps
         current={current}
+        onChange={onStepChange}
         className="application-page-component__steps__header"
       >
         {steps.map((item) => (
@@ -70,7 +64,7 @@ export const ApplicationSteps = () => {
             <Button
               type="primary"
               htmlType="submit"
-              onClick={() => history.push('/apply')}
+              onClick={() => history.push(`/apply/?ref=${formReference}`)}
             >
               Back to Application
             </Button>
@@ -82,7 +76,7 @@ export const ApplicationSteps = () => {
           )}
           {current === steps.length - 1 && (
             <Button type="primary" htmlType="submit" onClick={form.submit}>
-              Done
+              Submit
             </Button>
           )}
         </div>

@@ -6,6 +6,7 @@ import {
   UniversityKeys,
   CycleKeys,
   MajorKeys,
+  CandidateKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
@@ -14,6 +15,7 @@ import * as ApplicationFormService from 'api/application-form';
 import * as CycleService from 'api/cycle';
 import * as UniversityService from 'api/university';
 import * as MajorService from 'api/majors';
+import * as CandidateService from 'api/candidates';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
@@ -24,6 +26,8 @@ import {
   setAcademicStandings,
   setApplicationTracks,
   setApplicationEssayQuestions,
+  setFormValidationStatus,
+  setEssayValidationStatus,
 } from '../actions/application-form-actions';
 import { setCycles, getCycles } from '../actions/cycle-actions';
 import {
@@ -141,8 +145,16 @@ export const appMiddleware = (store) => (next) => async (action) => {
     }
     case ApplicationFormKeys.VALIDATE_APPLICATION_FORM: {
       try {
-        await ApplicationFormService.validateForm(action.reference);
-        // dispatch an action
+        const formStatus = await ApplicationFormService.validateForm(
+          action.reference
+        );
+        sessionStorage.setItem('cycleReference', formStatus.responseBody.code);
+        store.dispatch(
+          setFormValidationStatus(
+            formStatus.requestSuccessful,
+            formStatus.responseBody
+          )
+        );
       } catch (err) {
         message.error(`Cannot validate application form: ${err}`);
       }
@@ -177,7 +189,9 @@ export const appMiddleware = (store) => (next) => async (action) => {
     }
     case ApplicationFormKeys.GET_APPLICATION_TRACKS: {
       try {
-        const applicationTracks = await ApplicationFormService.getApplicationTracks();
+        const applicationTracks = await ApplicationFormService.getApplicationTracks(
+          action.cycleReference
+        );
         store.dispatch(setApplicationTracks(applicationTracks));
       } catch (err) {
         message.error(`Cannot get application tracks: ${err}`);
@@ -195,6 +209,23 @@ export const appMiddleware = (store) => (next) => async (action) => {
       }
       break;
     }
+    case ApplicationFormKeys.VALIDATE_ESSAY_QUESTION: {
+      try {
+        const formStatus = await ApplicationFormService.validateEssayQuestion(
+          action.questionCode
+        );
+        store.dispatch(
+          setEssayValidationStatus(
+            formStatus.requestSuccessful,
+            formStatus.responseBody
+          )
+        );
+      } catch (err) {
+        message.error(`Cannot validate essay question: ${err}`);
+      }
+      break;
+    }
+
     case UniversityKeys.GET_UNIVERSITIES: {
       try {
         const universities = await UniversityService.getUniversities();
@@ -325,6 +356,31 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(getCycles());
       } catch (err) {
         message.error(`Cannot update cycle: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.SUBMIT_ADDITIONAL_ESSAY: {
+      try {
+        const responseSuccessful = await ApplicationFormService.submitAdditionalEssay(
+          action.values
+        );
+        if (responseSuccessful) {
+          message.info('Essay Submitted Successfully');
+        }
+      } catch (err) {
+        message.error(`Cannot submit application: ${err}`);
+      }
+      break;
+    }
+    case CandidateKeys.SUBMIT_CANDIDATE_APPLICATION_FORM: {
+      try {
+        await CandidateService.submitCandidateApplicationForm(
+          action.cycleReference,
+          action.values
+        );
+        message.info('Application Submitted Successfully');
+      } catch (err) {
+        message.error(`Cannot submit application: ${err}`);
       }
       break;
     }
