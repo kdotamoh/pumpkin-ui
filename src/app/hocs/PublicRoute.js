@@ -7,18 +7,23 @@ import {
   getAcademicStandings,
   getCountries,
   getApplicationEssayQuestions,
+  getApplicationTracks,
 } from 'app/store/actions/application-form-actions';
 import { getUniversities } from 'app/store/actions/university-actions';
 import { getMajors } from 'app/store/actions/major-actions';
 
 export class PublicRoute extends React.Component {
+  cycleReference = sessionStorage.getItem('cycleReference');
   componentDidMount() {
     this.props.getGenders();
     this.props.getCountries();
     this.props.getAcademicStandings();
     this.props.getUniversities();
     this.props.getMajors();
-    // this.props.getApplicationEssayQuestions('J6PNN4SG5U5K975KMGKQ');
+    if (this.cycleReference) {
+      this.props.getApplicationTracks(this.cycleReference);
+      this.props.getApplicationEssayQuestions(this.cycleReference);
+    }
   }
   render() {
     return (
@@ -40,6 +45,7 @@ PublicRoute.propTypes = {
   getMajors: PropTypes.func.isRequired,
   getUniversities: PropTypes.func.isRequired,
   getApplicationEssayQuestions: PropTypes.func.isRequired,
+  getApplicationTracks: PropTypes.func.isRequired,
   path: PropTypes.string,
   exact: PropTypes.string,
 };
@@ -58,6 +64,9 @@ const mapDispatchToProps = (dispatch) => ({
   getMajors: () => dispatch(getMajors()),
   getApplicationEssayQuestions: (cycleReference) =>
     dispatch(getApplicationEssayQuestions(cycleReference)),
+  getApplicationTracks: (cycleReference) => {
+    dispatch(getApplicationTracks(cycleReference));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublicRoute);
