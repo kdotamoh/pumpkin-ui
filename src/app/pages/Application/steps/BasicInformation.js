@@ -3,11 +3,11 @@ import { Form, Input, Select } from 'antd';
 import { useSelector } from 'react-redux';
 
 const { Option } = Select;
-export const GetGenders = () => {
+export const GetGenders = (disabled) => {
   const genders = useSelector((state) => state.applicationForm.genders);
   return genders.map((gender) => {
     return (
-      <Option key={gender} value={gender}>
+      <Option key={gender} value={gender} disabled={disabled}>
         {gender}
       </Option>
     );
@@ -38,7 +38,7 @@ export const BasicInformation = (params) => {
           },
         ]}
       >
-        <Input />
+        <Input disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         name="lastName"
@@ -49,7 +49,18 @@ export const BasicInformation = (params) => {
           },
         ]}
       >
-        <Input />
+        <Input disabled={params.disabled} />
+      </Form.Item>
+      <Form.Item
+        name="dateOfBirth"
+        label="Date of birth"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="date" disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         name="gender"
@@ -61,7 +72,7 @@ export const BasicInformation = (params) => {
         ]}
       >
         <Select placeholder="Select your gender" allowClear>
-          {GetGenders()}
+          {GetGenders(params.disabled)}
         </Select>
       </Form.Item>
       <Form.Item
@@ -74,7 +85,7 @@ export const BasicInformation = (params) => {
           },
         ]}
       >
-        <Input />
+        <Input disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         name="phoneNumber"
@@ -85,10 +96,10 @@ export const BasicInformation = (params) => {
           },
         ]}
       >
-        <Input type="number" />
+        <Input type="number" disabled={params.disabled} />
       </Form.Item>
       <Form.Item name="secondaryPhoneNumber" label="Other Phone Number">
-        <Input type="number" />
+        <Input type="number" disabled={params.disabled} />
       </Form.Item>
     </Form>
   );

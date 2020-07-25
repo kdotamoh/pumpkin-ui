@@ -4,12 +4,13 @@ import { LoginPage } from '../pages/LoginPage';
 import { EmployeeManagement } from '../pages/Management/EmployeeManagement';
 import { AlumManagement } from '../pages/Management/AlumManagement';
 import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
-import { ApplicationPage } from '../pages/Application/ApplicationPage';
 import ActivationPage from '../pages/ActivationPage';
-import { ApplicationSteps } from 'app/pages/Application/ApplicationSteps';
 import { RecruitmentCycleManagement } from 'app/pages/Management/CycleManagement';
 import { UniversitySetupManagement } from 'app/pages/Management/UniversitySetupManagement';
 import { MajorManagement } from 'app/pages/Management/MajorManagement';
+import ActivateFormReferencePage from 'app/pages/Application/ActivateFormReferencePage';
+import { SecondaryApplicationForm } from 'app/pages/Application/SecondaryApplicationForm';
+import { PrimaryApplicationForm } from 'app/pages/Application/PrimaryApplicationForm';
 
 export const authorized = [
   {
@@ -59,13 +60,18 @@ export const unauthorized = [
     component: ActivationPage,
   },
   {
+    path: '/apply/additional-essay',
+    layout: ApplicationLayout,
+    component: SecondaryApplicationForm,
+  },
+  {
     path: '/apply',
     layout: ApplicationLayout,
-    component: ApplicationPage,
+    component: ActivateFormReferencePage,
   },
   {
     path: '/application-form',
     layout: ApplicationLayout,
-    component: ApplicationSteps,
+    component: PrimaryApplicationForm,
   },
 ];

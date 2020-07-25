@@ -6,8 +6,8 @@ export async function validateForm(reference) {
     const { data } = await client.get(
       `/application-form/validate?formReference=${reference}`
     );
-    const { requestSuccessful } = data;
-    return requestSuccessful;
+    const { requestSuccessful, responseBody } = data;
+    return { requestSuccessful, responseBody };
   } catch (err) {
     const {
       data: { responseMessage, requestSuccessful },
@@ -57,12 +57,11 @@ export async function getGenders() {
 }
 
 export async function getApplicationTracks(cycleReference) {
+  console.log(cycleReference);
   try {
-    const { data } = await client.get('/application-form/tracks', {
-      params: {
-        cycleReference,
-      },
-    });
+    const { data } = await client.get(
+      `/application-form/tracks?cycleReference=${cycleReference}`
+    );
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
@@ -75,11 +74,9 @@ export async function getApplicationTracks(cycleReference) {
 
 export async function getApplicationEssayQuestions(cycleReference) {
   try {
-    const { data } = await client.get('/application-form/essay-questions', {
-      params: {
-        cycleReference,
-      },
-    });
+    const { data } = await client.get(
+      `/application-form/essay-questions?cycleReference=${cycleReference}`
+    );
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
@@ -87,5 +84,38 @@ export async function getApplicationEssayQuestions(cycleReference) {
       data: { responseMessage },
     } = err.response;
     message.error(`Cannot get application essay questions: ${responseMessage}`);
+  }
+}
+
+export async function validateEssayQuestion(questionCode) {
+  try {
+    const { data } = await client.get(
+      `/essay-questions/validate?essayQuestionCode=${questionCode}`
+    );
+    const { requestSuccessful, responseBody } = data;
+    return { requestSuccessful, responseBody };
+  } catch (err) {
+    const {
+      data: { responseMessage, requestSuccessful },
+    } = err.response;
+    message.error(`An error occurred: ${responseMessage}`);
+    return requestSuccessful;
+  }
+}
+
+export async function submitAdditionalEssay(values) {
+  try {
+    const { data } = await client.post(
+      '/essay-questions/additional-essay/submit',
+      values
+    );
+    const { requestSuccessful } = data;
+    return { requestSuccessful };
+  } catch (err) {
+    const {
+      data: { responseMessage, requestSuccessful },
+    } = err.response;
+    message.error(`An error occurred: ${responseMessage}`);
+    return requestSuccessful;
   }
 }
