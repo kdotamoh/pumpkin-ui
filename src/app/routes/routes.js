@@ -11,6 +11,8 @@ import { MajorManagement } from 'app/pages/Management/MajorManagement';
 import ActivateFormReferencePage from 'app/pages/Application/ActivateFormReferencePage';
 import { SecondaryApplicationForm } from 'app/pages/Application/SecondaryApplicationForm';
 import { PrimaryApplicationForm } from 'app/pages/Application/PrimaryApplicationForm';
+import AddCycle from 'app/pages/Cycle/AddCycle';
+import UpdateCycle from 'app/pages/Cycle/UpdateCycle';
 
 export const authorized = [
   {
@@ -27,6 +29,16 @@ export const authorized = [
     path: '/tracks',
     layout: DefaultLayout,
     component: ApplicationTrackManagement,
+  },
+  {
+    path: '/cycles/new',
+    layout: DefaultLayout,
+    component: AddCycle,
+  },
+  {
+    path: '/cycles/update/:id',
+    layout: DefaultLayout,
+    component: UpdateCycle,
   },
   {
     path: '/cycles',

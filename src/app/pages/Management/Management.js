@@ -2,11 +2,15 @@ import * as React from 'react';
 import { Table, Dropdown, Menu, Button, Input, Modal } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+
 const ModalActions = {
   ADD: 'ADD',
   UPDATE: 'UPDATE',
+  ACTIVATE: 'ACTIVATE',
+  DEACTIVATE: 'DEACTIVATE',
 };
-export class ManagementComponent extends React.Component {
+class ManagementComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -73,10 +77,12 @@ export class ManagementComponent extends React.Component {
     );
   }
   onClickEntity = (action) => {
-    this.setState({
-      visible: true,
-      action: action,
-    });
+    this.props.willNavigate
+      ? this.props.history.push(this.props.navigateTo)
+      : this.setState({
+          visible: true,
+          action: action,
+        });
   };
   onCancelAddEntity = () => {
     this.props.onCancelAddEntity(() => this.setState({ visible: false }));
@@ -94,6 +100,31 @@ export class ManagementComponent extends React.Component {
             Edit
           </Menu.Item>
         )}
+        {this.props.newEntityName === 'CYCLE' && (
+          <Menu.Item
+            onClick={() => {
+              this.props.onEditEntity(record);
+            }}
+          >
+            Edit
+          </Menu.Item>
+        )}
+        {/* <Menu.Item
+          onClick={() => {
+            this.props.setCurrentEntity(record);
+            this.props.onActivateEntity();
+          }}
+        >
+          Activate
+        </Menu.Item> */}
+        <Menu.Item
+          onClick={() => {
+            // this.props.setCurrentEntity(record);
+            this.props.onDeactivateEntity(record);
+          }}
+        >
+          Deactivate
+        </Menu.Item>
         <Menu.Item
           onClick={() => {
             this.props.setCurrentEntity(record);
@@ -110,6 +141,7 @@ export class ManagementComponent extends React.Component {
 ManagementComponent.propTypes = {
   onAddNewEntity: PropTypes.func.isRequired,
   onCancelAddEntity: PropTypes.func.isRequired,
+  onDeactivateEntity: PropTypes.func.isRequired,
   newEntityName: PropTypes.string.isRequired,
   headerTitle: PropTypes.string.isRequired,
   columnDefs: PropTypes.array.isRequired,
@@ -119,4 +151,9 @@ ManagementComponent.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onEditEntity: PropTypes.func,
   setCurrentEntity: PropTypes.func.isRequired,
+  history: PropTypes.object,
+  willNavigate: PropTypes.bool,
+  navigateTo: PropTypes.string,
 };
+
+export default withRouter(ManagementComponent);
