@@ -226,11 +226,11 @@ export async function reactivateCycle(code) {
   }
 }
 
-export async function addCycleForm(code, form) {
+export async function addCycleForm(form, code) {
   try {
     const { data } = await client.post(
       `/recruitment/cycle/${code}/add/form`,
-      { form },
+      { ...form },
       {
         headers: {
           user_token: token,
@@ -238,6 +238,7 @@ export async function addCycleForm(code, form) {
       }
     );
     const { responseBody } = data;
+    message.success('Form added');
     return responseBody;
   } catch (err) {
     const {
@@ -247,11 +248,11 @@ export async function addCycleForm(code, form) {
   }
 }
 
-export async function updateCycleForm(code, form) {
+export async function updateCycleForm(form, code) {
   try {
     const { data } = await client.put(
       `/recruitment/cycle/${code}/update/form`,
-      { form },
+      { ...form },
       {
         headers: {
           user_token: token,
@@ -259,6 +260,7 @@ export async function updateCycleForm(code, form) {
       }
     );
     const { responseBody } = data;
+    message.success('Form updated');
     return responseBody;
   } catch (err) {
     const {
@@ -268,7 +270,7 @@ export async function updateCycleForm(code, form) {
   }
 }
 
-export async function deleteCycleForm(code, formCode) {
+export async function deleteCycleForm(formCode, code) {
   try {
     const { data } = await client.delete(
       `/recruitment/cycle/${code}/delete/form?formCode=${formCode}`,
@@ -279,6 +281,7 @@ export async function deleteCycleForm(code, formCode) {
       }
     );
     const { responseBody } = data;
+    message.success('Form removed from cycle');
     return responseBody;
   } catch (err) {
     const {
