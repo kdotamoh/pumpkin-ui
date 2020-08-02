@@ -11,6 +11,7 @@ import {
   deleteCycle,
   updateCycle,
   deactivateCycle,
+  reactivateCycle,
   setCurrentCycle,
 } from 'app/store/actions/cycle-actions';
 
@@ -94,8 +95,9 @@ export class RecruitmentCycleManagementComponent extends React.Component {
     this.props.history.push(`/cycles/update/${record.code}`);
     // callback();
   };
-  onActivateCycle = (callback) => {
-    callback();
+  onActivateCycle = (record) => {
+    this.props.reactivateCycle(record.code);
+    // callback();
   };
   onDeactivateCycle = (record) => {
     this.props.deactivateCycle(record.code);
@@ -127,6 +129,7 @@ RecruitmentCycleManagementComponent.propTypes = {
   deleteCycle: PropTypes.func.isRequired,
   updateCycle: PropTypes.func.isRequired,
   deactivateCycle: PropTypes.func.isRequired,
+  reactivateCycle: PropTypes.func.isRequired,
   setCurrentCycle: PropTypes.func.isRequired,
   currentCycle: PropTypes.object,
   data: PropTypes.array.isRequired,
@@ -146,6 +149,7 @@ const mapDispatchToProps = (dispatch) => ({
   deleteCycle: (code) => dispatch(deleteCycle(code)),
   updateCycle: (name, code) => dispatch(updateCycle(name, code)),
   deactivateCycle: (code) => dispatch(deactivateCycle(code)),
+  reactivateCycle: (code) => dispatch(reactivateCycle(code)),
   setCurrentCycle: (record) => dispatch(setCurrentCycle(record)),
 });
 
