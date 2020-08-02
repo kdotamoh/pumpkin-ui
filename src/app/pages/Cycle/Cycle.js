@@ -14,7 +14,7 @@ import {
   deleteCycleEssayQuestion,
   addCycleStage,
   deleteCycleStage,
-  deleteCycleTrack,
+  updateCycleTracks,
 } from 'api/cycle';
 
 import 'style/cycle-page.css';
@@ -207,31 +207,15 @@ class Cycle extends React.Component {
           <Row>
             <Col span={12} className="pr-15rem">
               <div>Tracks</div>
-              {this.state.listOfApplicationTrackCodes.map((track, index) => (
-                <div key={index}>
-                  <span>{track}</span>
-                  <Button
-                    onClick={async () => {
-                      await deleteCycleTrack(track, this.props.id);
-                      this.handleSetCycle();
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              ))}
               <Select
-                // mode="multiple"
+                mode="multiple"
                 style={{ width: '100%' }}
                 value={this.state.listOfApplicationTrackCodes}
                 onChange={(value) => {
                   this.setState({
-                    listOfApplicationTrackCodes: [
-                      ...this.state.listOfApplicationTrackCodes,
-                      value,
-                    ],
+                    listOfApplicationTrackCodes: value,
                   });
-                  this.state.listOfApplicationTrackCodes.concat(value);
+                  // this.state.listOfApplicationTrackCodes.concat(value);
                 }}
               >
                 {this.props.tracks.map((track) => (
@@ -240,6 +224,19 @@ class Cycle extends React.Component {
                   </Option>
                 ))}
               </Select>
+              {isUpdating && (
+                <Button
+                  onClick={async () => {
+                    await updateCycleTracks(
+                      this.state.listOfApplicationTrackCodes,
+                      this.props.id
+                    );
+                    this.handleSetCycle();
+                  }}
+                >
+                  Update tracks
+                </Button>
+              )}
             </Col>
             <Col span={12} className="pr-15rem">
               <div>
