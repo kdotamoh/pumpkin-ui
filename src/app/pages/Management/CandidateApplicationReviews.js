@@ -36,7 +36,7 @@ export class CandidateApplicationReviewsComponent extends React.Component {
       dataIndex: 'notes',
       key: 'notes',
       fixed: 'right',
-      render: (text, record) => <Link onClick={() => this.showReviewersNotes(record)}>view notes</Link>,
+      render: (text, record) => <Link to="#" onClick={() => this.showReviewersNotes(record)}>view notes</Link>,
     },
     {
       title: 'Reviewer\'s  decision',

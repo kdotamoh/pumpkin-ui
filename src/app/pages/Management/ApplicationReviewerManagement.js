@@ -55,6 +55,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
       .then(data => {
         if (data && this.props.recruitmentCycles.length > 0) {
           this.onRecruitementCycleSelected(this.props.recruitmentCycles[0].code);
+          this.setState({ cyclesHaveBeenLoaded: true });
         }
       })
   }
@@ -62,6 +63,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      cyclesHaveBeenLoaded: false,
       cycleReference: '',
     };
   }
@@ -85,9 +87,9 @@ export class ApplicationReviewerManagementComponent extends React.Component {
   };
 
   onRecruitementCycleSelected = (code) => {
-    this.setState({ cycleReference: code })
-    this.props.getApplicationReviewers(code)
-    this.props.getRecruitmentCycleReviewSummary(code)
+    this.setState({ cycleReference: code });
+    this.props.getApplicationReviewers(code);
+    this.props.getRecruitmentCycleReviewSummary(code);
   };
 
   subHeaderView = () => {
@@ -109,8 +111,8 @@ export class ApplicationReviewerManagementComponent extends React.Component {
 
     return (
       <div style={{ display: 'flex' }}>
-        {showSummary > 0 &&
-          <div>
+        {this.state.cyclesHaveBeenLoaded &&
+          <div style={{ marginRight: 16 }}>
             <p className="management-component__subheader_title">Recruitment Cycle</p>
             <Select defaultValue={this.state.cycleReference} style={{ width: 300 }}
               onSelect={this.onRecruitementCycleSelected}>
