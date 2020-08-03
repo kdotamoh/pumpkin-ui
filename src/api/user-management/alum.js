@@ -2,9 +2,8 @@ import { message } from 'antd';
 import client from '../../api';
 import store from '../../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function inviteAlum(email, seoGraduationYear) {
@@ -14,7 +13,7 @@ export async function inviteAlum(email, seoGraduationYear) {
       { email, seoGraduationYear },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -35,7 +34,7 @@ export async function getAlumni() {
   try {
     const { data } = await client.get('/seo-alum', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -56,7 +55,7 @@ export async function searchAlumni(searchKey) {
   try {
     const { data } = await client.get('/seo-alum/search', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -78,7 +77,7 @@ export async function deleteAlum(email) {
   try {
     const { data } = await client.delete(`/seo-alum/delete/${email}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;

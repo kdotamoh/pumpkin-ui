@@ -2,9 +2,8 @@ import { message } from 'antd';
 import client from '../../api';
 import store from '../../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function inviteEmployee(email, employeeId) {
@@ -14,7 +13,7 @@ export async function inviteEmployee(email, employeeId) {
       { email, employeeId },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -35,7 +34,7 @@ export async function getEmployees() {
   try {
     const { data } = await client.get('/seo-employee', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -56,7 +55,7 @@ export async function searchEmployees(searchKey) {
   try {
     const { data } = await client.get('/seo-employee/search', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -78,7 +77,7 @@ export async function deleteEmployee(email) {
   try {
     const { data } = await client.delete(`/seo-employee/delete/${email}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;

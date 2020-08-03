@@ -2,9 +2,8 @@ import { message } from 'antd';
 import client from '../api';
 import store from '../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function createTrack(name) {
@@ -14,7 +13,7 @@ export async function createTrack(name) {
       { name },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -35,7 +34,7 @@ export async function getTracks() {
   try {
     const { data } = await client.get('/application-track', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -56,7 +55,7 @@ export async function deleteTrack(code) {
   try {
     const { data } = await client.delete(`/application-track/delete/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;
@@ -79,7 +78,7 @@ export async function updateTrack(name, code) {
       { name, code },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
