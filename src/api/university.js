@@ -2,9 +2,8 @@ import { message } from 'antd';
 import client from '../api';
 import store from '../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function createUniversity(name, country) {
@@ -14,7 +13,7 @@ export async function createUniversity(name, country) {
       { name, country },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -35,7 +34,7 @@ export async function getUniversities() {
   try {
     const { data } = await client.get('/universities', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -56,7 +55,7 @@ export async function deleteUniversity(code) {
   try {
     const { data } = await client.delete(`/universities/delete/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;
@@ -79,7 +78,7 @@ export async function updateUniversity(name, code) {
       { name, code },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -99,7 +98,7 @@ export async function activateUniversity(code) {
   try {
     const { data } = await client.put(`/universities/activate/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;
