@@ -394,7 +394,7 @@ export async function updateCycleTracks(tracks, code) {
       }
     );
     const { responseBody } = data;
-    message.success('Tracks updated to cycle');
+    message.success('Cycle tracks updated');
     return responseBody;
   } catch (err) {
     const {
