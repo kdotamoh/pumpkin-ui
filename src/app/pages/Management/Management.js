@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table, Dropdown, Menu, Button, Input, Modal } from 'antd';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ const ModalActions = {
   ACTIVATE: 'ACTIVATE',
   DEACTIVATE: 'DEACTIVATE',
 };
+
 class ManagementComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +44,13 @@ class ManagementComponent extends React.Component {
     return (
       <div className="management-component__container">
         <div className="management-component__header">
-          <h4 className="management-component__h4">{this.props.headerTitle}</h4>
+          <div style={{ display: 'flex' }}>
+            {this.props.showShowBackButton &&
+              <ArrowLeftOutlined
+                style={{ marginRight: 24, marginTop: 4 }}
+                onClick={() => this.props.history.goBack()} />}
+            <h4 className="management-component__h4">{this.props.headerTitle}</h4>
+          </div>
           <div className="management-component__actions">
             {this.props.onAddNewEntity && (
               <Button
@@ -166,7 +173,7 @@ ManagementComponent.propTypes = {
   willNavigate: PropTypes.bool,
   navigateTo: PropTypes.string,
   subHeaderView: PropTypes.element,
-  actionColumnIsProvided: PropTypes.bool,
+  showShowBackButton: PropTypes.bool,
 };
 
 export default withRouter(ManagementComponent);

@@ -76,7 +76,6 @@ export class ApplicationReviewerManagementComponent extends React.Component {
         onSearch={this.onSearchApplicationReviewers}
         setCurrentEntity={this.props.setCurrentApplicationReviewer}
         subHeaderView={this.subHeaderView()}
-        actionColumnIsProvided={true}
       />
     );
   }

@@ -85,7 +85,7 @@ export class CandidateApplicationReviewsComponent extends React.Component {
           newEntityName="REVIEWERS"
           onSearch={this.onSearchCandidateApplicationReviews}
           subHeaderView={this.applicationReviewerSummaryView()}
-          actionColumnIsProvided={true}
+          showShowBackButton={true}
         />
 
         <Modal title="Reviewer's notes" visible={this.state.isNotesModalVisible}
