@@ -24,6 +24,12 @@ export class SideBarComponent extends React.Component {
     const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
     return (
       <Menu mode="inline">
+        <Menu.Item key="reviewers">
+          <NavLink to="/reviewers">
+            <GoldOutlined />
+            <span>Reviewers</span>
+          </NavLink>
+        </Menu.Item>
         <Menu.Item key="employees">
           <NavLink to="/employees">
             <GoldOutlined />
