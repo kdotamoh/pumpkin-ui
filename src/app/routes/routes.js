@@ -1,6 +1,8 @@
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import { ApplicationLayout } from '../layouts/ApplicationLayout';
 import { LoginPage } from '../pages/LoginPage';
+import { ApplicationReviewerManagement } from '../pages/Management/ApplicationReviewerManagement';
+import { CandidateApplicationReviews} from '../pages/Management/CandidateApplicationReviews';
 import { EmployeeManagement } from '../pages/Management/EmployeeManagement';
 import { AlumManagement } from '../pages/Management/AlumManagement';
 import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
@@ -15,6 +17,16 @@ import AddCycle from 'app/pages/Cycle/AddCycle';
 import UpdateCycle from 'app/pages/Cycle/UpdateCycle';
 
 export const authorized = [
+  {
+    path: '/reviewers',
+    layout: DefaultLayout,
+    component: ApplicationReviewerManagement,
+  },
+  {
+    path: '/application-review/:reviewerCode',
+    layout: DefaultLayout,
+    component: CandidateApplicationReviews,
+  },
   {
     path: '/employees',
     layout: DefaultLayout,

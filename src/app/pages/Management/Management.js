@@ -16,7 +16,27 @@ class ManagementComponent extends React.Component {
     this.state = {
       visible: false,
       action: '',
+      columnDefs: this.props.columnDefs
     };
+  }
+
+  componentDidMount() {
+    if (this.state.columnDefs.filter(e => e.dataIndex === 'actions').length === 0) {
+      this.setState({
+        columnDefs: this.state.columnDefs.concat([{
+          title: 'Actions',
+          dataIndex: 'actions',
+          key: 'actions',
+          fixed: 'right',
+          width: 100,
+          render: (text, record) => (
+            <Dropdown overlay={this.menu(record)} placement="bottomCenter">
+              <EllipsisOutlined rotate={90} />
+            </Dropdown>
+          ),
+        }])
+      });
+    }
   }
 
   render() {
@@ -25,13 +45,13 @@ class ManagementComponent extends React.Component {
         <div className="management-component__header">
           <h4 className="management-component__h4">{this.props.headerTitle}</h4>
           <div className="management-component__actions">
-            <Button
-              type="primary"
-              shape="round"
-              onClick={() => this.onClickEntity(ModalActions.ADD)}
-            >
-              ADD NEW
-            </Button>
+            {this.props.onAddNewEntity && (
+              <Button
+                type="primary"
+                shape="round"
+                onClick={() => this.onClickEntity(ModalActions.ADD)}
+              >ADD NEW</Button>
+            )}
             {this.props.onSearch && (
               <Input
                 className="management-component__search"
@@ -42,31 +62,22 @@ class ManagementComponent extends React.Component {
             )}
           </div>
         </div>
+        <div className="management-component__subheader">
+          {this.props.subHeaderView}
+        </div>
         <Table
           dataSource={this.props.data}
-          columns={this.props.columnDefs.concat([
-            {
-              title: 'Actions',
-              dataIndex: 'actions',
-              key: 'actions',
-              fixed: 'right',
-              width: 100,
-              render: (text, record) => (
-                <Dropdown overlay={this.menu(record)} placement="bottomCenter">
-                  <EllipsisOutlined rotate={90} />
-                </Dropdown>
-              ),
-            },
-          ])}
+          columns={this.state.columnDefs}
         />
+
         <Modal
           title={`${this.state.action} ${this.props.newEntityName}`}
           visible={this.state.visible}
           onOk={() =>
             this.state.action === ModalActions.ADD
               ? this.props.onAddNewEntity(() =>
-                  this.setState({ visible: false })
-                )
+                this.setState({ visible: false })
+              )
               : this.props.onEditEntity(() => this.setState({ visible: false }))
           }
           onCancel={this.onCancelAddEntity}
@@ -80,9 +91,9 @@ class ManagementComponent extends React.Component {
     this.props.willNavigate
       ? this.props.history.push(this.props.navigateTo)
       : this.setState({
-          visible: true,
-          action: action,
-        });
+        visible: true,
+        action: action,
+      });
   };
   onCancelAddEntity = () => {
     this.props.onCancelAddEntity(() => this.setState({ visible: false }));
@@ -158,6 +169,8 @@ ManagementComponent.propTypes = {
   history: PropTypes.object,
   willNavigate: PropTypes.bool,
   navigateTo: PropTypes.string,
+  subHeaderView: PropTypes.element,
+  actionColumnIsProvided: PropTypes.bool,
 };
 
 export default withRouter(ManagementComponent);
