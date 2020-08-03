@@ -127,22 +127,25 @@ class ManagementComponent extends React.Component {
             Edit
           </Menu.Item>
         )}
-        {/* <Menu.Item
-          onClick={() => {
-            this.props.setCurrentEntity(record);
-            this.props.onActivateEntity();
-          }}
-        >
-          Activate
-        </Menu.Item> */}
-        <Menu.Item
-          onClick={() => {
-            // this.props.setCurrentEntity(record);
-            this.props.onDeactivateEntity(record);
-          }}
-        >
-          Deactivate
-        </Menu.Item>
+        {record.status === 'INACTIVE' ? (
+          <Menu.Item
+            onClick={() => {
+              // this.props.setCurrentEntity(record);
+              this.props.onActivateEntity(record);
+            }}
+          >
+            Reactivate
+          </Menu.Item>
+        ) : (
+          <Menu.Item
+            onClick={() => {
+              // this.props.setCurrentEntity(record);
+              this.props.onDeactivateEntity(record);
+            }}
+          >
+            Deactivate
+          </Menu.Item>
+        )}
         <Menu.Item
           onClick={() => {
             this.props.setCurrentEntity(record);
@@ -157,10 +160,11 @@ class ManagementComponent extends React.Component {
 }
 
 ManagementComponent.propTypes = {
-  onAddNewEntity: PropTypes.func,
-  onCancelAddEntity: PropTypes.func,
-  onDeactivateEntity: PropTypes.func,
-  newEntityName: PropTypes.string,
+  onAddNewEntity: PropTypes.func.isRequired,
+  onCancelAddEntity: PropTypes.func.isRequired,
+  onDeactivateEntity: PropTypes.func.isRequired,
+  onActivateEntity: PropTypes.func.isRequired,
+  newEntityName: PropTypes.string.isRequired,
   headerTitle: PropTypes.string.isRequired,
   columnDefs: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,

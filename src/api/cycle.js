@@ -225,11 +225,11 @@ export async function reactivateCycle(code) {
   }
 }
 
-export async function addCycleForm(code, form) {
+export async function addCycleForm(form, code) {
   try {
     const { data } = await client.post(
       `/recruitment/cycle/${code}/add/form`,
-      { form },
+      { ...form },
       {
         headers: {
           user_token: getToken(),
@@ -237,6 +237,7 @@ export async function addCycleForm(code, form) {
       }
     );
     const { responseBody } = data;
+    message.success('Form added');
     return responseBody;
   } catch (err) {
     const {
@@ -246,11 +247,11 @@ export async function addCycleForm(code, form) {
   }
 }
 
-export async function updateCycleForm(code, form) {
+export async function updateCycleForm(form, code) {
   try {
     const { data } = await client.put(
       `/recruitment/cycle/${code}/update/form`,
-      { form },
+      { ...form },
       {
         headers: {
           user_token: getToken(),
@@ -258,6 +259,7 @@ export async function updateCycleForm(code, form) {
       }
     );
     const { responseBody } = data;
+    message.success('Form updated');
     return responseBody;
   } catch (err) {
     const {
@@ -267,7 +269,7 @@ export async function updateCycleForm(code, form) {
   }
 }
 
-export async function deleteCycleForm(code, formCode) {
+export async function deleteCycleForm(formCode, code) {
   try {
     const { data } = await client.delete(
       `/recruitment/cycle/${code}/delete/form?formCode=${formCode}`,
@@ -278,6 +280,7 @@ export async function deleteCycleForm(code, formCode) {
       }
     );
     const { responseBody } = data;
+    message.success('Form removed from cycle');
     return responseBody;
   } catch (err) {
     const {
@@ -378,10 +381,11 @@ export async function deleteCycleEssayQuestion(essayCode, code) {
   }
 }
 
-export async function addCycleTrack(trackCode, code) {
+export async function updateCycleTracks(tracks, code) {
   try {
-    const { data } = await client.post(
-      `/recruitment/cycle/${code}/add/track?trackCode=${trackCode}`,
+    const { data } = await client.put(
+      `/recruitment/cycle/${code}/update/tracks`,
+      [...tracks],
       {
         headers: {
           user_token: getToken(),
@@ -389,33 +393,54 @@ export async function addCycleTrack(trackCode, code) {
       }
     );
     const { responseBody } = data;
-    message.success('Track add to cycle');
+    message.success('Cycle tracks updated');
     return responseBody;
   } catch (err) {
     const {
       data: { responseMessage },
     } = err.response;
-    message.error(`Cannot add recruitment cycle track: ${responseMessage}`);
+    message.error(`Cannot update recruitment cycle tracks: ${responseMessage}`);
   }
 }
 
-export async function deleteCycleTrack(trackCode, code) {
-  try {
-    const { data } = await client.delete(
-      `/recruitment/cycle/${code}/delete/track?trackCode=${trackCode}`,
-      {
-        headers: {
-          user_token: getToken(),
-        },
-      }
-    );
-    const { responseBody } = data;
-    message.success('Track removed from cycle');
-    return responseBody;
-  } catch (err) {
-    const {
-      data: { responseMessage },
-    } = err.response;
-    message.error(`Cannot delete recruitment cycle track: ${responseMessage}`);
-  }
-}
+// export async function addCycleTrack(trackCode, code) {
+//   try {
+//     const { data } = await client.post(
+//       `/recruitment/cycle/${code}/add/track?trackCode=${trackCode}`,
+//       {
+//         headers: {
+//           user_token: token,
+//         },
+//       }
+//     );
+//     const { responseBody } = data;
+//     message.success('Track add to cycle');
+//     return responseBody;
+//   } catch (err) {
+//     const {
+//       data: { responseMessage },
+//     } = err.response;
+//     message.error(`Cannot add recruitment cycle track: ${responseMessage}`);
+//   }
+// }
+
+// export async function deleteCycleTrack(trackCode, code) {
+//   try {
+//     const { data } = await client.delete(
+//       `/recruitment/cycle/${code}/delete/track?trackCode=${trackCode}`,
+//       {
+//         headers: {
+//           user_token: getToken(),
+//         },
+//       }
+//     );
+//     const { responseBody } = data;
+//     message.success('Track removed from cycle');
+//     return responseBody;
+//   } catch (err) {
+//     const {
+//       data: { responseMessage },
+//     } = err.response;
+//     message.error(`Cannot delete recruitment cycle track: ${responseMessage}`);
+//   }
+// }
