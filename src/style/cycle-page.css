@@ -8,3 +8,20 @@
   font-weight: bold;
   text-transform: uppercase;
 }
+
+.cycle__word-count {
+  border: none;
+  border-bottom: 1px solid rgb(223, 226, 229);
+  width: fit-content;
+  padding: 0.5rem;
+}
+
+.action--blue {
+  color: rgb(40, 73, 153);
+  cursor: pointer;
+}
+
+.action--red {
+  color: #ff4d4f;
+  cursor: pointer;
+}
