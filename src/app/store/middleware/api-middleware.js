@@ -7,6 +7,8 @@ import {
   CycleKeys,
   MajorKeys,
   CandidateKeys,
+  ApplicationReviewerKeys,
+  CandidateApplicationReviewKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
@@ -16,6 +18,8 @@ import * as CycleService from 'api/cycle';
 import * as UniversityService from 'api/university';
 import * as MajorService from 'api/majors';
 import * as CandidateService from 'api/candidates';
+import * as ApplicationReviewerService from 'api/application-reviewer';
+import * as CandidateReviewService from 'api/candidate-review';
 import { setEmployees, getEmployees } from '../actions/employee-actions';
 import { setAlumni, getAlumni } from '../actions/alum-actions';
 import { message } from 'antd';
@@ -35,6 +39,12 @@ import {
   getUniversities,
 } from '../actions/university-actions';
 import { setMajors, getMajors } from '../actions/major-actions';
+import { setApplicationReviewers } from '../actions/application-reviewer-actions';
+import {
+  setRecruitmentCycleReviewSummary,
+  setCandidateApplicationReviews,
+  setApplicationReviewerSummary,
+} from '../actions/candidate-review-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -384,6 +394,81 @@ export const appMiddleware = (store) => (next) => async (action) => {
       }
       break;
     }
+
+    case ApplicationReviewerKeys.GET_APPLICATION_REVIEWERS: {
+      try {
+        const applicationReviewers = await ApplicationReviewerService.getApplicationReviewers(
+          action.cycleReference
+        );
+        const reviewersContent = applicationReviewers.content;
+        store.dispatch(setApplicationReviewers(reviewersContent));
+      } catch (err) {
+        message.error(`Cannot get application reviewers: ${err}`);
+      }
+      break;
+    }
+    case ApplicationReviewerKeys.SEARCH_APPLICATION_REVIEWERS: {
+      try {
+        const applicationReviewers = await ApplicationReviewerService.searchApplicationReviewers(
+          action.cycleReference,
+          action.searchKey,
+        );
+        const reviewersContent = applicationReviewers.content;
+        store.dispatch(setApplicationReviewers(reviewersContent));
+      } catch (err) {
+        message.error(`Cannot get application reviewers: ${err}`);
+      }
+      break;
+    }
+
+    case CandidateApplicationReviewKeys.GET_RECRUITMENT_CYCLE_REVIEW_SUMMARY: {
+      try {
+        const reviewSummary = await CandidateReviewService.getRecruitmentCycleReviewSummary(
+          action.cycleReference,
+        );
+        store.dispatch(setRecruitmentCycleReviewSummary(reviewSummary));
+      } catch (err) {
+        message.error(`Cannot get review summary: ${err}`);
+      }
+      break;
+    }
+    case CandidateApplicationReviewKeys.GET_APPLICATION_REVIEWER_SUMMARY: {
+      try {
+        const reviewSummary = await CandidateReviewService.getApplicationReviewerSummary(
+          action.reviewerCode,
+        );
+        store.dispatch(setApplicationReviewerSummary(reviewSummary));
+      } catch (err) {
+        message.error(`Cannot get review summary: ${err}`);
+      }
+      break;
+    }
+    case CandidateApplicationReviewKeys.GET_CANDIDATE_APPLICATION_REVIEWS: {
+      try {
+        const applicationReviews = await CandidateReviewService.getCandidateApplicationReviews(
+          action.reviewerCode,
+          action.seoDecision,
+        );
+        store.dispatch(setCandidateApplicationReviews(applicationReviews.content));
+      } catch (err) {
+        message.error(`Cannot get candidate application reviews: ${err}`);
+      }
+      break;
+    }
+    case CandidateApplicationReviewKeys.SEARCH_CANDIDATE_APPLICATION_REVIEWS: {
+      try {
+        const applicationReviews = await CandidateReviewService.searchCandidateApplicationReviews(
+          action.reviewerCode,
+          action.seoDecision,
+          action.searchKey,
+        );
+        store.dispatch(setCandidateApplicationReviews(applicationReviews.content));
+      } catch (err) {
+        message.error(`Cannot search candidate application reviews: ${err}`);
+      }
+      break;
+    }
+
     default:
       return {};
   }
