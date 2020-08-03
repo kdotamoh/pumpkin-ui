@@ -103,7 +103,8 @@ export class ApplicationReviewerManagementComponent extends React.Component {
       );
     }
 
-    const showSummary = this.props.recruitmentCycleSummary.totalPendingReviews != undefined;
+    const showSummary = this.props.recruitmentCycleSummary.totalReviewers != undefined;
+    const totalReviewers = this.props.recruitmentCycleSummary.totalReviewers;
     const pendingReviews = this.props.recruitmentCycleSummary.totalPendingReviews;
     const approvedReviews = this.props.recruitmentCycleSummary.totalApproved;
 
@@ -121,6 +122,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
           <div style={{ marginLeft: 'auto' }}>
             <p className="management-component__subheader_title">Application Summary</p>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <SummaryBadgeComponent title="Total Reviewers" count={totalReviewers} type="primary" />
               <SummaryBadgeComponent title="Total Approved" count={approvedReviews} type="success" />
               <SummaryBadgeComponent title="Total Pending" count={pendingReviews} type="warning" />
             </div>
