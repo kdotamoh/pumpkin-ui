@@ -25,12 +25,12 @@ export default function SummaryBadgeComponent(props) {
     const badgeStyle = {
         margin: 'auto',
         marginRight: 8,
-        fontSize: 9,
+        fontSize: 10,
         padding: '4px 12px',
         borderRadius: 20,
         backgroundColor: props.isActive ? '#fff' : getBadgeColor(),
         color: props.isActive ? '#000' : '#fff',
-        opacity: props.isActive ? 1 : 0.6,
+        opacity: props.isActive ? 1 : 0.8,
         fontWeight: 'bold',
     }
 
