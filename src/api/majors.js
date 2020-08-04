@@ -2,9 +2,8 @@ import { message } from 'antd';
 import client from '../api';
 import store from '../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function createMajor(name, country) {
@@ -14,7 +13,7 @@ export async function createMajor(name, country) {
       { name, country },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -35,7 +34,7 @@ export async function getMajors() {
   try {
     const { data } = await client.get('/course-of-study', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -56,7 +55,7 @@ export async function deleteMajor(code) {
   try {
     const { data } = await client.delete(`/course-of-study/delete/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;
@@ -77,7 +76,7 @@ export async function updateMajor(name, code) {
       { name, code },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -95,7 +94,7 @@ export async function activateMajor(code) {
   try {
     const { data } = await client.put(`/course-of-study/activate/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;

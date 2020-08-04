@@ -2,16 +2,15 @@ import { message } from 'antd';
 import client from '.';
 import store from '../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function getRecruitmentCycleReviewSummary(cycleReference) {
   try {
     const { data } = await client.get('/candidate-review/cycle-summary', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         cycleReference,
@@ -31,7 +30,7 @@ export async function getApplicationReviewerSummary(reviewerCode) {
   try {
     const { data } = await client.get('/candidate-review/reviewer-summary', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         reviewerCode,
@@ -51,7 +50,7 @@ export async function getCandidateApplicationReviews(reviewerCode, seoDecision) 
   try {
     const { data } = await client.get('/candidate-review', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -74,7 +73,7 @@ export async function searchCandidateApplicationReviews(reviewerCode, seoDecisio
   try {
     const { data } = await client.get('/candidate-review/search', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -100,7 +99,7 @@ export async function makeFinalDecision(applicationReference, seoDecision) {
       seoDecision,
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
 
       });

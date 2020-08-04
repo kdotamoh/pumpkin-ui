@@ -2,9 +2,8 @@ import { message } from 'antd';
 import client from '../api';
 import store from '../app/store';
 
-let token;
-if (store) {
-  token = store.getState().user.userToken;
+function getToken() {
+  return store ? store.getState().user.userToken : undefined
 }
 
 export async function createCycle(cycle) {
@@ -14,7 +13,7 @@ export async function createCycle(cycle) {
       { ...cycle },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -35,7 +34,7 @@ export async function getCycles() {
   try {
     const { data } = await client.get('/recruitment/cycle/all', {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
       params: {
         page: 0,
@@ -56,7 +55,7 @@ export async function deleteCycle(code) {
   try {
     const { data } = await client.delete(`/recruitment/cycle/delete/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;
@@ -76,7 +75,7 @@ export async function getCycleByCode(code) {
   try {
     const { data } = await client.get(`/recruitment/cycle/${code}`, {
       headers: {
-        user_token: token,
+        user_token: getToken(),
       },
     });
     const { responseBody } = data;
@@ -98,7 +97,7 @@ export async function updateCycle(details, code) {
       { ...details, code },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -122,7 +121,7 @@ export async function updateCycleStage(details, code) {
       { ...details },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -143,7 +142,7 @@ export async function deleteCycleStage(stageCode, code) {
       `/recruitment/cycle/${code}/delete/stage?stageCode=${stageCode}`,
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -165,7 +164,7 @@ export async function addCycleStage(details, code) {
       { ...details },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -210,7 +209,7 @@ export async function reactivateCycle(code) {
       `/recruitment/cycle/reactivate/${code}`,
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -233,7 +232,7 @@ export async function addCycleForm(form, code) {
       { ...form },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -255,7 +254,7 @@ export async function updateCycleForm(form, code) {
       { ...form },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -276,7 +275,7 @@ export async function deleteCycleForm(formCode, code) {
       `/recruitment/cycle/${code}/delete/form?formCode=${formCode}`,
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -297,7 +296,7 @@ export async function deactivateCycleForm(code, formCode) {
       `/recruitment/cycle/${code}/deactivate/form?formCode=${formCode}`,
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -320,7 +319,7 @@ export async function addCycleEssayQuestion(question, code) {
       { ...question },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -342,7 +341,7 @@ export async function updateCycleEssayQuestion(details, code) {
       { ...details },
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -365,7 +364,7 @@ export async function deleteCycleEssayQuestion(essayCode, code) {
       `/recruitment/cycle/${code}/delete/essay-question?essayCode=${essayCode}`,
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -389,7 +388,7 @@ export async function updateCycleTracks(tracks, code) {
       [...tracks],
       {
         headers: {
-          user_token: token,
+          user_token: getToken(),
         },
       }
     );
@@ -431,7 +430,7 @@ export async function updateCycleTracks(tracks, code) {
 //       `/recruitment/cycle/${code}/delete/track?trackCode=${trackCode}`,
 //       {
 //         headers: {
-//           user_token: token,
+//           user_token: getToken(),
 //         },
 //       }
 //     );
