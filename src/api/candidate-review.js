@@ -104,6 +104,7 @@ export async function makeFinalDecision(applicationReference, seoDecision) {
 
       });
     const { responseBody } = data;
+    message.success('Review Successful');
     return responseBody;
   } catch (err) {
     const {
