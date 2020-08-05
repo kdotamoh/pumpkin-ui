@@ -22,14 +22,17 @@ const { SubMenu } = Menu;
 export class SideBarComponent extends React.Component {
   render() {
     const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
+    const isAdmin = this.props.user.roles.includes('ADMIN');
     return (
       <Menu mode="inline">
-        <Menu.Item key="reviewers">
-          <NavLink to="/reviewers">
-            <GoldOutlined />
-            <span>Reviewers</span>
-          </NavLink>
-        </Menu.Item>
+        {(isSuperAdmin || isAdmin) && (
+          <Menu.Item key="reviewers">
+            <NavLink to="/reviewers">
+              <GoldOutlined />
+              <span>Reviewers</span>
+            </NavLink>
+          </Menu.Item>
+        )}
         <Menu.Item key="employees">
           <NavLink to="/employees">
             <GoldOutlined />

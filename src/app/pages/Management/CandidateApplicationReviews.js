@@ -12,6 +12,7 @@ import { Modal, Menu, Dropdown, Button } from 'antd';
 import SummaryBadgeComponent from './SummaryBadgeComponent';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { makeFinalDecision } from '../../../api/candidate-review';
+import * as moment from 'moment';
 
 export class CandidateApplicationReviewsComponent extends React.Component {
 
@@ -22,14 +23,15 @@ export class CandidateApplicationReviewsComponent extends React.Component {
       key: 'candidateName',
     },
     {
-      title: 'Email Address',
-      dataIndex: 'candidateEmail',
-      key: 'candidateEmail',
-    },
-    {
       title: 'Stage',
       dataIndex: 'cycleStage',
       key: 'cycleStage',
+    },
+    {
+      title: 'Review Type',
+      dataIndex: 'reviewType',
+      key: 'reviewType',
+      render: (text) => <span>{(text || '').replace('_', ' ')}</span>,
     },
     {
       title: 'Notes',
@@ -94,15 +96,15 @@ export class CandidateApplicationReviewsComponent extends React.Component {
           onCancel={() => this.setState({ isNotesModalVisible: false })}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginRight: 8 }}>
             <div>
-              <p style={{ margin: 0, fontSize: 12 }}>Applicant</p>
+              <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Applicant</p>
               <p>{this.state.selectedCandidate.candidateName}</p>
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: 12 }}>Reviewer</p>
+              <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Reviewer</p>
               <p>{this.state.selectedCandidate.reviewerName}</p>
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: 12 }}>Decision</p>
+              <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Decision</p>
               <p>{this.decoratedDecisionStatusView(this.state.selectedCandidate.decision || '')}</p>
             </div>
           </div>
@@ -118,26 +120,30 @@ export class CandidateApplicationReviewsComponent extends React.Component {
           <div style={{ display: 'flex', justifyContent: 'space-between', marginRight: 8 }}>
             <div>
               <div>
-                <p style={{ margin: 0, fontSize: 12 }}>Applicant</p>
+                <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Applicant</p>
                 <p>{this.state.selectedCandidate.candidateName}</p>
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: 12 }}>Email</p>
+                <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Email</p>
                 <p>{this.state.selectedCandidate.candidateEmail}</p>
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: 12 }}>College</p>
+                <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>College</p>
                 <p>{this.state.selectedCandidate.candidateUniversity}</p>
               </div>
             </div>
             <div>
               <div>
-                <p style={{ margin: 0, fontSize: 12 }}>Decision</p>
+                <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Decision</p>
                 <p>{this.decoratedDecisionStatusView(this.state.selectedCandidate.decision || '')}</p>
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: 12 }}>Recruitment Cycle</p>
-                <p>{this.state.selectedCandidate.recruitmentCycleName}</p>
+                <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>First Choice</p>
+                <p>{this.state.selectedCandidate.firstChoice}</p>
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: 12, color: '#a9a9a9' }}>Graduation Year</p>
+                <p>{moment(this.state.selectedCandidate.graduationDate).format('MMMM YYYY')}</p>
               </div>
             </div>
           </div>
@@ -155,10 +161,13 @@ export class CandidateApplicationReviewsComponent extends React.Component {
           />
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 48 }}>
             <Button style={{ marginRight: 12, width: 100 }} type="primary"
+              disabled={!this.state.seoRemarks}
               onClick={() => this.makeSEODecision('APPROVED')}>Approve</Button>
             <Button style={{ marginRight: 12, width: 100 }} danger
+              disabled={!this.state.seoRemarks}
               onClick={() => this.makeSEODecision('REJECTED')}>Reject</Button>
             <Button style={{ width: 100 }}
+              disabled={!this.state.seoRemarks}
               onClick={() => this.makeSEODecision('MAYBE')}>Maybe</Button>
           </div>
         </Modal>
@@ -199,6 +208,7 @@ export class CandidateApplicationReviewsComponent extends React.Component {
       .then((data) => {
         if (data) {
           this.setState({ isDecisionModalVisible: false });
+          this.componentDidMount();
         }
       });
   };
