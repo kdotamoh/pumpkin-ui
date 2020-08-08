@@ -23,8 +23,6 @@ import {
   deactivateCycleForm,
 } from 'api/cycle';
 
-import { activeIconSVG, deactivatedIconSVG } from 'assets/svg/active-icon';
-
 import 'style/cycle-page.css';
 
 const initialState = {
@@ -236,10 +234,8 @@ class Cycle extends React.Component {
                           index
                         )}
                       />
-                      <span className="ml-4">
-                        {form.status === 'ACTIVE'
-                          ? activeIconSVG
-                          : deactivatedIconSVG}
+                      <span style={{ fontSize: '70%' }} className="ml-4">
+                        {form.status}
                       </span>
                     </div>
 
