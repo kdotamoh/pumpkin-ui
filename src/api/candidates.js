@@ -3,7 +3,7 @@ import client from '../api';
 
 export async function submitCandidateApplicationForm(reference, values) {
   try {
-    const { data } = await client.post(
+    const response = await client.post(
       `/candidate-application?cycleReference=${reference}`,
       values,
       {
@@ -12,13 +12,12 @@ export async function submitCandidateApplicationForm(reference, values) {
         },
       }
     );
-    const { requestSuccessful, responseBody } = data;
-    return { requestSuccessful, responseBody };
+    console.log(response);
   } catch (err) {
-    const {
-      data: { responseMessage, requestSuccessful },
-    } = err.response;
-    message.error(`An error occurred: ${responseMessage}`);
-    return requestSuccessful;
+    // const {
+    //   data: { responseMessage, requestSuccessful },
+    // } = err.response;
+    message.error(`An error occurred: ${err}`);
+    return err;
   }
 }

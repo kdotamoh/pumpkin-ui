@@ -1,0 +1,79 @@
+import React from 'react';
+import { Result, Typography, Spin } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
+
+const { Paragraph, Text } = Typography;
+export const formValidationError = (error) => {
+  return (
+    <Result
+      status="error"
+      title="Form validation failed"
+      subTitle="Please check that you have provided the correct link to the application and try again."
+    >
+      <div className="desc">
+        <Paragraph>
+          <Text
+            strong
+            style={{
+              fontSize: 16,
+            }}
+          >
+            The link you supplied has the following error:
+          </Text>
+        </Paragraph>
+        <Paragraph>
+          <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+          {error}
+        </Paragraph>
+      </div>
+    </Result>
+  );
+};
+
+export const formValidationLoading = () => {
+  return (
+    <div className="center-all">
+      <Spin />
+      <div style={{ marginLeft: '1rem' }}>
+        Validating application form reference...
+      </div>
+    </div>
+  );
+};
+
+export const formSubmissionError = (error) => {
+  return (
+    <Result
+      status="error"
+      title="Form submission failed"
+      subTitle="Please check that you have provided the correct application details according to the error message and try again. If the error persists, please contact xyz"
+    >
+      <div className="desc">
+        <Paragraph>
+          <Text
+            strong
+            style={{
+              fontSize: 16,
+            }}
+          >
+            The application page gave the following error:
+          </Text>
+        </Paragraph>
+        <Paragraph>
+          <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+          {error}
+        </Paragraph>
+      </div>
+    </Result>
+  );
+};
+
+export const formSubmissionSuccess = () => {
+  return (
+    <Result
+      status="success"
+      title="Form submission successful"
+      subTitle="Please wait for an email to tell you the status of your application"
+    />
+  );
+};
