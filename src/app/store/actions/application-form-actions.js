@@ -52,10 +52,11 @@ export const validateApplicationForm = (reference) => ({
   reference,
 });
 
-export const setFormValidationStatus = (valid, cycleDetails) => ({
+export const setFormValidationStatus = (valid, cycleDetails, error) => ({
   type: ApplicationFormKeys.SET_FORM_VALIDATION_STATUS,
   valid,
   cycleDetails,
+  error,
 });
 
 export const validateEssayQuestion = (questionCode) => ({
@@ -63,10 +64,11 @@ export const validateEssayQuestion = (questionCode) => ({
   questionCode,
 });
 
-export const setEssayValidationStatus = (valid, questionDetails) => ({
+export const setEssayValidationStatus = (valid, questionDetails, error) => ({
   type: ApplicationFormKeys.SET_ESSAY_VALIDATION_STATUS,
   valid,
   questionDetails,
+  error,
 });
 
 export const submitAdditionalEssay = (values) => ({
@@ -79,4 +81,43 @@ export const storeEssay = (code, response, wordCount) => ({
   code,
   response,
   wordCount,
+});
+
+export const storeAdditionalEssayWordCount = (wordCount) => ({
+  type: ApplicationFormKeys.STORE_ADDITIONAL_ESSAY_WORD_COUNT,
+  wordCount,
+});
+
+export const setApplicationFormUniversities = (universities) => ({
+  type: ApplicationFormKeys.SET_UNIVERSITIES,
+  universities,
+});
+
+export const setApplicationFormMajors = (majors) => ({
+  type: ApplicationFormKeys.SET_MAJORS,
+  majors,
+});
+
+export const getApplicationFormUniversities = (country) => ({
+  type: ApplicationFormKeys.GET_APPLICATION_FORM_UNIVERSITIES,
+  country,
+});
+
+export const getApplicationFormMajors = () => ({
+  type: ApplicationFormKeys.GET_APPLICATION_FORM_MAJORS,
+});
+
+export const setSubmissionResponse = (response, error) => ({
+  type: ApplicationFormKeys.SET_SUBMISSION_RESPONSE,
+  response,
+  error,
+});
+
+export const storeCandidateCV = (cv) => ({
+  type: ApplicationFormKeys.STORE_CANDIDATE_CV,
+  cv,
+});
+export const storeCandidatePhoto = (photo) => ({
+  type: ApplicationFormKeys.STORE_CANDIDATE_PHOTO,
+  photo,
 });

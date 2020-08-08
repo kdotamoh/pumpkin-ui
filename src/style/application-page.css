@@ -77,3 +77,8 @@ Application Section
 .ant-input[disabled] {
   color: black;
 }
+
+.application-form__wordcount,
+.additional-essay__wordcount {
+  color: red;
+}
