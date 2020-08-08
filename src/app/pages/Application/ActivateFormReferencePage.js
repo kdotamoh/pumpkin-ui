@@ -41,7 +41,7 @@ const ActivateFormReferencePage = () => {
           type="primary"
           onClick={() =>
             history.push(
-              `application-form/?ref=${sessionStorage.getItem(
+              `/apply/application-form/?ref=${sessionStorage.getItem(
                 'applicationFormReference'
               )}`
             )

@@ -126,18 +126,22 @@ export const ApplicationInformation = (params) => {
         name="candidateCV"
         label="Resume"
         valuePropName="resume"
-        extra="accepted file types (pdf, doc, docx)"
+        extra={
+          !params.disabled
+            ? 'accepted file types (pdf, doc, docx)'
+            : candidateCV
+        }
         rules={[
           {
             required: true,
           },
         ]}
+        className={params.disabled ? 'application-form__file_input' : null}
       >
         <Input
           type="file"
           accept=".pdf, .doc"
-          // onChange={(e) => dispatch(storeCandidateCV(e.target.files))}
-          disabled={params.disabled}
+          onChange={(e) => dispatch(storeCandidateCV(e.target.files[0].name))}
         />
       </Form.Item>
 
@@ -145,18 +149,22 @@ export const ApplicationInformation = (params) => {
         name="candidatePhoto"
         label="Photo"
         valuePropName="photo"
-        extra="accepted file types (png, jpg)"
+        extra={
+          !params.disabled ? 'accepted file types (png, jpg)' : candidatePhoto
+        }
         rules={[
           {
             required: true,
           },
         ]}
+        className={params.disabled ? 'application-form__file_input' : null}
       >
         <Input
           type="file"
           accept="image/png, image/jpeg"
-          // onChange={(e) => dispatch(storeCandidatePhoto(e.target.files))}
-          disabled={params.disabled}
+          onChange={(e) =>
+            dispatch(storeCandidatePhoto(e.target.files[0].name))
+          }
         />
       </Form.Item>
     </Form>
