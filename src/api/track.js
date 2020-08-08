@@ -3,7 +3,7 @@ import client from '../api';
 import store from '../app/store';
 
 function getToken() {
-  return store ? store.getState().user.userToken : undefined
+  return store ? store.getState().user.userToken : undefined;
 }
 
 export async function createTrack(name) {
@@ -38,7 +38,7 @@ export async function getTracks() {
       },
       params: {
         page: 0,
-        size: 20,
+        size: 50,
       },
     });
     const { responseBody } = data;

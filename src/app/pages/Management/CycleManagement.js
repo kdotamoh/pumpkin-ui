@@ -15,6 +15,8 @@ import {
   setCurrentCycle,
 } from 'app/store/actions/cycle-actions';
 
+import { activeIconSVG, deactivatedIconSVG } from 'assets/svg/active-icon';
+
 const columns = [
   {
     title: 'Cycles',
@@ -22,9 +24,20 @@ const columns = [
     key: 'name',
   },
   {
+    title: 'Year',
+    dataIndex: 'year',
+    key: 'year',
+  },
+  {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
+    render: (status) => {
+      if (status === 'ACTIVE') {
+        return activeIconSVG;
+      }
+      return deactivatedIconSVG;
+    },
   },
 ];
 
