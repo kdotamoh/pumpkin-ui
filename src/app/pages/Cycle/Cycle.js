@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getTracks } from 'app/store/actions/track-actions';
 import { createCycle } from 'app/store/actions/cycle-actions';
-import { Select, Row, Col, Button, Input } from 'antd';
+import { Select, Row, Col, Button, Input, message } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 
 import {
@@ -92,6 +92,20 @@ class Cycle extends React.Component {
     let { ...data } = await getCycleByCode(this.props.id);
     this.setState(data);
     this.handleTrackCodes();
+  };
+
+  handleCopyToClipboard = async (formCode) => {
+    if (!navigator.clipboard) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(
+        `https://seo-pumpkin-ui.herokuapp.com/apply?ref=${formCode}`
+      );
+      message.success('Form link copied to clipboard');
+    } catch (err) {
+      message.error('Failed to copy form link');
+    }
   };
 
   handleSubmit = (e) => {
@@ -280,13 +294,9 @@ class Cycle extends React.Component {
                       )}
                       <span
                         className="ml-3 text--blue action--blue"
-                        onClick={async () => {
-                          deactivateCycleForm(form.code, this.props.id);
-                          this.handleSetCycle();
-                        }}
+                        onClick={() => this.handleCopyToClipboard(form.code)}
                       >
                         <CopyOutlined title="Copy form link to clipboard" />
-                        {/* Copy form link */}
                       </span>
                     </div>
                   </div>
