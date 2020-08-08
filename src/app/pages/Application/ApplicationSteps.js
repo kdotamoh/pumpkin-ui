@@ -29,7 +29,9 @@ export const ApplicationSteps = (params) => {
     };
   });
   steps.push({
-    title: 'Application Confirmation',
+    title: params.confirmation
+      ? params.confirmation
+      : 'Application Confirmation',
     content: ApplicationConfirmation(params.steps, {
       ...stepInformation,
       layout: 'horizontal',

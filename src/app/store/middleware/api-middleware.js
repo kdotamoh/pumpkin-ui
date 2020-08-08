@@ -32,6 +32,9 @@ import {
   setApplicationEssayQuestions,
   setFormValidationStatus,
   setEssayValidationStatus,
+  setApplicationFormUniversities,
+  setApplicationFormMajors,
+  setSubmissionResponse,
 } from '../actions/application-form-actions';
 import { setCycles, getCycles } from '../actions/cycle-actions';
 import {
@@ -158,13 +161,27 @@ export const appMiddleware = (store) => (next) => async (action) => {
         const formStatus = await ApplicationFormService.validateForm(
           action.reference
         );
-        sessionStorage.setItem('cycleReference', formStatus.responseBody.code);
-        store.dispatch(
-          setFormValidationStatus(
-            formStatus.requestSuccessful,
-            formStatus.responseBody
-          )
-        );
+        if (formStatus.requestSuccessful) {
+          sessionStorage.setItem(
+            'cycleReference',
+            formStatus.responseBody.code
+          );
+          store.dispatch(
+            setFormValidationStatus(
+              formStatus.requestSuccessful,
+              formStatus.responseBody,
+              null
+            )
+          );
+        } else {
+          store.dispatch(
+            setFormValidationStatus(
+              formStatus.requestSuccessful,
+              null,
+              formStatus.responseMessage
+            )
+          );
+        }
       } catch (err) {
         message.error(`Cannot validate application form: ${err}`);
       }
@@ -221,20 +238,49 @@ export const appMiddleware = (store) => (next) => async (action) => {
     }
     case ApplicationFormKeys.VALIDATE_ESSAY_QUESTION: {
       try {
-        const formStatus = await ApplicationFormService.validateEssayQuestion(
+        const essayStatus = await ApplicationFormService.validateEssayQuestion(
           action.questionCode
         );
-        store.dispatch(
-          setEssayValidationStatus(
-            formStatus.requestSuccessful,
-            formStatus.responseBody
-          )
-        );
+        if (essayStatus.requestSuccessful) {
+          store.dispatch(
+            setEssayValidationStatus(
+              essayStatus.requestSuccessful,
+              essayStatus.responseBody
+            )
+          );
+        } else {
+          store.dispatch(
+            setEssayValidationStatus(
+              essayStatus.requestSuccessful,
+              null,
+              essayStatus.responseMessage
+            )
+          );
+        }
       } catch (err) {
         message.error(`Cannot validate essay question: ${err}`);
       }
       break;
     }
+    case ApplicationFormKeys.GET_APPLICATION_FORM_UNIVERSITIES: {
+      try {
+        const universities = await ApplicationFormService.getUniversities(
+          action.country
+        );
+        store.dispatch(setApplicationFormUniversities(universities));
+      } catch (err) {
+        message.error(`Cannot get universities: ${err}`);
+      }
+      break;
+    }
+    case ApplicationFormKeys.GET_APPLICATION_FORM_MAJORS:
+      try {
+        const majors = await ApplicationFormService.getMajors();
+        store.dispatch(setApplicationFormMajors(majors));
+      } catch (err) {
+        message.error(`Cannot get majors: ${err}`);
+      }
+      break;
 
     case UniversityKeys.GET_UNIVERSITIES: {
       try {
@@ -371,11 +417,18 @@ export const appMiddleware = (store) => (next) => async (action) => {
     }
     case ApplicationFormKeys.SUBMIT_ADDITIONAL_ESSAY: {
       try {
-        const responseSuccessful = await ApplicationFormService.submitAdditionalEssay(
+        const submitAdditionalEssay = await ApplicationFormService.submitAdditionalEssay(
           action.values
         );
-        if (responseSuccessful) {
-          message.info('Essay Submitted Successfully');
+        if (submitAdditionalEssay.responseSuccessful) {
+          store.dispatch(setSubmissionResponse('success', null));
+        } else {
+          store.dispatch(
+            setSubmissionResponse(
+              'failure',
+              submitAdditionalEssay.responseMessage
+            )
+          );
         }
       } catch (err) {
         message.error(`Cannot submit application: ${err}`);
@@ -384,15 +437,36 @@ export const appMiddleware = (store) => (next) => async (action) => {
     }
     case CandidateKeys.SUBMIT_CANDIDATE_APPLICATION_FORM: {
       try {
-        await CandidateService.submitCandidateApplicationForm(
+        const submitApplicationForm = CandidateService.submitCandidateApplicationForm(
           action.cycleReference,
           action.values
         );
-        message.info('Application Submitted Successfully');
+        if (submitApplicationForm.requestSuccessful) {
+          store.dispatch(setSubmissionResponse('success', null));
+        } else {
+          store.dispatch(
+            setSubmissionResponse(
+              'failure',
+              submitApplicationForm.responseMessage
+            )
+          );
+        }
       } catch (err) {
-        message.error(`Cannot submit application: ${err}`);
+        store.dispatch(setSubmissionResponse('failure', err));
       }
       break;
+      // try {
+      //   await CandidateService.submitCandidateApplicationForm(
+      //     action.cycleReference,
+      //     action.values
+      //   );
+      //   message.info('Application Submitted Successfully');
+      //   store.dispatch(setSubmissionResponse('success'));
+      // } catch (err) {
+      //   message.error(`Cannot submit application: hi ${err}`);
+      //   store.dispatch(setSubmissionResponse('failure'));
+      // }
+      // break;
     }
 
     case ApplicationReviewerKeys.GET_APPLICATION_REVIEWERS: {

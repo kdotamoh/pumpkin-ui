@@ -89,13 +89,13 @@ export const unauthorized = [
     component: SecondaryApplicationForm,
   },
   {
+    path: '/apply/application-form',
+    layout: ApplicationLayout,
+    component: PrimaryApplicationForm,
+  },
+  {
     path: '/apply',
     layout: ApplicationLayout,
     component: ActivateFormReferencePage,
-  },
-  {
-    path: '/application-form',
-    layout: ApplicationLayout,
-    component: PrimaryApplicationForm,
   },
 ];

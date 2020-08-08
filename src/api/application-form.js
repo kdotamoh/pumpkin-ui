@@ -12,8 +12,7 @@ export async function validateForm(reference) {
     const {
       data: { responseMessage, requestSuccessful },
     } = err.response;
-    message.error(`An error occurred: ${responseMessage}`);
-    return requestSuccessful;
+    return { requestSuccessful, responseMessage };
   }
 }
 
@@ -57,7 +56,6 @@ export async function getGenders() {
 }
 
 export async function getApplicationTracks(cycleReference) {
-  console.log(cycleReference);
   try {
     const { data } = await client.get(
       `/application-form/tracks?cycleReference=${cycleReference}`
@@ -99,7 +97,7 @@ export async function validateEssayQuestion(questionCode) {
       data: { responseMessage, requestSuccessful },
     } = err.response;
     message.error(`An error occurred: ${responseMessage}`);
-    return requestSuccessful;
+    return { requestSuccessful, responseMessage };
   }
 }
 
@@ -109,13 +107,40 @@ export async function submitAdditionalEssay(values) {
       '/essay-questions/additional-essay/submit',
       values
     );
-    const { requestSuccessful } = data;
-    return { requestSuccessful };
+    const { requestSuccessful, responseMessage } = data;
+    return { requestSuccessful, responseMessage };
   } catch (err) {
     const {
       data: { responseMessage, requestSuccessful },
     } = err.response;
-    message.error(`An error occurred: ${responseMessage}`);
-    return requestSuccessful;
+    return { requestSuccessful, responseMessage };
+  }
+}
+
+export async function getUniversities(country) {
+  try {
+    const { data } = await client.get(
+      `/application-form/universities?country=${country}`
+    );
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot get university: ${responseMessage}`);
+  }
+}
+
+export async function getMajors() {
+  try {
+    const { data } = await client.get('/application-form/university-majors');
+    const { responseBody } = data;
+    return responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot get major: ${responseMessage}`);
   }
 }

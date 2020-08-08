@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Select } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getApplicationFormUniversities } from 'app/store/actions/application-form-actions';
 
 const { Option } = Select;
 const GetCountries = (disabled) => {
@@ -30,7 +31,9 @@ const GetAcademicStandings = (disabled) => {
   });
 };
 const GetUniversities = (disabled) => {
-  const universities = useSelector((state) => state.universities.available);
+  const universities = useSelector(
+    (state) => state.applicationForm.universities
+  );
   if (universities) {
     return universities.map((university) => {
       return (
@@ -46,7 +49,7 @@ const GetUniversities = (disabled) => {
   }
 };
 const GetMajors = (disabled) => {
-  const majors = useSelector((state) => state.majors.available);
+  const majors = useSelector((state) => state.applicationForm.majors);
 
   return majors.map((major) => {
     return (
@@ -56,7 +59,9 @@ const GetMajors = (disabled) => {
     );
   });
 };
+
 export const EducationalBackground = (params) => {
+  const dispatch = useDispatch();
   return (
     <Form
       layout={params.layout}
@@ -80,7 +85,14 @@ export const EducationalBackground = (params) => {
           },
         ]}
       >
-        <Select allowClear>{GetCountries(params.disabled)}</Select>
+        <Select
+          allowClear
+          onSelect={(country) =>
+            dispatch(getApplicationFormUniversities(country))
+          }
+        >
+          {GetCountries(params.disabled)}
+        </Select>
       </Form.Item>
       <Form.Item
         name="universityCode"
