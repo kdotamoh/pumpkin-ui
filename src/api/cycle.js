@@ -3,7 +3,7 @@ import client from '../api';
 import store from '../app/store';
 
 function getToken() {
-  return store ? store.getState().user.userToken : undefined
+  return store ? store.getState().user.userToken : undefined;
 }
 
 export async function createCycle(cycle) {
@@ -290,10 +290,11 @@ export async function deleteCycleForm(formCode, code) {
   }
 }
 
-export async function deactivateCycleForm(code, formCode) {
+export async function deactivateCycleForm(formCode, code) {
   try {
     const { data } = await client.patch(
       `/recruitment/cycle/${code}/deactivate/form?formCode=${formCode}`,
+      null,
       {
         headers: {
           user_token: getToken(),
@@ -301,6 +302,7 @@ export async function deactivateCycleForm(code, formCode) {
       }
     );
     const { responseBody } = data;
+    message.success('Form deactivated successfully');
     return responseBody;
   } catch (err) {
     const {
