@@ -82,3 +82,8 @@ Application Section
 .additional-essay__wordcount {
   color: red;
 }
+
+.application-form__file_input .ant-form-item-control-input {
+  display: none;
+  min-height: 0px;
+}
