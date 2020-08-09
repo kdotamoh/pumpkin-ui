@@ -65,7 +65,6 @@ export const PrimaryApplicationForm = () => {
             'applicationFormReference'
           );
 
-          console.log('done', values);
           const cycleReference = sessionStorage.getItem('cycleReference');
           dispatch(submitCandidateApplicationForm(cycleReference, values));
         }}
