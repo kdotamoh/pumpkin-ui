@@ -28,6 +28,7 @@ export const ApplicationSteps = (params) => {
       content: step.content(stepInformation),
     };
   });
+  
   steps.push({
     title: params.confirmation
       ? params.confirmation

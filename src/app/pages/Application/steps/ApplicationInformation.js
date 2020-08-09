@@ -1,11 +1,13 @@
-import React from 'react';
-import { Form, Select, Input } from 'antd';
+import React, { useState } from 'react';
+import { Form, Select, Input, Upload, Button, Icon, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import { UploadOutlined } from '@ant-design/icons';
 import {
   storeEssay,
   storeCandidateCV,
   storeCandidatePhoto,
 } from 'app/store/actions/application-form-actions';
+import _ from 'lodash';
 const { Option } = Select;
 
 export const GetApplicationEssayQuestions = (disabled) => {
@@ -80,6 +82,100 @@ export const ApplicationInformation = (params) => {
   const candidatePhoto = useSelector(
     (state) => state.applicationForm.candidatePhoto
   );
+  const [fileListState, updateFileListState] = useState(null);
+  const [fileState, updateFileState] = useState(null);
+  const [photoFileListState, updatePhotoFileListState] = useState(null);
+  const [photoFileState, updatePhotoFileState] = useState(null);
+
+  const handleFileChange = (file) => {
+    let fileList = [...file.fileList];
+
+    if (!!fileList.length === false) {
+      return;
+    }
+
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    const isDocOrPdf =
+      fileList[0].type === 'application/pdf' ||
+      fileList[0].type === 'application/doc' ||
+      fileList[0].type === 'application/docx';
+
+    if (!isDocOrPdf) {
+      message.error('Please upload only pdf/doc/docx file');
+      return;
+    }
+
+    const isLt2M = fileList[0].size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Please upload only documents smaller than 2MB');
+      return;
+    }
+
+    if (fileList.length > 1) {
+      message.error('You can only upload one document');
+      return;
+    }
+    const newFileFile = {
+      lastModified: file.file.lastModified,
+      name: file.file.name,
+      size: file.file.size,
+      type: file.file.type,
+      uid: file.file.uid,
+      webkitRelativePath: file.file.webkitRelativePath,
+    };
+
+    dispatch(storeCandidateCV(newFileFile));
+
+    updateFileListState(fileList);
+    updateFileState(file.file);
+  };
+  const handlePhotoFileChange = (file) => {
+    let fileList = [...file.fileList];
+
+    if (!!fileList.length === false) {
+      return;
+    }
+
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    const isJpgOrPng =
+      fileList[0].type === 'image/jpeg' || fileList[0].type === 'image/png';
+
+    if (!isJpgOrPng) {
+      message.error('Please upload only JPG/PNG file');
+      return;
+    }
+
+    const isLt2M = fileList[0].size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Please upload only documents smaller than 2MB');
+      return;
+    }
+
+    if (fileList.length > 1) {
+      message.error('You can only upload one document');
+      return;
+    }
+    const newFileFile = {
+      lastModified: file.file.lastModified,
+      lastModifiedDate:
+        'Thu Jul 30 2020 15:30:18 GMT+0100 (West Africa Standard Time) {}',
+      name: file.file.name,
+      size: file.file.size,
+      type: file.file.type,
+      uid: file.file.uid,
+      webkitRelativePath: file.file.webkitRelativePath,
+    };
+
+    dispatch(storeCandidatePhoto(newFileFile));
+
+    updatePhotoFileListState(fileList);
+    updatePhotoFileState(file.file);
+  };
+
   return (
     <Form
       layout={params.layout}
@@ -129,7 +225,7 @@ export const ApplicationInformation = (params) => {
         extra={
           !params.disabled
             ? 'accepted file types (pdf, doc, docx)'
-            : candidateCV
+            : candidateCV && candidateCV.name
         }
         rules={[
           {
@@ -138,11 +234,16 @@ export const ApplicationInformation = (params) => {
         ]}
         className={params.disabled ? 'application-form__file_input' : null}
       >
-        <Input
-          type="file"
-          accept=".pdf, .doc"
-          onChange={(e) => dispatch(storeCandidateCV(e.target.files[0].name))}
-        />
+        <Upload
+          onChange={handleFileChange}
+          beforeUpload={(file, fileList) => false}
+          fileList={fileListState}
+          onRemove={() => updateFileListState(null)}
+        >
+          <Button>
+            <UploadOutlined /> Click to Upload
+          </Button>
+        </Upload>
       </Form.Item>
 
       <Form.Item
@@ -150,7 +251,9 @@ export const ApplicationInformation = (params) => {
         label="Photo"
         valuePropName="photo"
         extra={
-          !params.disabled ? 'accepted file types (png, jpg)' : candidatePhoto
+          !params.disabled
+            ? 'accepted file types (png, jpg)'
+            : candidatePhoto && candidatePhoto.name
         }
         rules={[
           {
@@ -159,13 +262,16 @@ export const ApplicationInformation = (params) => {
         ]}
         className={params.disabled ? 'application-form__file_input' : null}
       >
-        <Input
-          type="file"
-          accept="image/png, image/jpeg"
-          onChange={(e) =>
-            dispatch(storeCandidatePhoto(e.target.files[0].name))
-          }
-        />
+        <Upload
+          onChange={handlePhotoFileChange}
+          beforeUpload={(file, fileList) => false}
+          fileList={photoFileListState}
+          onRemove={() => updatePhotoFileListState(null)}
+        >
+          <Button>
+            <UploadOutlined /> Click to Upload
+          </Button>
+        </Upload>
       </Form.Item>
     </Form>
   );
