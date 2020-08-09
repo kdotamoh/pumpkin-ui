@@ -73,7 +73,7 @@ export const formSubmissionSuccess = () => {
     <Result
       status="success"
       title="Form submission successful"
-      subTitle="Please wait for an email to tell you the status of your application"
+      subTitle="Congratulations! You've successfully submitted your application. You'll receive a confirmation email shortly."
     />
   );
 };
