@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Select, Input, Upload, Button, Icon, message } from 'antd';
+import { Form, Select, Input, Upload, Button, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { UploadOutlined } from '@ant-design/icons';
 import {
@@ -7,7 +7,6 @@ import {
   storeCandidateCV,
   storeCandidatePhoto,
 } from 'app/store/actions/application-form-actions';
-import _ from 'lodash';
 const { Option } = Select;
 
 export const GetApplicationEssayQuestions = (disabled) => {
@@ -107,9 +106,9 @@ export const ApplicationInformation = (params) => {
       return;
     }
 
-    const isLt2M = fileList[0].size / 1024 / 1024 < 2;
+    const isLt2M = fileList[0].size / 1024 / 1024 < 1;
     if (!isLt2M) {
-      message.error('Please upload only documents smaller than 2MB');
+      message.error('Please upload only documents smaller than 1MB');
       return;
     }
 
@@ -149,9 +148,9 @@ export const ApplicationInformation = (params) => {
       return;
     }
 
-    const isLt2M = fileList[0].size / 1024 / 1024 < 2;
+    const isLt2M = fileList[0].size / 1024 / 1024 < 1;
     if (!isLt2M) {
-      message.error('Please upload only documents smaller than 2MB');
+      message.error('Please upload only documents smaller than 1MB');
       return;
     }
 
