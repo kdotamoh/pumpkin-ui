@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getTracks } from 'app/store/actions/track-actions';
 import { createCycle } from 'app/store/actions/cycle-actions';
-import { Select, Row, Col, Button, Input } from 'antd';
+import { Select, Row, Col, Button, Input, message } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 
 import {
   getCycleByCode,
@@ -19,6 +20,7 @@ import {
   addCycleStage,
   deleteCycleStage,
   updateCycleTracks,
+  deactivateCycleForm,
 } from 'api/cycle';
 
 import 'style/cycle-page.css';
@@ -35,7 +37,7 @@ const initialState = {
       compulsoryQuestion: false,
     },
   ],
-  listOfApplicationForms: [{ name: 'test' }],
+  listOfApplicationForms: [{ name: 'DEFAULT' }],
   recruitmentCycleTracks: [],
   listOfApplicationTrackCodes: [],
 };
@@ -90,13 +92,29 @@ class Cycle extends React.Component {
     this.handleTrackCodes();
   };
 
+  handleCopyToClipboard = async (formCode) => {
+    if (!navigator.clipboard) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(
+        `https://seo-pumpkin-ui.herokuapp.com/apply?ref=${formCode}`
+      );
+      message.success('Form link copied to clipboard');
+    } catch (err) {
+      message.error('Failed to copy form link');
+    }
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     // eslint-disable-next-line
     const { loadingStatus, ...cycle } = this.state;
     this.props.createCycle(cycle);
 
-    this.setState(...initialState);
+    // this.setState(...initialState);
+    // window.scrollTo(0, 0);
+    this.props.history.push('/cycles');
   };
 
   render() {
@@ -117,7 +135,7 @@ class Cycle extends React.Component {
             ⟵ Back
           </u>
           <div className="cycle__container mt-4">
-            <h4 className="cycle__heading">
+            <h4 className="cycle__heading mb-5">
               {isUpdating ? 'Update cycle' : 'Add cycle'}
             </h4>
             <Row>
@@ -141,7 +159,7 @@ class Cycle extends React.Component {
                     <label htmlFor="recruitmentCycleName">Cycle Year</label>
                     <input
                       type="number"
-                      className="form__input"
+                      className="form__input mb-4"
                       placeholder="year"
                       value={this.state.year}
                       onChange={(e) => this.setState({ year: e.target.value })}
@@ -150,14 +168,12 @@ class Cycle extends React.Component {
                 </div>
 
                 {isUpdating && (
-                  <Button
-                    type="primary"
-                    shape="round"
-                    className="mt-4"
+                  <span
+                    className="mt-4 text--blue action--blue"
                     onClick={() => this.handleUpdateCycle()}
                   >
                     Update
-                  </Button>
+                  </span>
                 )}
               </Col>
               <Col span={12} className="pr-15rem"></Col>
@@ -205,29 +221,53 @@ class Cycle extends React.Component {
                 <p>Forms</p>
                 {this.state.listOfApplicationForms.map((form, index) => (
                   <div key={index}>
-                    <TextArea
-                      type="text"
-                      className=" mb-4"
-                      name="name"
-                      value={form.name}
-                      onChange={this.handleInput(
-                        'listOfApplicationForms',
-                        index
-                      )}
-                    />
+                    <div
+                      className="mb-4"
+                      style={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      <TextArea
+                        type="text"
+                        name="name"
+                        value={form.name}
+                        onChange={this.handleInput(
+                          'listOfApplicationForms',
+                          index
+                        )}
+                      />
+                      <span style={{ fontSize: '70%' }} className="ml-4">
+                        {form.status}
+                      </span>
+                    </div>
+
                     <div className="mb-5">
                       {isUpdating && (
-                        <span
-                          className="mr-3 text--blue action--blue"
-                          onClick={async () => {
-                            form.new
-                              ? await addCycleForm(form, this.props.id)
-                              : await updateCycleForm(form, this.props.id);
-                            this.handleSetCycle();
-                          }}
-                        >
-                          {form.new ? 'Add to cycle' : 'Update'}
-                        </span>
+                        <>
+                          {form.status === 'ACTIVE' && (
+                            <span
+                              className="mr-3 text--blue action--blue"
+                              onClick={async () => {
+                                await deactivateCycleForm(
+                                  form.code,
+                                  this.props.id
+                                );
+                                this.handleSetCycle();
+                              }}
+                            >
+                              Deactivate
+                            </span>
+                          )}
+                          <span
+                            className="mr-3 text--blue action--blue"
+                            onClick={async () => {
+                              form.new
+                                ? await addCycleForm(form, this.props.id)
+                                : await updateCycleForm(form, this.props.id);
+                              this.handleSetCycle();
+                            }}
+                          >
+                            {form.new ? 'Add to cycle' : 'Update'}
+                          </span>
+                        </>
                       )}
                       {!form.new && (
                         <span
@@ -248,6 +288,12 @@ class Cycle extends React.Component {
                           Remove
                         </span>
                       )}
+                      <span
+                        className="ml-3 text--blue action--blue"
+                        onClick={() => this.handleCopyToClipboard(form.code)}
+                      >
+                        <CopyOutlined title="Copy form link to clipboard" />
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -384,7 +430,7 @@ class Cycle extends React.Component {
                             checked={essay.showInApplicationForm}
                             onChange={this.handleInput('listOfEssays', index)}
                           />
-                          Show in main form
+                          Show in application form
                         </label>
                         <label htmlFor="" className="ml-5">
                           <input
@@ -395,7 +441,7 @@ class Cycle extends React.Component {
                             checked={essay.compulsoryQuestion}
                             onChange={this.handleInput('listOfEssays', index)}
                           />
-                          Compulsory
+                          Compulsory question
                         </label>
                       </div>
                       <div className="mb-5">
@@ -430,7 +476,7 @@ class Cycle extends React.Component {
                                 this.handleSetCycle();
                               } else {
                                 this.setState({
-                                  listOfStages: this.state.listOfEssays.filter(
+                                  listOfEssays: this.state.listOfEssays.filter(
                                     (essay, essayId) => index !== essayId
                                   ),
                                 });
@@ -441,8 +487,6 @@ class Cycle extends React.Component {
                           </span>
                         )}
                       </div>
-
-                      {/* //Todo: Handle both local and server-side deletion */}
                     </div>
                   ))}
                   <Button
