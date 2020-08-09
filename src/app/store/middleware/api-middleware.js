@@ -437,7 +437,7 @@ export const appMiddleware = (store) => (next) => async (action) => {
     }
     case CandidateKeys.SUBMIT_CANDIDATE_APPLICATION_FORM: {
       try {
-        const submitApplicationForm = CandidateService.submitCandidateApplicationForm(
+        const submitApplicationForm = await CandidateService.submitCandidateApplicationForm(
           action.cycleReference,
           action.values
         );
@@ -455,18 +455,6 @@ export const appMiddleware = (store) => (next) => async (action) => {
         store.dispatch(setSubmissionResponse('failure', err));
       }
       break;
-      // try {
-      //   await CandidateService.submitCandidateApplicationForm(
-      //     action.cycleReference,
-      //     action.values
-      //   );
-      //   message.info('Application Submitted Successfully');
-      //   store.dispatch(setSubmissionResponse('success'));
-      // } catch (err) {
-      //   message.error(`Cannot submit application: hi ${err}`);
-      //   store.dispatch(setSubmissionResponse('failure'));
-      // }
-      // break;
     }
 
     case ApplicationReviewerKeys.GET_APPLICATION_REVIEWERS: {
@@ -485,7 +473,7 @@ export const appMiddleware = (store) => (next) => async (action) => {
       try {
         const applicationReviewers = await ApplicationReviewerService.searchApplicationReviewers(
           action.cycleReference,
-          action.searchKey,
+          action.searchKey
         );
         const reviewersContent = applicationReviewers.content;
         store.dispatch(setApplicationReviewers(reviewersContent));
@@ -498,7 +486,7 @@ export const appMiddleware = (store) => (next) => async (action) => {
     case CandidateApplicationReviewKeys.GET_RECRUITMENT_CYCLE_REVIEW_SUMMARY: {
       try {
         const reviewSummary = await CandidateReviewService.getRecruitmentCycleReviewSummary(
-          action.cycleReference,
+          action.cycleReference
         );
         store.dispatch(setRecruitmentCycleReviewSummary(reviewSummary));
       } catch (err) {
@@ -509,7 +497,7 @@ export const appMiddleware = (store) => (next) => async (action) => {
     case CandidateApplicationReviewKeys.GET_APPLICATION_REVIEWER_SUMMARY: {
       try {
         const reviewSummary = await CandidateReviewService.getApplicationReviewerSummary(
-          action.reviewerCode,
+          action.reviewerCode
         );
         store.dispatch(setApplicationReviewerSummary(reviewSummary));
       } catch (err) {
@@ -521,9 +509,11 @@ export const appMiddleware = (store) => (next) => async (action) => {
       try {
         const applicationReviews = await CandidateReviewService.getCandidateApplicationReviews(
           action.reviewerCode,
-          action.seoDecision,
+          action.seoDecision
         );
-        store.dispatch(setCandidateApplicationReviews(applicationReviews.content));
+        store.dispatch(
+          setCandidateApplicationReviews(applicationReviews.content)
+        );
       } catch (err) {
         message.error(`Cannot get candidate application reviews: ${err}`);
       }
@@ -534,9 +524,11 @@ export const appMiddleware = (store) => (next) => async (action) => {
         const applicationReviews = await CandidateReviewService.searchCandidateApplicationReviews(
           action.reviewerCode,
           action.seoDecision,
-          action.searchKey,
+          action.searchKey
         );
-        store.dispatch(setCandidateApplicationReviews(applicationReviews.content));
+        store.dispatch(
+          setCandidateApplicationReviews(applicationReviews.content)
+        );
       } catch (err) {
         message.error(`Cannot search candidate application reviews: ${err}`);
       }
