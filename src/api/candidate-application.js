@@ -46,9 +46,6 @@ export const getCandidateSummary = async (reference) => {
 }
 
 export const downloadFile = async (fileUrl, reference) => {
-
-
-    console.log(`/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}`);
     const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
     const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
 
