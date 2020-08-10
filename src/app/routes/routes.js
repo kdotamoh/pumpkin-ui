@@ -15,6 +15,8 @@ import { SecondaryApplicationForm } from 'app/pages/Application/SecondaryApplica
 import { PrimaryApplicationForm } from 'app/pages/Application/PrimaryApplicationForm';
 import AddCycle from 'app/pages/Cycle/AddCycle';
 import UpdateCycle from 'app/pages/Cycle/UpdateCycle';
+import {CandidateApplicationManagement} from "../pages/Management/CandidateApplicationManagement";
+import {CandidateApplicationSummary} from "../pages/Management/CandidateApplicationSummary";
 
 export const authorized = [
   {
@@ -67,6 +69,16 @@ export const authorized = [
     layout: DefaultLayout,
     component: UniversitySetupManagement,
   },
+  {
+    path: '/applications',
+    layout: DefaultLayout,
+    component: CandidateApplicationManagement,
+  },
+  {
+    path: '/application-summary/:reference',
+    layout: DefaultLayout,
+    component: CandidateApplicationSummary,
+  },
 ];
 
 export const unauthorized = [
@@ -98,4 +110,9 @@ export const unauthorized = [
     layout: ApplicationLayout,
     component: ActivateFormReferencePage,
   },
+  {
+    path: '/application-form',
+    layout: ApplicationLayout,
+    component: PrimaryApplicationForm,
+  }
 ];

@@ -1,14 +1,15 @@
 import {
-  EmployeeKeys,
-  AlumKeys,
-  TrackKeys,
-  ApplicationFormKeys,
-  UniversityKeys,
-  CycleKeys,
-  MajorKeys,
-  CandidateKeys,
-  ApplicationReviewerKeys,
-  CandidateApplicationReviewKeys,
+    EmployeeKeys,
+    AlumKeys,
+    TrackKeys,
+    ApplicationFormKeys,
+    UniversityKeys,
+    CycleKeys,
+    MajorKeys,
+    CandidateKeys,
+    ApplicationReviewerKeys,
+    CandidateApplicationReviewKeys,
+    CandidateApplicationKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
@@ -20,108 +21,110 @@ import * as MajorService from 'api/majors';
 import * as CandidateService from 'api/candidates';
 import * as ApplicationReviewerService from 'api/application-reviewer';
 import * as CandidateReviewService from 'api/candidate-review';
-import { setEmployees, getEmployees } from '../actions/employee-actions';
-import { setAlumni, getAlumni } from '../actions/alum-actions';
-import { message } from 'antd';
-import { setTracks, getTracks } from '../actions/track-actions';
+import * as CandidateApplicationService from 'api/candidate-application';
+import {setEmployees, getEmployees} from '../actions/employee-actions';
+import {setAlumni, getAlumni} from '../actions/alum-actions';
+import {message} from 'antd';
+import {setTracks, getTracks} from '../actions/track-actions';
 import {
-  setCountries,
-  setGenders,
-  setAcademicStandings,
-  setApplicationTracks,
-  setApplicationEssayQuestions,
-  setFormValidationStatus,
-  setEssayValidationStatus,
-  setApplicationFormUniversities,
-  setApplicationFormMajors,
-  setSubmissionResponse,
+    setCountries,
+    setGenders,
+    setAcademicStandings,
+    setApplicationTracks,
+    setApplicationEssayQuestions,
+    setFormValidationStatus,
+    setEssayValidationStatus,
+    setApplicationFormUniversities,
+    setApplicationFormMajors,
+    setSubmissionResponse,
 } from '../actions/application-form-actions';
-import { setCycles, getCycles } from '../actions/cycle-actions';
+import {setCycles, getCycles} from '../actions/cycle-actions';
 import {
-  setUniversities,
-  getUniversities,
+    setUniversities,
+    getUniversities,
 } from '../actions/university-actions';
-import { setMajors, getMajors } from '../actions/major-actions';
-import { setApplicationReviewers } from '../actions/application-reviewer-actions';
+import {setMajors, getMajors} from '../actions/major-actions';
+import {setApplicationReviewers} from '../actions/application-reviewer-actions';
 import {
-  setRecruitmentCycleReviewSummary,
-  setCandidateApplicationReviews,
-  setApplicationReviewerSummary,
+    setRecruitmentCycleReviewSummary,
+    setCandidateApplicationReviews,
+    setApplicationReviewerSummary,
 } from '../actions/candidate-review-actions';
+import {setCandidateApplicationSummary, setCandidates} from "../actions/candidate-application-actions";
 
 export const appMiddleware = (store) => (next) => async (action) => {
-  const result = next(action);
-  switch (action.type) {
-    case EmployeeKeys.GET_EMPLOYEES:
-      try {
-        const employees = await EmployeeService.getEmployees();
-        const employeeContent = employees.content;
-        store.dispatch(setEmployees(employeeContent));
-      } catch (err) {
-        message.error(`Cannot get employees: ${err}`);
-      }
-      break;
-    case EmployeeKeys.INVITE_EMPLOYEE:
-      try {
-        await EmployeeService.inviteEmployee(action.email, action.employeeId);
-        store.dispatch(getEmployees());
-      } catch (err) {
-        message.error(`Cannot invite employee: ${err}`);
-      }
-      break;
-    case EmployeeKeys.DELETE_EMPLOYEE:
-      try {
-        await EmployeeService.deleteEmployee(action.email);
-      } catch (err) {
-        message.error(`Cannot delete employee: ${err}`);
-      }
-      break;
-    case EmployeeKeys.SEARCH_EMPLOYEES: {
-      try {
-        const filteredEmployees = await EmployeeService.searchEmployees(
-          action.searchKey
-        );
-        const employeeContent = filteredEmployees.content;
-        store.dispatch(setEmployees(employeeContent));
-      } catch (err) {
-        message.error(`Cannot search employees: ${err}`);
-      }
-      break;
-    }
-    case AlumKeys.GET_ALUMNI:
-      try {
-        const alumni = await AlumService.getAlumni();
-        const alumniContent = alumni.content;
-        store.dispatch(setAlumni(alumniContent));
-      } catch (err) {
-        message.error(`Cannot get alumni: ${err}`);
-      }
-      break;
-    case AlumKeys.INVITE_ALUM:
-      try {
-        await AlumService.inviteAlum(action.email, action.seoGraduationYear);
-        store.dispatch(getAlumni());
-      } catch (err) {
-        message.error(`Cannot invite alum: ${err}`);
-      }
-      break;
-    case AlumKeys.DELETE_ALUM:
-      try {
-        await AlumService.deleteAlum(action.email);
-      } catch (err) {
-        message.error(`Cannot delete alum: ${err}`);
-      }
-      break;
-    case AlumKeys.SEARCH_ALUMNI: {
-      try {
-        const filteredAlumni = await AlumService.searchAlumni(action.searchKey);
-        const alumniContent = filteredAlumni.content;
-        store.dispatch(setAlumni(alumniContent));
-      } catch (err) {
-        message.error(`Cannot search alumni: ${err}`);
-      }
-      break;
-    }
+    const result = next(action);
+    switch (action.type) {
+        case EmployeeKeys.GET_EMPLOYEES:
+            try {
+                const employees = await EmployeeService.getEmployees();
+                const employeeContent = employees.content;
+                store.dispatch(setEmployees(employeeContent));
+            } catch (err) {
+                message.error(`Cannot get employees: ${err}`);
+            }
+            break;
+        case EmployeeKeys.INVITE_EMPLOYEE:
+            try {
+                await EmployeeService.inviteEmployee(action.email, action.employeeId);
+                store.dispatch(getEmployees());
+            } catch (err) {
+                message.error(`Cannot invite employee: ${err}`);
+            }
+            break;
+        case EmployeeKeys.DELETE_EMPLOYEE:
+            try {
+                await EmployeeService.deleteEmployee(action.email);
+            } catch (err) {
+                message.error(`Cannot delete employee: ${err}`);
+            }
+            break;
+        case EmployeeKeys.SEARCH_EMPLOYEES: {
+            try {
+                const filteredEmployees = await EmployeeService.searchEmployees(
+                    action.searchKey
+                );
+                const employeeContent = filteredEmployees.content;
+                store.dispatch(setEmployees(employeeContent));
+            } catch (err) {
+                message.error(`Cannot search employees: ${err}`);
+            }
+            break;
+        }
+        case AlumKeys.GET_ALUMNI:
+            try {
+                const alumni = await AlumService.getAlumni();
+                const alumniContent = alumni.content;
+                store.dispatch(setAlumni(alumniContent));
+            } catch (err) {
+                message.error(`Cannot get alumni: ${err}`);
+            }
+            break;
+        case AlumKeys.INVITE_ALUM:
+            try {
+                await AlumService.inviteAlum(action.email, action.seoGraduationYear);
+                store.dispatch(getAlumni());
+            } catch (err) {
+                message.error(`Cannot invite alum: ${err}`);
+            }
+            break;
+        case AlumKeys.DELETE_ALUM:
+            try {
+                await AlumService.deleteAlum(action.email);
+            } catch (err) {
+                message.error(`Cannot delete alum: ${err}`);
+            }
+            break;
+        case AlumKeys.SEARCH_ALUMNI: {
+            try {
+                const filteredAlumni = await AlumService.searchAlumni(action.searchKey);
+                const alumniContent = filteredAlumni.content;
+                store.dispatch(setAlumni(alumniContent));
+            } catch (err) {
+                message.error(`Cannot search alumni: ${err}`);
+            }
+            break;
+        }
 
     case TrackKeys.GET_TRACKS:
       try {
@@ -282,50 +285,50 @@ export const appMiddleware = (store) => (next) => async (action) => {
       }
       break;
 
-    case UniversityKeys.GET_UNIVERSITIES: {
-      try {
-        const universities = await UniversityService.getUniversities();
-        const universitiesContent = universities.content;
-        store.dispatch(setUniversities(universitiesContent));
-      } catch (err) {
-        message.error(`Cannot get universities: ${err}`);
-      }
-      break;
-    }
-    case UniversityKeys.CREATE_UNIVERSITY:
-      try {
-        await UniversityService.createUniversity(action.name, action.country);
-        store.dispatch(getUniversities());
-      } catch (err) {
-        message.error(`Cannot create university: ${err}`);
-      }
-      break;
-    case UniversityKeys.DELETE_UNIVERSITY: {
-      try {
-        await UniversityService.deleteUniversity(action.code);
-      } catch (err) {
-        message.error(`Cannot delete university: ${err}`);
-      }
-      break;
-    }
-    case UniversityKeys.ACTIVATE_UNIVERSITY: {
-      try {
-        await UniversityService.activateUniversity(action.code);
-      } catch (err) {
-        message.error(`Cannot activate university: ${err}`);
-      }
-      break;
-    }
+        case UniversityKeys.GET_UNIVERSITIES: {
+            try {
+                const universities = await UniversityService.getUniversities();
+                const universitiesContent = universities.content;
+                store.dispatch(setUniversities(universitiesContent));
+            } catch (err) {
+                message.error(`Cannot get universities: ${err}`);
+            }
+            break;
+        }
+        case UniversityKeys.CREATE_UNIVERSITY:
+            try {
+                await UniversityService.createUniversity(action.name, action.country);
+                store.dispatch(getUniversities());
+            } catch (err) {
+                message.error(`Cannot create university: ${err}`);
+            }
+            break;
+        case UniversityKeys.DELETE_UNIVERSITY: {
+            try {
+                await UniversityService.deleteUniversity(action.code);
+            } catch (err) {
+                message.error(`Cannot delete university: ${err}`);
+            }
+            break;
+        }
+        case UniversityKeys.ACTIVATE_UNIVERSITY: {
+            try {
+                await UniversityService.activateUniversity(action.code);
+            } catch (err) {
+                message.error(`Cannot activate university: ${err}`);
+            }
+            break;
+        }
 
-    case UniversityKeys.UPDATE_UNIVERSITY: {
-      try {
-        await UniversityService.updateUniversity(action.name, action.code);
-        store.dispatch(getUniversities());
-      } catch (err) {
-        message.error(`Cannot update university: ${err}`);
-      }
-      break;
-    }
+        case UniversityKeys.UPDATE_UNIVERSITY: {
+            try {
+                await UniversityService.updateUniversity(action.name, action.code);
+                store.dispatch(getUniversities());
+            } catch (err) {
+                message.error(`Cannot update university: ${err}`);
+            }
+            break;
+        }
 
     case MajorKeys.GET_MAJORS:
       try {
@@ -535,8 +538,34 @@ export const appMiddleware = (store) => (next) => async (action) => {
       break;
     }
 
-    default:
-      return {};
-  }
-  return result;
+        case CandidateApplicationKeys.GET_CANDIDATES: {
+            try {
+                const candidates = await CandidateApplicationService.getCandidates();
+                const candidatesContent = candidates.content;
+                candidatesContent.map(candidate => candidate.name = `${candidate.firstName} ${candidate.lastName}`)
+                store.dispatch(setCandidates(candidatesContent));
+            } catch (err) {
+                message.error(`Cannot get candidates: ${err}`);
+            }
+            break;
+        }
+
+        case CandidateApplicationKeys.GET_CANDIDATE_SUMMARY: {
+            try{
+                const candidate = await CandidateApplicationService.getCandidateSummary(action.reference);
+                candidate.secondaryPhoneNumber = candidate.secondaryPhoneNumber?.trim();
+                if (!candidate.secondaryPhoneNumber || candidate.secondaryPhoneNumber.includes("undefined")) {
+                    candidate.secondaryPhoneNumber = null;
+                }
+                store.dispatch(setCandidateApplicationSummary(candidate));
+            } catch(err) {
+                message.error(`Cannot get candidate summary: ${err}`);
+            }
+            break;
+        }
+
+        default:
+            return {};
+    }
+    return result;
 };
