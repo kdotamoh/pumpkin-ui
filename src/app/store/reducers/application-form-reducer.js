@@ -4,17 +4,28 @@ export const initialApplicationFormState = {
   countries: [],
   genders: [],
   academicStandings: [],
+  universities: [],
+  majors: [],
   formStatus: {
-    valid: false,
+    valid: null,
     cycleDetails: {},
+    error: null,
   },
   essayQuestionStatus: {
-    valid: false,
+    valid: null,
     questionDetails: {},
+    error: null,
   },
   essayQuestions: [],
   tracks: [],
   essayResponse: [],
+  additionalEssayWordCount: 0,
+  submissionStatus: {
+    submissionResponse: null,
+    error: null,
+  },
+  candidateCV: null,
+  candidatePhoto: null,
 };
 
 /**
@@ -63,6 +74,7 @@ export const applicationFormReducer = (
         formStatus: {
           valid: action.valid,
           cycleDetails: action.cycleDetails,
+          error: action.error,
         },
       };
     }
@@ -72,6 +84,7 @@ export const applicationFormReducer = (
         essayQuestionStatus: {
           valid: action.valid,
           questionDetails: action.questionDetails,
+          error: action.error,
         },
       };
     }
@@ -103,6 +116,45 @@ export const applicationFormReducer = (
       return {
         ...state,
         essayResponse: currentEssayResponses,
+      };
+    }
+    case ApplicationFormKeys.STORE_ADDITIONAL_ESSAY_WORD_COUNT: {
+      return {
+        ...state,
+        additionalEssayWordCount: action.wordCount,
+      };
+    }
+    case ApplicationFormKeys.SET_UNIVERSITIES: {
+      return {
+        ...state,
+        universities: action.universities,
+      };
+    }
+    case ApplicationFormKeys.SET_MAJORS: {
+      return {
+        ...state,
+        majors: action.majors,
+      };
+    }
+    case ApplicationFormKeys.SET_SUBMISSION_RESPONSE: {
+      return {
+        ...state,
+        submissionStatus: {
+          submissionResponse: action.response,
+          error: action.error,
+        },
+      };
+    }
+    case ApplicationFormKeys.STORE_CANDIDATE_CV: {
+      return {
+        ...state,
+        candidateCV: action.cv,
+      };
+    }
+    case ApplicationFormKeys.STORE_CANDIDATE_PHOTO: {
+      return {
+        ...state,
+        candidatePhoto: action.photo,
       };
     }
     default:

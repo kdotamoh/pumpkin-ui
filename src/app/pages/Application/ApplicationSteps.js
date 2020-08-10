@@ -28,8 +28,11 @@ export const ApplicationSteps = (params) => {
       content: step.content(stepInformation),
     };
   });
+  
   steps.push({
-    title: 'Application Confirmation',
+    title: params.confirmation
+      ? params.confirmation
+      : 'Application Confirmation',
     content: ApplicationConfirmation(params.steps, {
       ...stepInformation,
       layout: 'horizontal',

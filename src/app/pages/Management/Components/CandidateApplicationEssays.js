@@ -14,7 +14,7 @@ const CandidateApplicationEssays = ({candidateApplicationSummary}) => (
             </div>
             <div
                 className={`word_count_row ${essay.responseWordCount >= essay.essayQuestionWordCount / 2 ? "text-green" : "text-red"}`}>
-                Word Count: {essay.responseWordCount} words
+                Word Count: {essay.wordCount} words
             </div>
         </div>
     ))

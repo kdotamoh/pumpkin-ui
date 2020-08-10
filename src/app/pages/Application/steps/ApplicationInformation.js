@@ -1,9 +1,12 @@
-import React from 'react';
-import { Form, Select, Input, Button, Upload, message } from 'antd';
+import React, { useState } from 'react';
+import { Form, Select, Input, Upload, Button, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { UploadOutlined } from '@ant-design/icons';
-import { storeEssay } from 'app/store/actions/application-form-actions';
+import {
+  storeEssay,
+  storeCandidateCV,
+  storeCandidatePhoto,
+} from 'app/store/actions/application-form-actions';
 const { Option } = Select;
 
 export const GetApplicationEssayQuestions = (disabled) => {
@@ -12,16 +15,11 @@ export const GetApplicationEssayQuestions = (disabled) => {
     (state) => state.applicationForm.essayQuestions
   );
   const essays = useSelector((state) => state.applicationForm.essayResponse);
-  const setFormattedContent = (text, limit, code) => {
+  const setFormattedContent = (text, code) => {
     let words = text.split(' ');
-    if (words.filter(Boolean).length > limit) {
-      dispatch(
-        storeEssay(code, text.split(' ').slice(0, limit).join(' '), limit)
-      );
-    } else {
-      dispatch(storeEssay(code, text, words.filter(Boolean).length));
-    }
+    dispatch(storeEssay(code, text, words.filter(Boolean).length));
   };
+
   if (applicationEssayQuestions.length > 0) {
     return applicationEssayQuestions.map((question) => {
       const currentEssay =
@@ -29,8 +27,8 @@ export const GetApplicationEssayQuestions = (disabled) => {
           ? essays.find((essay) => essay.essayQuestionCode === question.code)
           : '';
       const content = currentEssay ? currentEssay.candidateResponse : '';
-      console.log(content);
       const wordCount = currentEssay ? currentEssay.wordCount : 0;
+      const wordCountLimitReached = wordCount > question.wordCount;
 
       return (
         <Form.Item key={question.code}>
@@ -49,16 +47,18 @@ export const GetApplicationEssayQuestions = (disabled) => {
               autoSize={{ minRows: 10 }}
               value={content}
               onChange={(event) =>
-                setFormattedContent(
-                  event.target.value,
-                  question.wordCount,
-                  question.code
-                )
+                setFormattedContent(event.target.value, question.code)
               }
               allowClear
             />
           </Form.Item>
-          <span> {`${wordCount} / ${question.wordCount}`}</span>
+          <span
+            className={
+              wordCountLimitReached ? 'application-form__wordcount' : null
+            }
+          >
+            {`${wordCount} / ${question.wordCount}`}
+          </span>
         </Form.Item>
       );
     });
@@ -76,23 +76,105 @@ const GetApplicationChoices = (disabled) => {
 };
 
 export const ApplicationInformation = (params) => {
-  const fileProps = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange: (info) => {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+  const dispatch = useDispatch();
+  const candidateCV = useSelector((state) => state.applicationForm.candidateCV);
+  const candidatePhoto = useSelector(
+    (state) => state.applicationForm.candidatePhoto
+  );
+  const [fileListState, updateFileListState] = useState(null);
+  const [fileState, updateFileState] = useState(null);
+  const [photoFileListState, updatePhotoFileListState] = useState(null);
+  const [photoFileState, updatePhotoFileState] = useState(null);
+
+  const handleFileChange = (file) => {
+    let fileList = [...file.fileList];
+
+    if (!!fileList.length === false) {
+      return;
+    }
+
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    const isDocOrPdf =
+      fileList[0].type === 'application/pdf' ||
+      fileList[0].type === 'application/doc' ||
+      fileList[0].type === 'application/docx';
+
+    if (!isDocOrPdf) {
+      message.error('Please upload only pdf/doc/docx file');
+      return;
+    }
+
+    const isLt2M = fileList[0].size / 1024 / 1024 < 1;
+    if (!isLt2M) {
+      message.error('Please upload only documents smaller than 1MB');
+      return;
+    }
+
+    if (fileList.length > 1) {
+      message.error('You can only upload one document');
+      return;
+    }
+    const newFileFile = {
+      lastModified: file.file.lastModified,
+      name: file.file.name,
+      size: file.file.size,
+      type: file.file.type,
+      uid: file.file.uid,
+      webkitRelativePath: file.file.webkitRelativePath,
+    };
+
+    dispatch(storeCandidateCV(newFileFile));
+
+    updateFileListState(fileList);
+    updateFileState(file.file);
   };
+  const handlePhotoFileChange = (file) => {
+    let fileList = [...file.fileList];
+
+    if (!!fileList.length === false) {
+      return;
+    }
+
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    const isJpgOrPng =
+      fileList[0].type === 'image/jpeg' || fileList[0].type === 'image/png';
+
+    if (!isJpgOrPng) {
+      message.error('Please upload only JPG/PNG file');
+      return;
+    }
+
+    const isLt2M = fileList[0].size / 1024 / 1024 < 1;
+    if (!isLt2M) {
+      message.error('Please upload only documents smaller than 1MB');
+      return;
+    }
+
+    if (fileList.length > 1) {
+      message.error('You can only upload one document');
+      return;
+    }
+    const newFileFile = {
+      lastModified: file.file.lastModified,
+      lastModifiedDate:
+        'Thu Jul 30 2020 15:30:18 GMT+0100 (West Africa Standard Time) {}',
+      name: file.file.name,
+      size: file.file.size,
+      type: file.file.type,
+      uid: file.file.uid,
+      webkitRelativePath: file.file.webkitRelativePath,
+    };
+
+    dispatch(storeCandidatePhoto(newFileFile));
+
+    updatePhotoFileListState(fileList);
+    updatePhotoFileState(file.file);
+  };
+
   return (
     <Form
       layout={params.layout}
@@ -139,58 +221,54 @@ export const ApplicationInformation = (params) => {
         name="candidateCV"
         label="Resume"
         valuePropName="resume"
-        extra="accepted file types (pdf, doc, docx)"
+        extra={
+          !params.disabled
+            ? 'accepted file types (pdf, doc, docx)'
+            : candidateCV && candidateCV.name
+        }
         rules={[
           {
-            required: false,
+            required: true,
           },
         ]}
+        className={params.disabled ? 'application-form__file_input' : null}
       >
         <Upload
-          {...fileProps}
-          // beforeUpload={(file) => {
-          //   console.log(file.type);
-          //   const isAcceptedFileType =
-          //     file.type === 'image/jpeg' || file.type === 'image/png';
-          //   if (!isAcceptedFileType) {
-          //     message.error('You can only upload JPG/PNG file!');
-          //   }
-          //   return isAcceptedFileType;
-          // }}
+          onChange={handleFileChange}
+          beforeUpload={(file, fileList) => false}
+          fileList={fileListState}
+          onRemove={() => updateFileListState(null)}
         >
           <Button>
-            <UploadOutlined /> Click to upload
+            <UploadOutlined /> Click to Upload
           </Button>
         </Upload>
       </Form.Item>
+
       <Form.Item
         name="candidatePhoto"
         label="Photo"
         valuePropName="photo"
-        extra="accepted file types (png, jpg)"
+        extra={
+          !params.disabled
+            ? 'accepted file types (png, jpg)'
+            : candidatePhoto && candidatePhoto.name
+        }
         rules={[
           {
-            required: false,
+            required: true,
           },
         ]}
+        className={params.disabled ? 'application-form__file_input' : null}
       >
         <Upload
-          {...fileProps}
-          // beforeUpload={(file) => {
-          //   const isJpgOrPng =
-          //     file.type === 'image/jpeg' || file.type === 'image/png';
-          //   if (!isJpgOrPng) {
-          //     message.error('You can only upload JPG/PNG file!');
-          //   }
-          //   const isLt2M = file.size / 1024 / 1024 < 2;
-          //   if (!isLt2M) {
-          //     message.error('Image must smaller than 2MB!');
-          //   }
-          //   return isJpgOrPng && isLt2M;
-          // }}
+          onChange={handlePhotoFileChange}
+          beforeUpload={(file, fileList) => false}
+          fileList={photoFileListState}
+          onRemove={() => updatePhotoFileListState(null)}
         >
           <Button>
-            <UploadOutlined /> Click to upload
+            <UploadOutlined /> Click to Upload
           </Button>
         </Upload>
       </Form.Item>

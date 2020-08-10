@@ -1,36 +1,34 @@
 import React from 'react';
 import { validateApplicationForm } from '../../store/actions/application-form-actions';
 import { useHistory } from 'react-router-dom';
-import { Spin, Button } from 'antd';
-
 import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'antd';
+import {
+  formValidationError,
+  formValidationLoading,
+} from './FormValidationHelper';
+
+export const validateRef = (dispatch) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const reference = urlParams.get('ref');
+  sessionStorage.setItem('applicationFormReference', reference);
+  dispatch(validateApplicationForm(reference));
+};
 
 const ActivateFormReferencePage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const validateRef = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const reference = urlParams.get('ref');
-    sessionStorage.setItem('applicationFormReference', reference);
-    dispatch(validateApplicationForm(reference));
-  };
-
   React.useEffect(() => {
-    validateRef();
+    validateRef(dispatch);
   }, []);
-  const formStatus = useSelector(
-    (state) => state.applicationForm.formStatus.valid
-  );
-  const cycleDetails = useSelector(
-    (state) => state.applicationForm.formStatus.cycleDetails
-  );
+  const formStatus = useSelector((state) => state.applicationForm.formStatus);
 
-  if (formStatus) {
+  if (formStatus.valid) {
     return (
       <React.Fragment>
         <div className="application-page-component__body">
           <div className="application-page-component__track-name">
-            {`${cycleDetails.year} ${cycleDetails.name} Application`}
+            {`${formStatus.cycleDetails.year} ${formStatus.cycleDetails.name} Application`}
           </div>
           <p>
             Thank you for considering applying for this position. Note that your
@@ -41,23 +39,23 @@ const ActivateFormReferencePage = () => {
         </div>
         <Button
           type="primary"
-          onClick={() => history.push('/application-form')}
+          onClick={() =>
+            history.push(
+              `/apply/application-form/?ref=${sessionStorage.getItem(
+                'applicationFormReference'
+              )}`
+            )
+          }
           className="application-page-component__primary"
         >
           Start
         </Button>
       </React.Fragment>
     );
+  } else if (formStatus.valid === false) {
+    return formValidationError(formStatus.error);
   }
-
-  return (
-    <div className="center-all">
-      <Spin />
-      <div style={{ marginLeft: '1rem' }}>
-        Validating application form reference...
-      </div>
-    </div>
-  );
+  return formValidationLoading();
 };
 
 export default ActivateFormReferencePage;

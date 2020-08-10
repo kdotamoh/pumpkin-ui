@@ -1,23 +1,62 @@
 import { ApplicationSteps } from './ApplicationSteps';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SecondaryForm } from './steps/SecondaryForm';
-import { submitAdditionalEssay } from 'app/store/actions/application-form-actions';
+import {
+  submitAdditionalEssay,
+  validateEssayQuestion,
+} from 'app/store/actions/application-form-actions';
+import React from 'react';
+import {
+  formValidationError,
+  formValidationLoading,
+  formSubmissionSuccess,
+  formSubmissionError,
+} from './FormValidationHelper';
+
 export const SecondaryApplicationForm = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const questionCode = urlParams.get('questionCode');
   const dispatch = useDispatch();
-  return ApplicationSteps({
-    steps: [
-      {
-        title: 'Application Form',
-        content: SecondaryForm,
-      },
-    ],
-    onFinish: (values) => {
-      delete values.fullName;
-      values.essayQuestionCode = questionCode;
-      console.log(values);
-      dispatch(submitAdditionalEssay(values));
-    },
-  });
+  React.useEffect(() => {
+    dispatch(validateEssayQuestion(questionCode));
+  }, []);
+  const essayQuestionStatus = useSelector(
+    (state) => state.applicationForm.essayQuestionStatus.valid
+  );
+  const formError = useSelector(
+    (state) => state.applicationForm.essayQuestionStatus.error
+  );
+  const submissionResponse = useSelector(
+    (state) => state.applicationForm.submissionStatus.submissionResponse
+  );
+  const submissionError = useSelector(
+    (state) => state.applicationForm.submissionStatus.error
+  );
+  if (essayQuestionStatus) {
+    if (submissionResponse === 'success') {
+      return formSubmissionSuccess();
+    }
+    if (submissionResponse === 'failure') {
+      return formSubmissionError(submissionError);
+    }
+    return (
+      <ApplicationSteps
+        steps={[
+          {
+            title: 'Additional Essay',
+            content: SecondaryForm,
+          },
+        ]}
+        confirmation={'Additional Essay Confirmation'}
+        onFinish={(values) => {
+          delete values.fullName;
+          values.essayQuestionCode = questionCode;
+          dispatch(submitAdditionalEssay(values));
+        }}
+      />
+    );
+  } else if (essayQuestionStatus === false) {
+    return formValidationError(formError);
+  }
+  return formValidationLoading();
 };
