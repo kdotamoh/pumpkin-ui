@@ -134,7 +134,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
         this.props.getTracks().then(() => this.setState({tracksHasBeenLoaded: true}));
     };
 
-    rchFields = () => {
+    resetSearchFields = () => {
         this.setState({
             university: null,
             stageCode: null,
@@ -154,34 +154,23 @@ export class CandidateApplicationManagementComponent extends React.Component {
         this.props.getCountriesForSearch();
     }
 
-    getDropdownChildren = (data, skipFirst) => {
+    getDropdownChildren = (data) => {
         let children = [];
-        let index = skipFirst ? 1: 0;
-        while (index < data.length) {
+        for (let i of data) {
             children.push(
-                <Select.Option key={data[index].code}>
-                    {data[index].name}
+                <Select.Option key={i.code}>
+                    {i.name}
                 </Select.Option>
             );
         }
-        // for (indexi<data.length;index++) {
-        //
-        // }
-        // for (let i of data) {
-        //     children.push(
-        //         <Select.Option key={i.code}>
-        //             {i.name}
-        //         </Select.Option>
-        //     );
-        // }
         return children;
     }
 
     subHeaderView = () => {
-        const status = [{name: 'Status', code: null}, {name: 'ACTIVE', code: 'ACTIVE'}, {name: 'INACTIVE', code: 'INACTIVE'}];
+        const status = [{name: 'ACTIVE', code: 'ACTIVE'}, {name: 'INACTIVE', code: 'INACTIVE'}];
 
         const cyclesChildren = this.getDropdownChildren(this.props.recruitmentCycles);
-        const statusChildren = this.getDropdownChildren(status, true);
+        const statusChildren = this.getDropdownChildren(status);
         const stagesChildren = this.getDropdownChildren(this.props.stages)
         const tracksChildren = this.getDropdownChildren(this.props.tracks)
         const countriesChildren = this.getDropdownChildren(this.props.countries)
@@ -219,7 +208,6 @@ export class CandidateApplicationManagementComponent extends React.Component {
                         <div>
                             <p className="">Track</p>
                             <Select defaultValue={this.state.defaultTrack} style={searchConditionsStyle}
-
                                     onSelect={(code) => this.onSearchFilterSelected(code, 'trackCode')}>
                                 {tracksChildren}
                             </Select>
