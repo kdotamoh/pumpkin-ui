@@ -45,7 +45,7 @@ export const getCandidateSummary = async (reference) => {
     }
 }
 
-export const getCountriesForSearch = async () =>{
+export const getCountriesForSearch = async () => {
     try {
         const {data} = await client.get(`/candidate-application/search/countries/`, {
             headers: {
@@ -63,7 +63,7 @@ export const getCountriesForSearch = async () =>{
 }
 
 
-export const getRecruitmentCycleDetails = async (code) =>{
+export const getRecruitmentCycleDetails = async (code) => {
     try {
         const {data} = await client.get(`/recruitment/cycle/${code}`, {
             headers: {
@@ -80,7 +80,7 @@ export const getRecruitmentCycleDetails = async (code) =>{
     }
 }
 
-export const searchCandidateApplications = async (searchKeys, cycleReference) =>{
+export const searchCandidateApplications = async (searchKeys, cycleReference) => {
     try {
         const {data} = await client.get('/candidate-application/search', {
             headers: {
@@ -112,13 +112,6 @@ export const downloadFile = async (fileUrl, reference) => {
     const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
     const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
 
-    fetch(url)
-        .then( res => res.blob() )
-        .then( blob => {
-            var file = window.URL.createObjectURL(blob);
-            window.location.assign(file);
-        });
-
-    // window.open(url, '_self');
+    window.open(url, '_self');
 }
 
