@@ -3,7 +3,7 @@ import client from '../api';
 export async function submitCandidateApplicationForm(reference, values) {
   let formData = new FormData();
   for (const key in values) {
-    if (key == 'essays') {
+    if (key === 'essays') {
       values[key].forEach((val, index) => {
         for (const v in val) {
           formData.append(`${key}[${index}].${v}`, val[v]);
@@ -11,10 +11,10 @@ export async function submitCandidateApplicationForm(reference, values) {
       });
       continue;
     }
-    if (key == 'dateOfBirth' || key == 'graduationDate') {
+    if (key === 'dateOfBirth' || key === 'graduationDate') {
       values[key] = values[key] + ' 00:00:00';
     }
-    if (key == 'candidateCV' || key == 'candidatePhoto') {
+    if (key === 'candidateCV' || key === 'candidatePhoto') {
       values[key] = values[key].file;
     }
     formData.append(key, values[key]);

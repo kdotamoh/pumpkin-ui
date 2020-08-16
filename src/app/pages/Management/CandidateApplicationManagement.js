@@ -3,9 +3,13 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-    getCandidates, setCurrentCandidate
+    getCandidates, getCountriesForSearch, getRecruitmentCycleDetails, searchCandidateApplication, setCurrentCandidate
 } from 'app/store/actions/candidate-application-actions';
 import {Link} from "react-router-dom";
+import {Select, Input, Button} from 'antd';
+import {getCycles} from "../../store/actions/cycle-actions";
+import {getTracks} from "../../store/actions/track-actions";
+import "../../../style/candidate-application.css";
 
 export class CandidateApplicationManagementComponent extends React.Component {
 
@@ -28,18 +32,18 @@ export class CandidateApplicationManagementComponent extends React.Component {
         {
             title: 'Current Stage',
             dataIndex: 'currentStage',
-            key: 'currentStag',
+            key: 'currentStage',
+            render: (stage, record) => {
+                if (record.status === 'ACTIVE') {
+                    return <div style={{color: 'green'}}>{stage}</div>;
+                }
+                return <div style={{color: 'red'}}>{stage}</div>;
+            },
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status) => {
-                if (status === 'ACTIVE') {
-                    return <div style={{color: 'green'}}>Active</div>;
-                }
-                return <div style={{color: 'grey'}}>Inactive</div>;
-            },
+            title: 'Country',
+            dataIndex: 'countryOfStudy',
+            key: 'countryOfStudy',
         },
         {
             title: 'Actions',
@@ -49,43 +53,226 @@ export class CandidateApplicationManagementComponent extends React.Component {
             render: (text, record) => (
                 <Link to={`/application-summary/${record.reference}`}
                       onClick={() => this.props.setCurrentCandidate(record)}>
-                    View candidate
+                    View Applicant
                 </Link>),
         }
     ];
 
     componentDidMount() {
-        this.props.getCandidates();
-        this.props.setCurrentCandidate({});
+        this.props.getCycles().then(data => {
+                if (data && this.props.recruitmentCycles.length > 0) {
+                    this.onRecruitmentCycleSelected(this.props.recruitmentCycles[2].code);
+                    this.setState({cyclesHaveBeenLoaded: true});
+                }
+            }
+        );
     }
 
     constructor(props) {
         super(props);
+        //TODO: PUT SEARCH KEYS IN A SINGLE OBJECT
         this.state = {
-            name: '',
-            country: '',
+            searchFilters: {
+                university: null,
+                stageCode: null,
+                trackCode: null,
+                status: null,
+                country: null,
+            },
+            university: null,
+            stageCode: null,
+            trackCode: null,
+            status: null,
+            country: null,
+            defaultStage: 'Stage',
+            defaultTrack: 'Track',
+            defaultCountry: 'Country',
+            defaultStatue: 'Status',
+            cycleReference: '',
+            cycleHasBeenLoaded: false,
+            tracksHasBeenLoaded: false,
         };
+
     }
 
     render() {
         return (
             <React.Fragment>
                 <ManagementComponent
-                    headerTitle="LIST OF CANDIDATES"
+                    headerTitle="LIST OF APPLICANTS"
                     columnDefs={this.columns}
                     data={this.props.data}
                     newEntityName="CANDIDATES"
                     setCurrentEntity={this.props.setCurrentCandidate}
-                    // subHeaderView={this.subHeaderView()}
+                    subHeaderView={this.subHeaderView()}
                 />
             </React.Fragment>
         );
     }
+
+    handleInput(e) {
+        let filters = {...this.state.searchFilters};
+        filters["university"] = e.target.value;
+        this.setState({searchFilters: filters})
+    }
+
+    onSearchFilterSelected = (code, target) => {
+        let filters = {...this.state.searchFilters};
+        filters[target] = code;
+        this.setState({searchFilters: filters})
+    }
+
+    handleSearch = () => {
+        this.props.searchCandidateApplications(this.state.searchFilters, this.state.cycleReference);
+    }
+
+    onRecruitmentCycleSelected = (code) => {
+        this.resetSearchFields();
+        this.setState({cycleReference: code});
+        this.fetchSearchFilters(code);
+        this.props.getCandidates(code);
+        this.props.getTracks().then(() => this.setState({tracksHasBeenLoaded: true}));
+    };
+
+    rchFields = () => {
+        this.setState({
+            university: null,
+            stageCode: null,
+            trackCode: null,
+            status: null,
+            country: null,
+            defaultStage: 'Stage',
+            defaultTrack: 'Track',
+            defaultCountry: 'Country',
+            defaultStatue: 'Status',
+        })
+        // this.onRecruitmentCycleSelected(this.state.cycleReference)
+    }
+
+    fetchSearchFilters = (code) => {
+        this.props.getRecruitmentCycleDetails(code);
+        this.props.getCountriesForSearch();
+    }
+
+    getDropdownChildren = (data, skipFirst) => {
+        let children = [];
+        let index = skipFirst ? 1: 0;
+        while (index < data.length) {
+            children.push(
+                <Select.Option key={data[index].code}>
+                    {data[index].name}
+                </Select.Option>
+            );
+        }
+        // for (indexi<data.length;index++) {
+        //
+        // }
+        // for (let i of data) {
+        //     children.push(
+        //         <Select.Option key={i.code}>
+        //             {i.name}
+        //         </Select.Option>
+        //     );
+        // }
+        return children;
+    }
+
+    subHeaderView = () => {
+        const status = [{name: 'Status', code: null}, {name: 'ACTIVE', code: 'ACTIVE'}, {name: 'INACTIVE', code: 'INACTIVE'}];
+
+        const cyclesChildren = this.getDropdownChildren(this.props.recruitmentCycles);
+        const statusChildren = this.getDropdownChildren(status, true);
+        const stagesChildren = this.getDropdownChildren(this.props.stages)
+        const tracksChildren = this.getDropdownChildren(this.props.tracks)
+        const countriesChildren = this.getDropdownChildren(this.props.countries)
+
+        const searchConditionsStyle = {width: 200}
+        const pageHeaderDataLoaded = this.state.cyclesHaveBeenLoaded && this.state.tracksHasBeenLoaded;
+        return (
+            <div className="applicants_page_subheader">
+                {
+                    pageHeaderDataLoaded &&
+
+                    <div className="applicants_page_subheader_row data-row">
+                        <div>
+                            <p className="management-component__subheader_title">Recruitment Cycle</p>
+                            <Select defaultValue={this.state.cycleReference} style={{width: 300}}
+                                    onSelect={this.onRecruitmentCycleSelected}>
+                                {cyclesChildren}
+                            </Select>
+                        </div>
+                        <div>
+                            <p className="">University</p>
+                            <Input
+                                placeholder="University"
+                                value={this.state.searchFilters.university}
+                                onChange={(e) => this.handleInput(e)}
+                            />
+                        </div>
+                        <div>
+                            <p className="">Stage</p>
+                            <Select defaultValue={this.state.defaultStage} style={searchConditionsStyle}
+                                    onSelect={(code) => this.onSearchFilterSelected(code,'stageCode')}>
+                                {stagesChildren}
+                            </Select>
+                        </div>
+                        <div>
+                            <p className="">Track</p>
+                            <Select defaultValue={this.state.defaultTrack} style={searchConditionsStyle}
+
+                                    onSelect={(code) => this.onSearchFilterSelected(code, 'trackCode')}>
+                                {tracksChildren}
+                            </Select>
+                        </div>
+                    </div>
+                }
+                {
+                    pageHeaderDataLoaded &&
+                    <div>
+                        <div className="applicants_page_subheader_row">
+                            <div style={{display: "flex"}}>
+                                <div style={{marginRight: "10px"}}>
+                                    <p className="">Country of Study</p>
+                                    <Select defaultValue={this.state.defaultCountry} style={searchConditionsStyle}
+                                            onSelect={(code) => this.onSearchFilterSelected(code, 'country')}>
+                                        {countriesChildren}
+                                    </Select>
+                                </div>
+                                <div>
+                                    <p className="">Status</p>
+                                    <Select defaultValue={this.state.defaultStatue} style={{width: 100}}
+                                            onSelect={(code) => this.onSearchFilterSelected(code, 'status')}>
+                                        {statusChildren}
+                                    </Select>
+                                </div>
+                                <p className="filter_count">Displaying {this.props.displayingCandidates} of {this.props.totalCandidates} applicants</p>
+                            </div>
+                        </div>
+                        <div className="subheader_actions" style={{justifyContent: "flex-end"}}>
+                            <Button type="primary" onClick={() => this.handleSearch()}>
+                                Apply Filter
+                            </Button>
+                            <Button onClick={() => this.resetSearchFields()}>
+                                Clear Filter
+                            </Button>
+                            <Button type="link">
+                                Export to Csv
+                            </Button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        );
+    };
 }
 
 CandidateApplicationManagementComponent.propTypes = {
     getCandidates: PropTypes.func.isRequired,
-    setCurrentCandidate: PropTypes.func.isRequired
+    setCurrentCandidate: PropTypes.func.isRequired,
+    recruitmentCycles: PropTypes.array.isRequired,
+    getTracks: PropTypes.func.isRequired,
+    tracks: PropTypes.array.isRequired,
 };
 
 /**
@@ -93,11 +280,22 @@ CandidateApplicationManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
     data: state.candidateApplications.available,
+    recruitmentCycles: state.cycles.available,
+    stages: state.candidateApplications.stages,
+    tracks: state.candidateApplications.tracks,
+    countries: state.candidateApplications.countries,
+    totalCandidates: state.candidateApplications.totalCandidates,
+    displayingCandidates: state.candidateApplications.displayingCandidates
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getCandidates: () => dispatch(getCandidates()),
-    setCurrentCandidate: (candidate) => dispatch(setCurrentCandidate(candidate))
+    getTracks: () => dispatch(getTracks()),
+    getCandidates: (code) => dispatch(getCandidates(code)),
+    getCountriesForSearch: () => dispatch(getCountriesForSearch()),
+    searchCandidateApplications: (searchKeys, cycleReference) => dispatch(searchCandidateApplication(searchKeys, cycleReference)),
+    setCurrentCandidate: (candidate) => dispatch(setCurrentCandidate(candidate)),
+    getRecruitmentCycleDetails: (code) => dispatch(getRecruitmentCycleDetails(code)),
+    getCycles: () => dispatch(getCycles()),
 });
 
 export const CandidateApplicationManagement = connect(

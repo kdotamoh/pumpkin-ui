@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import {withRouter, Link} from 'react-router-dom';
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import {getCandidateApplicationSummary} from "../../store/actions/candidate-application-actions";
-import "../../../style/candidate-application-summary.css";
-import { Tabs} from "antd";
+import "../../../style/candidate-application.css";
+import {Tabs} from "antd";
 import CandidateApplicationDetails from "./Components/CandidateApplicationDetails";
 import CandidateApplicationEssays from "./Components/CandidateApplicationEssays";
 import CandidateApplicationDocuments from "./Components/CandidateApplicationDocuments";
@@ -16,11 +16,14 @@ const {TabPane} = Tabs;
 export class CandidateApplicationSummaryComponent extends React.Component {
 
     componentDidMount() {
-        this.props.getCandidateApplicationSummary(this.props.match.params.reference);
+        this.props.getCandidateApplicationSummary(this.props.match.params.reference).then(() => this.setState({pageLoading: false}));
     }
 
     constructor(props) {
         super(props);
+        this.state = {
+            pageLoading: true
+        }
     }
 
     render() {
@@ -29,6 +32,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         const isAdmin = this.props.user.roles.includes('ADMIN');
         const {candidateApplicationSummary} = this.props;
         const applicationReference = this.props.match.params.reference;
+        const {pageLoading} = this.state;
 
         return (
             <div className="management-component__container candidate_application_container">
@@ -43,19 +47,27 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
                 <Tabs type="card" className="tab-container">
                     <TabPane tab="Application Details" key="1">
-                        <CandidateApplicationDetails candidateApplicationSummary={candidateApplicationSummary}/>
+                        <CandidateApplicationDetails
+                            candidateApplicationSummary={candidateApplicationSummary}
+                            pageLoading={pageLoading}/>
                     </TabPane>
                     <TabPane tab="Essays" key="2">
-                        <CandidateApplicationEssays candidateApplicationSummary={candidateApplicationSummary}/>
+                        <CandidateApplicationEssays
+                            candidateApplicationSummary={candidateApplicationSummary}
+                            pageLoading={pageLoading}/>
                     </TabPane>
 
                     <TabPane tab="Uploaded Documents" key="3">
                         <CandidateApplicationDocuments
                             candidateApplicationSummary={candidateApplicationSummary}
-                            applicationReference={applicationReference}/>
+                            applicationReference={applicationReference}
+                            pageLoading={pageLoading}/>
                     </TabPane>
+
                     {(isSuperAdmin || isAdmin) && <TabPane tab="Reviews" key="4">
-                        <CandidateApplicationReviews candidateApplicationSummary={candidateApplicationSummary}/>
+                        <CandidateApplicationReviews
+                            candidateApplicationSummary={candidateApplicationSummary}
+                            pageLoading={pageLoading}/>
                     </TabPane>}
                 </Tabs>
             </div>
