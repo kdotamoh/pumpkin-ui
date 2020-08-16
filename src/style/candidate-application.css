@@ -1,0 +1,98 @@
+.candidate_application_container {
+    padding: 0 40px;
+    overflow: scroll;
+}
+
+.tab-container {
+    margin-bottom: 10px;
+}
+
+.data-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.sub-content {
+    margin-bottom: 20px;
+}
+
+.sub-content-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.word_count_row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.text-green {
+    color: green;
+}
+
+.text-red {
+    color: red;
+}
+
+.btn {
+    background: transparent;
+    border: 0;
+    color: blue;
+    padding: 0;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.applicants_page_subheader p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.applicants_page_subheader_row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.space_between {
+    justify-content: space-between;
+}
+
+.subheader_actions {
+    display: flex;
+}
+
+.subheader_actions button {
+    margin-right: 5px;
+}
+
+.subheader_actions button:nth-child(3) {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.filter_count {
+    margin-left: 10px !important;
+    display: flex;
+    align-self: flex-end;
+}
+
+.document_row {
+    display: flex;
+    margin-bottom: 50px;
+}
+
+.document_row p {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.image_container {
+    width: 100px;
+}
+
