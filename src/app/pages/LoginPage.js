@@ -28,9 +28,10 @@ export const LoginPage = () => {
       // await dispatch(fetchUser({ username: email, password }));
       dispatch(setUser(user)); // TODO: use a thunk instead?
 
-      user.roles.includes('ADMIN')
-        ? history.push('/employees')
-        : history.push('/alumni'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
+      // user.roles.includes('ADMIN')
+      //   ? history.push('/employees')
+      //   : history.push('/alumni'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
+      history.push('/applications');
     } catch (err) {
       console.error(err);
     }
