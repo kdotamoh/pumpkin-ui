@@ -10,6 +10,7 @@ import {Select, Input, Button} from 'antd';
 import {getCycles} from "../../store/actions/cycle-actions";
 import {getTracks} from "../../store/actions/track-actions";
 import "../../../style/candidate-application.css";
+import * as CandidateApplicationService from "../../../api/candidate-application";
 
 export class CandidateApplicationManagementComponent extends React.Component {
 
@@ -51,7 +52,10 @@ export class CandidateApplicationManagementComponent extends React.Component {
             key: 'actions',
             fixed: 'right',
             render: (text, record) => (
-                <Link to={`/application-summary/${record.reference}`}
+                <Link to={({
+                    pathname: `/application-summary/${record.reference}`,
+                    search: `?cycleReference=${this.state.cycleReference}`
+                })}
                       onClick={() => this.props.setCurrentCandidate(record)}>
                     View Applicant
                 </Link>),
@@ -70,7 +74,6 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        //TODO: PUT SEARCH KEYS IN A SINGLE OBJECT
         this.state = {
             searchFilters: {
                 university: null,
@@ -149,6 +152,10 @@ export class CandidateApplicationManagementComponent extends React.Component {
         // this.onRecruitmentCycleSelected(this.state.cycleReference)
     }
 
+    exportCandidateApplications = () => {
+        // CandidateApplicationService.exportCandidateApplications(this.state.searchFilters, this.state.cycleReference);
+    }
+
     fetchSearchFilters = (code) => {
         this.props.getRecruitmentCycleDetails(code);
         this.props.getCountriesForSearch();
@@ -201,7 +208,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                         <div>
                             <p className="">Stage</p>
                             <Select defaultValue={this.state.defaultStage} style={searchConditionsStyle}
-                                    onSelect={(code) => this.onSearchFilterSelected(code,'stageCode')}>
+                                    onSelect={(code) => this.onSearchFilterSelected(code, 'stageCode')}>
                                 {stagesChildren}
                             </Select>
                         </div>
@@ -243,7 +250,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                             <Button onClick={() => this.resetSearchFields()}>
                                 Clear Filter
                             </Button>
-                            <Button type="link">
+                            <Button type="link" onClick={() => this.exportCandidateApplications()}>
                                 Export to Csv
                             </Button>
                         </div>

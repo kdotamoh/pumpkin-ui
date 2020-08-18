@@ -56,11 +56,7 @@
 .applicants_page_subheader_row {
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
-}
-
-.space_between {
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 }
 
 .subheader_actions {
@@ -96,3 +92,64 @@
     width: 100px;
 }
 
+.displayed_reference_row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.green_bordered_button {
+    color: #219653;
+    border: 1px solid #219653;
+}
+
+.green_bordered_button:hover {
+    color: #219653;
+    border: 1px solid #219653;
+    opacity: 0.7;
+}
+
+.orange_bordered_button {
+    color: #F2994A;
+    border: 1px solid #F2994A;
+}
+
+.orange_bordered_button:hover {
+    color: #F2994A;
+    border: 1px solid #F2994A;
+    opacity: 0.7;
+}
+
+.red_bordered_button {
+    color: #E00E20;
+    border: 1px solid #E00E20;
+}
+
+.red_bordered_button:hover {
+    color: #E00E20;
+    border: 1px solid #E00E20;
+    opacity: 0.7;
+}
+
+.blue_bordered_button {
+    color: #284999;
+    border: 1px solid #284999;
+}
+
+.blue_bordered_button:hover {
+    color: #284999;
+    border: 1px solid #284999;
+    opacity: 0.7;
+}
+
+.text-12 {
+    font-size: 12px;
+}
+
+.text-10 {
+    font-size: 10px;
+}
+
+.ant-modal-body .ant-input, .ant-modal-footer .ant-btn {
+    border-radius: 0;
+}

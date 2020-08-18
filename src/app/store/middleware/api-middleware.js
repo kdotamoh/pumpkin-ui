@@ -53,7 +53,7 @@ import {
 import {
     setCandidateApplicationSummary,
     setCandidates, setCountriesForSearch,
-    setRecruitmentCycleDetails, setTotalCandidatesCount
+    setRecruitmentCycleDetails, setReviewTypes, setTotalCandidatesCount
 } from "../actions/candidate-application-actions";
 
 export const appMiddleware = (store) => (next) => async (action) => {
@@ -600,6 +600,32 @@ export const appMiddleware = (store) => (next) => async (action) => {
                 const candidates = await CandidateApplicationService.searchCandidateApplications(action.searchKeys, action.cycleReference);
                 candidates.content.map(candidate => candidate.name = `${candidate.firstName} ${candidate.lastName}`)
                 store.dispatch(setCandidates(candidates));
+            } catch (err) {
+                message.error(`Cannot get candidate summary: ${err}`);
+            }
+            break;
+        }
+
+        case CandidateApplicationKeys.GET_REVIEW_TYPES: {
+            try {
+                let reviewTypes = await CandidateApplicationService.getReviewTypes();
+                reviewTypes = reviewTypes.map(reviewType => {
+                    return {
+                        code: reviewType,
+                        name: reviewType
+                    }
+                });
+                store.dispatch(setReviewTypes(reviewTypes));
+            } catch (err) {
+                message.error(`Cannot get candidate summary: ${err}`);
+            }
+            break;
+        }
+
+        case CandidateApplicationKeys.GET_APPLICATION_STAGES: {
+            try {
+                const applicationStages = await CandidateApplicationService.getApplicationStages();
+                store.dispatch(setCandidates(applicationStages));
             } catch (err) {
                 message.error(`Cannot get candidate summary: ${err}`);
             }
