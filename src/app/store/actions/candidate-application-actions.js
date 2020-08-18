@@ -54,3 +54,16 @@ export const searchCandidateApplication = (searchKeys, cycleReference) => ({
     searchKeys,
     cycleReference
 })
+
+export const setReviewTypes = (reviewTypes) => ({
+    type: CandidateApplicationKeys.SET_REVIEW_TYPES,
+    reviewTypes
+})
+
+export const getReviewTypes = () => ({
+    type: CandidateApplicationKeys.GET_REVIEW_TYPES
+})
+
+export const getApplicationStages = () => ({
+    type: CandidateApplicationKeys.GET_APPLICATION_STAGES
+})

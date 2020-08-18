@@ -9,6 +9,7 @@ export const initialCandidateApplications = {
     countries: [],
     totalCandidates: 0,
     displayingCandidates: 0,
+    reviewTypes: []
 };
 
 export const candidateApplicationReducer = (state = initialCandidateApplications, action) => {
@@ -54,6 +55,13 @@ export const candidateApplicationReducer = (state = initialCandidateApplications
             return {
                 ...state,
                 countries: action.data
+            }
+        }
+
+        case CandidateApplicationKeys.SET_REVIEW_TYPES: {
+            return {
+                ...state,
+                reviewTypes: action.reviewTypes
             }
         }
 
