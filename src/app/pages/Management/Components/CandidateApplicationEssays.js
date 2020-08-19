@@ -12,8 +12,8 @@ const CandidateApplicationEssays = ({candidateApplicationSummary, pageLoading}) 
                     </div>
                     <div>
                         <div className="data-row">
-                            <div className="flex-1">University
-                                - {essay.candidateResponse}</div>
+                            <div className="flex-1">
+                                {essay.candidateResponse}</div>
                         </div>
                     </div>
                     <div

@@ -44,9 +44,9 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             alumReview: {
                 remarks: '',
                 reviewType: '',
-                cycleStageCode: '',
                 applicationReference: this.props.match.params.reference
             },
+            cycleStageCode: '',
             seoRemark: '',
             cycleReference: ''
         }
@@ -58,15 +58,24 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         this.setState({alumReview});
     }
 
-    // TODO: MAKE THIS REQUEST AT THE MIDDLEWARE
+    onCycleStageCodeChanged = (cycleStageCode) => {
+        this.setState({cycleStageCode});
+    }
+
     onAddReview = async (decision) => {
+
         try {
             const alumReview = this.state.alumReview;
-            alumReview['decision'] = decision;
-            await addReview(alumReview).then();
-        } catch (e) {
+            const request = {...alumReview, decision, cycleStageCode: this.state.cycleStageCode};
+            setTimeout(()=> {
+                addReview(request).then(res=>{
+                    if (!res) {
+                        this.clearAndCloseModal();
+                    }
+                });
+            }, 1000)
 
-        } finally {
+        } catch (e) {
 
         }
     }
@@ -74,16 +83,28 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     onMakeSeoDecision = async (seoDecision) => {
         try {
             const request = {
-                cycleStageCode: this.state.alumReview.cycleStageCode,
+                cycleStageCode: this.state.cycleStageCode,
                 seoRemarks: this.state.seoRemark,
                 seoDecision
             }
-            await makeFinalDecision(this.props.match.params.reference, request).then();
+            const data = await makeFinalDecision(this.props.match.params.reference, request);
         } catch (e) {
 
-        } finally {
-
         }
+    }
+
+    clearAndCloseModal = () => {
+        this.setState({
+            modalVisible: false,
+            alumReview: {
+                remarks: '',
+                reviewType: '',
+                applicationReference: this.props.match.params.reference
+            },
+            cycleStageCode: '',
+            seoRemark: '',
+            cycleReference: ''
+        })
     }
 
     render() {
@@ -113,7 +134,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                             <p>Reference - {this.props.match.params.reference}</p>
                             <Button onClick={() => this.setState({modalVisible: true})}
                                     className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
-                                {(isSuperAdmin || isAdmin) ? "Make Final Decision" : "Review"}
+                                {!(isSuperAdmin || isAdmin) ? "Make Final Decision" : "Review"}
                             </Button>
                         </div>
                     </div>
@@ -149,7 +170,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     visible={this.state.modalVisible}
                     title={(isAdmin || isSuperAdmin) ? "Final Decision" : "Add Review"}
                     onCancel={() => this.setState({modalVisible: false})}
-                    footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
+                    footer={!(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
                     {this.modalContent()}
                 </Modal>
@@ -160,27 +181,39 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     getAlumReviewActions = () => {
         return [
-            <Button key="reject" className="red_bordered_button" onClick={() => this.onAddReview('NO')}>
+            <Button key="reject" loading={this.state.decisionLoading}
+                    className="red_bordered_button"
+                    onClick={() => this.onAddReview('NO')}>
                 No
             </Button>,
-            <Button key="maybe" className="orange_bordered_button" onClick={() => this.onAddReview('MAYBE')}>
+            <Button key="maybe" loading={this.state.decisionLoading}
+                    className="orange_bordered_button"
+                    onClick={() => this.onAddReview('MAYBE')}>
                 Maybe
             </Button>,
-            <Button key="approve" className="green_bordered_button" onClick={() => this.onAddReview('YES')}>
-                yes
+            <Button key="approve" loading={this.state.decisionLoading}
+                    className="green_bordered_button"
+                    onClick={() => this.onAddReview('YES')}>
+                Yes
             </Button>
         ];
     }
 
     getAdminFinalDecisionActions = () => {
         return [
-            <Button key="reject" className="red_bordered_button" onClick={() => this.onMakeSeoDecision('REJECTED')}>
+            <Button key="reject"
+                    className="red_bordered_button"
+                    onClick={() => this.onMakeSeoDecision('REJECTED')}>
                 Reject
             </Button>,
-            <Button key="maybe" className="orange_bordered_button" onClick={() => this.onMakeSeoDecision('MAYBE')}>
+            <Button key="maybe"
+                    className="orange_bordered_button"
+                    onClick={() => this.onMakeSeoDecision('MAYBE')}>
                 Maybe
             </Button>,
-            <Button key="approve" className="green_bordered_button" onClick={() => this.onMakeSeoDecision('APPROVED')}>
+            <Button key="approve"
+                    className="green_bordered_button"
+                    onClick={() => this.onMakeSeoDecision('APPROVED')}>
                 Approve
             </Button>
         ];
@@ -190,7 +223,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
         return <React.Fragment>
-            {(isAdmin || isSuperAdmin) ?
+            {!(isAdmin || isSuperAdmin) ?
                 <div>
                     <p className="text-12">Considering <span style={{color: "blue"}}>ALL</span> reviews
                         give for this candidate's current stage, what is your final decision?</p>
@@ -198,13 +231,8 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         applicant would be
                         moving to the next stage</p>
                     <div style={{marginBottom: "20px"}}>
-                        <Select defaultValue="Select review type" style={{width: 200}}
-
-                                onSelect={(code) => this.onDropDownSelected(code, 'reviewType')}>
-                            {this.getDropdownChildren(this.props.reviewTypes)}
-                        </Select>
-                        <Select defaultValue="Select application stage" style={{width: 200, marginLeft: 40}}
-                                onSelect={(code) => this.onDropDownSelected(code, 'cycleStageCode')}>
+                        <Select defaultValue="Select application stage"
+                                onSelect={this.onCycleStageCodeChanged}>
                             {this.getDropdownChildren(this.props.stages)}
                         </Select>
                     </div>
@@ -222,7 +250,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                             {this.getDropdownChildren(this.props.reviewTypes)}
                         </Select>
                         <Select defaultValue="Select application stage" style={{width: 200, marginLeft: 40}}
-                                onSelect={(code) => this.onDropDownSelected(code, 'cycleStageCode')}>
+                                onSelect={this.onCycleStageCodeChanged}>
                             {this.getDropdownChildren(this.props.stages)}
                         </Select>
                     </div>

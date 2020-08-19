@@ -56,7 +56,11 @@
 .applicants_page_subheader_row {
     display: flex;
     align-items: flex-end;
-    /*justify-content: space-between;*/
+    justify-content: space-between;
+}
+
+.applicants_page_subheader_row > div {
+    margin-right: 10px;
 }
 
 .subheader_actions {
