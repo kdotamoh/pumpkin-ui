@@ -71,6 +71,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 addReview(request).then(res=>{
                     if (!res) {
                         this.clearAndCloseModal();
+                        this.componentDidMount();
                     }
                 });
             }, 1000)
@@ -244,14 +245,14 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
                 <div>
                     <div style={{marginBottom: "20px"}}>
+                        <Select defaultValue="Select application stage" style={{width: 200, marginLeft: 40}}
+                                onSelect={this.onCycleStageCodeChanged}>
+                            {this.getDropdownChildren(this.props.stages)}
+                        </Select>
                         <Select defaultValue="Select review type" style={{width: 200}}
 
                                 onSelect={(code) => this.onDropDownSelected(code, 'reviewType')}>
                             {this.getDropdownChildren(this.props.reviewTypes)}
-                        </Select>
-                        <Select defaultValue="Select application stage" style={{width: 200, marginLeft: 40}}
-                                onSelect={this.onCycleStageCodeChanged}>
-                            {this.getDropdownChildren(this.props.stages)}
                         </Select>
                     </div>
 
