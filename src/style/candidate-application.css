@@ -56,7 +56,6 @@
 .applicants_page_subheader_row {
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
 }
 
 .applicants_page_subheader_row > div {
@@ -156,4 +155,8 @@
 
 .ant-modal-body .ant-input, .ant-modal-footer .ant-btn {
     border-radius: 0;
+}
+
+.space-between {
+    justify-content: space-between;
 }

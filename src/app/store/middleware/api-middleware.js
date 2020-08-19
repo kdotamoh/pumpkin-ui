@@ -558,6 +558,7 @@ export const appMiddleware = (store) => (next) => async (action) => {
         case CandidateApplicationKeys.GET_CANDIDATE_SUMMARY: {
             try {
                 const candidate = await CandidateApplicationService.getCandidateSummary(action.reference);
+                candidate.academicStanding = candidate.academicStanding.replace(new RegExp('_', ''), ' ');
                 candidate.secondaryPhoneNumber = candidate.secondaryPhoneNumber?.trim();
                 if (!candidate.secondaryPhoneNumber || candidate.secondaryPhoneNumber.includes("undefined")) {
                     candidate.secondaryPhoneNumber = null;
@@ -609,12 +610,14 @@ export const appMiddleware = (store) => (next) => async (action) => {
         case CandidateApplicationKeys.GET_REVIEW_TYPES: {
             try {
                 let reviewTypes = await CandidateApplicationService.getReviewTypes();
-                reviewTypes = reviewTypes.map(reviewType => {
-                    return {
-                        code: reviewType,
-                        name: reviewType
-                    }
-                });
+
+                reviewTypes = reviewTypes
+                    .map(reviewType => {
+                        return {
+                            code: reviewType,
+                            name: reviewType.replace(new RegExp('_', ''), ' ')
+                        }
+                    });
                 store.dispatch(setReviewTypes(reviewTypes));
             } catch (err) {
                 message.error(`Cannot get candidate summary: ${err}`);

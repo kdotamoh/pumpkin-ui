@@ -134,7 +134,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                             <p>Reference - {this.props.match.params.reference}</p>
                             <Button onClick={() => this.setState({modalVisible: true})}
                                     className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
-                                {!(isSuperAdmin || isAdmin) ? "Make Final Decision" : "Review"}
+                                {(isSuperAdmin || isAdmin) ? "Make Final Decision" : "Review"}
                             </Button>
                         </div>
                     </div>
@@ -170,7 +170,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     visible={this.state.modalVisible}
                     title={(isAdmin || isSuperAdmin) ? "Final Decision" : "Add Review"}
                     onCancel={() => this.setState({modalVisible: false})}
-                    footer={!(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
+                    footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
                     {this.modalContent()}
                 </Modal>
@@ -181,17 +181,17 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     getAlumReviewActions = () => {
         return [
-            <Button key="reject" loading={this.state.decisionLoading}
+            <Button key="reject"
                     className="red_bordered_button"
                     onClick={() => this.onAddReview('NO')}>
                 No
             </Button>,
-            <Button key="maybe" loading={this.state.decisionLoading}
+            <Button key="maybe"
                     className="orange_bordered_button"
                     onClick={() => this.onAddReview('MAYBE')}>
                 Maybe
             </Button>,
-            <Button key="approve" loading={this.state.decisionLoading}
+            <Button key="approve"
                     className="green_bordered_button"
                     onClick={() => this.onAddReview('YES')}>
                 Yes
@@ -223,7 +223,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
         return <React.Fragment>
-            {!(isAdmin || isSuperAdmin) ?
+            {(isAdmin || isSuperAdmin) ?
                 <div>
                     <p className="text-12">Considering <span style={{color: "blue"}}>ALL</span> reviews
                         give for this candidate's current stage, what is your final decision?</p>

@@ -96,6 +96,7 @@ export const searchCandidateApplications = async (searchKeys, cycleReference) =>
                 country: searchKeys.country,
                 universityName: searchKeys.university,
                 status: searchKeys.status,
+                searchKey: searchKeys.searchKey,
                 page: 0,
                 size: 20,
             },
