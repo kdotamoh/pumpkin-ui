@@ -17,25 +17,30 @@ class ManagementComponent extends React.Component {
     this.state = {
       visible: false,
       action: '',
-      columnDefs: this.props.columnDefs
+      columnDefs: this.props.columnDefs,
     };
   }
 
   componentDidMount() {
-    if (this.state.columnDefs.filter(e => e.dataIndex === 'actions').length === 0) {
+    if (
+      this.state.columnDefs.filter((e) => e.dataIndex === 'actions').length ===
+      0
+    ) {
       this.setState({
-        columnDefs: this.state.columnDefs.concat([{
-          title: 'Actions',
-          dataIndex: 'actions',
-          key: 'actions',
-          fixed: 'right',
-          width: 100,
-          render: (text, record) => (
-            <Dropdown overlay={this.menu(record)} placement="bottomCenter">
-              <EllipsisOutlined rotate={90} />
-            </Dropdown>
-          ),
-        }])
+        columnDefs: this.state.columnDefs.concat([
+          {
+            title: 'Actions',
+            dataIndex: 'actions',
+            key: 'actions',
+            fixed: 'right',
+            width: 100,
+            render: (text, record) => (
+              <Dropdown overlay={this.menu(record)} placement="bottomCenter">
+                <EllipsisOutlined rotate={90} />
+              </Dropdown>
+            ),
+          },
+        ]),
       });
     }
   }
@@ -45,11 +50,15 @@ class ManagementComponent extends React.Component {
       <div className="management-component__container">
         <div className="management-component__header">
           <div style={{ display: 'flex' }}>
-            {this.props.showShowBackButton &&
+            {this.props.showShowBackButton && (
               <ArrowLeftOutlined
                 style={{ marginRight: 24, marginTop: 4 }}
-                onClick={() => this.props.history.goBack()} />}
-            <h4 className="management-component__h4">{this.props.headerTitle}</h4>
+                onClick={() => this.props.history.goBack()}
+              />
+            )}
+            <h4 className="management-component__h4">
+              {this.props.headerTitle}
+            </h4>
           </div>
           <div className="management-component__actions">
             {this.props.onAddNewEntity && (
@@ -57,12 +66,14 @@ class ManagementComponent extends React.Component {
                 type="primary"
                 shape="round"
                 onClick={() => this.onClickEntity(ModalActions.ADD)}
-              >ADD NEW</Button>
+              >
+                ADD NEW
+              </Button>
             )}
             {this.props.onSearch && (
               <Input
                 className="management-component__search"
-                placeholder="Search by email address"
+                placeholder="Search by name/email"
                 value={this.state.searchValue}
                 onChange={(e) => this.props.onSearch(e.target.value)}
               />
@@ -72,10 +83,7 @@ class ManagementComponent extends React.Component {
         <div className="management-component__subheader">
           {this.props.subHeaderView}
         </div>
-        <Table
-          dataSource={this.props.data}
-          columns={this.state.columnDefs}
-        />
+        <Table dataSource={this.props.data} columns={this.state.columnDefs} />
 
         <Modal
           title={`${this.state.action} ${this.props.newEntityName}`}
@@ -83,8 +91,8 @@ class ManagementComponent extends React.Component {
           onOk={() =>
             this.state.action === ModalActions.ADD
               ? this.props.onAddNewEntity(() =>
-                this.setState({ visible: false })
-              )
+                  this.setState({ visible: false })
+                )
               : this.props.onEditEntity(() => this.setState({ visible: false }))
           }
           onCancel={this.onCancelAddEntity}
@@ -98,9 +106,9 @@ class ManagementComponent extends React.Component {
     this.props.willNavigate
       ? this.props.history.push(this.props.navigateTo)
       : this.setState({
-        visible: true,
-        action: action,
-      });
+          visible: true,
+          action: action,
+        });
   };
   onCancelAddEntity = () => {
     this.props.onCancelAddEntity(() => this.setState({ visible: false }));
@@ -128,23 +136,31 @@ class ManagementComponent extends React.Component {
           </Menu.Item>
         )}
         {record.status === 'INACTIVE' ? (
-          <Menu.Item
-            onClick={() => {
-              // this.props.setCurrentEntity(record);
-              this.props.onActivateEntity(record);
-            }}
-          >
-            Reactivate
-          </Menu.Item>
+          <>
+            {this.props.newEntityName !== 'EMPLOYEE' && (
+              <Menu.Item
+                onClick={() => {
+                  // this.props.setCurrentEntity(record);
+                  this.props.onActivateEntity(record);
+                }}
+              >
+                Reactivate
+              </Menu.Item>
+            )}
+          </>
         ) : (
-          <Menu.Item
-            onClick={() => {
-              // this.props.setCurrentEntity(record);
-              this.props.onDeactivateEntity(record);
-            }}
-          >
-            Deactivate
-          </Menu.Item>
+          <>
+            {this.props.newEntityName !== 'EMPLOYEE' && (
+              <Menu.Item
+                onClick={() => {
+                  // this.props.setCurrentEntity(record);
+                  this.props.onDeactivateEntity(record);
+                }}
+              >
+                Deactivate
+              </Menu.Item>
+            )}
+          </>
         )}
         <Menu.Item
           onClick={() => {
@@ -162,8 +178,8 @@ class ManagementComponent extends React.Component {
 ManagementComponent.propTypes = {
   onAddNewEntity: PropTypes.func.isRequired,
   onCancelAddEntity: PropTypes.func.isRequired,
-  onDeactivateEntity: PropTypes.func.isRequired,
-  onActivateEntity: PropTypes.func.isRequired,
+  onDeactivateEntity: PropTypes.func,
+  onActivateEntity: PropTypes.func,
   newEntityName: PropTypes.string.isRequired,
   headerTitle: PropTypes.string.isRequired,
   columnDefs: PropTypes.array.isRequired,

@@ -91,7 +91,7 @@ export class EmployeeManagementComponent extends React.Component {
         />
         <Input
           placeholder="Employee ID"
-          value={this.state.employeeID}
+          value={this.state.employeeId}
           onChange={(e) => this.handleInput(e, 'employeeId')}
         />
       </div>
@@ -108,7 +108,7 @@ export class EmployeeManagementComponent extends React.Component {
     this.props.inviteEmployee(this.state.email, this.state.employeeId);
     this.setState({
       email: '',
-      employeeID: '',
+      employeeId: '',
     });
     callback();
   };
@@ -116,7 +116,7 @@ export class EmployeeManagementComponent extends React.Component {
   onCancelAddEmployee = (callback) => {
     this.setState({
       email: '',
-      employeeID: '',
+      employeeId: '',
     });
     callback();
   };
