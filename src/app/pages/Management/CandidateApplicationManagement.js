@@ -65,7 +65,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
     componentDidMount() {
         this.props.getCycles().then(data => {
                 if (data && this.props.recruitmentCycles.length > 0) {
-                    this.onRecruitmentCycleSelected(this.props.recruitmentCycles[2].code);
+                    this.onRecruitmentCycleSelected(this.props.recruitmentCycles[0].code);
                     this.setState({cyclesHaveBeenLoaded: true});
                 }
             }
@@ -81,7 +81,9 @@ export class CandidateApplicationManagementComponent extends React.Component {
                 trackCode: null,
                 status: null,
                 country: null,
+                name: null
             },
+            nameOrEmail: '',
             university: null,
             stageCode: null,
             trackCode: null,
@@ -119,6 +121,10 @@ export class CandidateApplicationManagementComponent extends React.Component {
         this.setState({searchFilters: filters})
     }
 
+    handleNameOrEmailInput(e) {
+        this.setState({nameOrEmail: e.target.value});
+    }
+
     onSearchFilterSelected = (code, target) => {
         let filters = {...this.state.searchFilters};
         filters[target] = code;
@@ -126,7 +132,12 @@ export class CandidateApplicationManagementComponent extends React.Component {
     }
 
     handleSearch = () => {
-        this.props.searchCandidateApplications(this.state.searchFilters, this.state.cycleReference);
+        let searchFilters = this.state.searchFilters;
+        searchFilters.firstName = this.state.nameOrEmail;
+        searchFilters.lastName = this.state.nameOrEmail;
+        searchFilters.email = this.state.nameOrEmail;
+
+        this.props.searchCandidateApplications(searchFilters, this.state.cycleReference);
     }
 
     onRecruitmentCycleSelected = (code) => {
@@ -192,7 +203,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     <div className="applicants_page_subheader_row data-row">
                         <div>
                             <p className="management-component__subheader_title">Recruitment Cycle</p>
-                            <Select defaultValue={this.state.cycleReference} style={{width: 300}}
+                            <Select defaultValue={this.state.cycleReference} style={{width: 230}}
                                     onSelect={this.onRecruitmentCycleSelected}>
                                 {cyclesChildren}
                             </Select>
@@ -219,6 +230,14 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                 {tracksChildren}
                             </Select>
                         </div>
+                        <div>
+                            <p className="">Name/Email</p>
+                            <Input
+                                placeholder="Name or Email"
+                                value={this.state.nameOrEmail}
+                                onChange={(e) => this.handleNameOrEmailInput(e)}
+                            />
+                        </div>
                     </div>
                 }
                 {
@@ -240,20 +259,21 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                         {statusChildren}
                                     </Select>
                                 </div>
-                                <p className="filter_count">Displaying {this.props.displayingCandidates} of {this.props.totalCandidates} applicants</p>
+                                <p className="filter_count">Displaying {this.props.totalCandidates} of {this.props.totalCandidates} applicants</p>
+                            </div>
+                            <div className="subheader_actions" style={{justifyContent: "flex-end"}}>
+                                <Button type="primary" onClick={() => this.handleSearch()}>
+                                    Apply Filter
+                                </Button>
+                                <Button onClick={() => this.resetSearchFields()}>
+                                    Clear Filter
+                                </Button>
+                                <Button type="link" onClick={() => this.exportCandidateApplications()}>
+                                    Export to Csv
+                                </Button>
                             </div>
                         </div>
-                        <div className="subheader_actions" style={{justifyContent: "flex-end"}}>
-                            <Button type="primary" onClick={() => this.handleSearch()}>
-                                Apply Filter
-                            </Button>
-                            <Button onClick={() => this.resetSearchFields()}>
-                                Clear Filter
-                            </Button>
-                            <Button type="link" onClick={() => this.exportCandidateApplications()}>
-                                Export to Csv
-                            </Button>
-                        </div>
+
                     </div>
                 }
             </div>
@@ -280,7 +300,6 @@ const mapStateToProps = (state) => ({
     tracks: state.candidateApplications.tracks,
     countries: state.candidateApplications.countries,
     totalCandidates: state.candidateApplications.totalCandidates,
-    displayingCandidates: state.candidateApplications.displayingCandidates
 })
 
 const mapDispatchToProps = (dispatch) => ({

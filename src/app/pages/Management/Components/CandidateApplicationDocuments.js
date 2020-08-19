@@ -1,4 +1,4 @@
-import {downloadFile} from "../../../../api/candidate-application";
+import {downloadCandidateDocument} from "../../../../api/candidate-application";
 import React from "react";
 import {Skeleton} from "antd";
 import Picture from "../../../../assets/svg/picture 1.svg" ;
@@ -17,7 +17,7 @@ const CandidateApplicationDocuments = ({candidateApplicationSummary, application
                     <p>Applicant Resume - PDF</p>
                     <button className="btn"
                             type="submit"
-                            onClick={() => downloadFile(candidateApplicationSummary.linkToCv, applicationReference)}>
+                            onClick={() => downloadCandidateDocument(candidateApplicationSummary.linkToCv, applicationReference)}>
                         Download <img src={Download} alt="Download"/>
                     </button>
                 </div>
@@ -31,7 +31,7 @@ const CandidateApplicationDocuments = ({candidateApplicationSummary, application
                     <p>Applicant Passport - JPEG</p>
                     <button className="btn"
                             type="submit"
-                            onClick={() => downloadFile(candidateApplicationSummary.linkToHeadShot, applicationReference)}>
+                            onClick={() => downloadCandidateDocument(candidateApplicationSummary.linkToHeadShot, applicationReference)}>
                         Download <img src={Download} alt="Download"/>
                     </button>
                 </div>

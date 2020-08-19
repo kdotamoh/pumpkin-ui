@@ -1,6 +1,7 @@
 import {message} from 'antd';
 import client from '../api';
 import store from '../app/store';
+import {downloadFile} from "../app/utils/download-util";
 
 function getToken() {
     return store ? store.getState().user.userToken : undefined
@@ -147,7 +148,6 @@ export const getApplicationStages = async () => {
 }
 
 export const addReview = async (review) => {
-    console.log(review);
     try {
         const {data} = await client.post('/candidate-review', review, {
             headers: {
@@ -159,7 +159,9 @@ export const addReview = async (review) => {
         const {
             data: {responseMessage},
         } = err.response;
+
         message.error(`Cannot add Review: ${responseMessage}`);
+        return "error";
     }
 }
 
@@ -178,53 +180,25 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
             data: {responseMessage},
         } = err.response;
         message.error(`Cannot make final decision: ${responseMessage}`);
+        return "error";
     }
 }
 
-const showFile = (blob) => {
 
-    var newBlob = new Blob([blob], {type: "image/png"})
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(newBlob);
-        return;
-    }     // For other browsers:    // Create a link pointing to the ObjectURL containing the blob. 
-    const data = window.URL.createObjectURL(newBlob);
-    var link = document.createElement('a');
-    link.href = data;
-    link.download = "file.png";
-    link.click();
-    setTimeout(function () {
-        window.URL.revokeObjectURL(data);
-    }, 100);
-}
-
-export const downloadFile = async (fileUrl, reference) => {
-    const extensionMapper = {
-        png: 'image/png', jpg: 'image/jpg', jpeg: 'image/jpeg', pdf: 'application/pdf', csv: 'text/csv'
-    }
-    console.log(fileUrl)
+export const downloadCandidateDocument = async (fileUrl, reference) => {
     const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
     const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
-    // const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
-    // const url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/download-file?applicationReference=H58UVFCHKD&fileUrl=gs://testing_env/Goldman_Spring_Programme/H58UVFCHKD/Untitled_Diagram.pdf&userToken=bc25393c004745c99103bd2d948551f31590490432596`;
+    const fileFullPath = fileUrl.split("/").pop();
+    let fileName = '';
+    let fileType = '';
+    for (let i = fileFullPath.length; i > 0; i--) {
+        if (fileFullPath[i] === '.') {
+            fileName = fileFullPath.substring(0, i);
+            fileType = fileFullPath.substring(i + 1, fileFullPath.length);
+            break;
+        }
+    }
 
-    fetch(url)
-        .then(res => {
-            console.log(res);
-            return res.blob()
-        })
-        .then(showFile)
-
-
-    // .then(data => {
-    //     fileDownload(data, "test.pdf");
-    // }
-
-
-    // const res = await client.get(url);
-    // console.log(res);
-    // fileDownload(res, "test.pdf");
-
-    // window.open(url, '_self');
+    downloadFile(url, fileName, fileType);
 }
 
