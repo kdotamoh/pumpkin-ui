@@ -81,9 +81,9 @@ export class CandidateApplicationManagementComponent extends React.Component {
                 trackCode: null,
                 status: null,
                 country: null,
-                name: null
+                name: null,
+                searchKey: '',
             },
-            nameOrEmail: '',
             university: null,
             stageCode: null,
             trackCode: null,
@@ -115,14 +115,10 @@ export class CandidateApplicationManagementComponent extends React.Component {
         );
     }
 
-    handleInput(e) {
+    handleTextInput(e, target) {
         let filters = {...this.state.searchFilters};
-        filters["university"] = e.target.value;
+        filters[target] = e.target.value;
         this.setState({searchFilters: filters})
-    }
-
-    handleNameOrEmailInput(e) {
-        this.setState({nameOrEmail: e.target.value});
     }
 
     onSearchFilterSelected = (code, target) => {
@@ -132,12 +128,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
     }
 
     handleSearch = () => {
-        let searchFilters = this.state.searchFilters;
-        searchFilters.firstName = this.state.nameOrEmail;
-        searchFilters.lastName = this.state.nameOrEmail;
-        searchFilters.email = this.state.nameOrEmail;
-
-        this.props.searchCandidateApplications(searchFilters, this.state.cycleReference);
+        this.props.searchCandidateApplications(this.state.searchFilters, this.state.cycleReference);
     }
 
     onRecruitmentCycleSelected = (code) => {
@@ -193,7 +184,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
         const tracksChildren = this.getDropdownChildren(this.props.tracks)
         const countriesChildren = this.getDropdownChildren(this.props.countries)
 
-        const searchConditionsStyle = {width: 200}
+        const dropDownStyle = {width: 200}
+        const inputStyle = {width: 160};
         const pageHeaderDataLoaded = this.state.cyclesHaveBeenLoaded && this.state.tracksHasBeenLoaded;
         return (
             <div className="applicants_page_subheader">
@@ -203,7 +195,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     <div className="applicants_page_subheader_row data-row">
                         <div>
                             <p className="management-component__subheader_title">Recruitment Cycle</p>
-                            <Select defaultValue={this.state.cycleReference} style={{width: 230}}
+                            <Select defaultValue={this.state.cycleReference} style={{width: 220}}
                                     onSelect={this.onRecruitmentCycleSelected}>
                                 {cyclesChildren}
                             </Select>
@@ -211,31 +203,33 @@ export class CandidateApplicationManagementComponent extends React.Component {
                         <div>
                             <p className="">University</p>
                             <Input
+                                style={inputStyle}
                                 placeholder="University"
                                 value={this.state.searchFilters.university}
-                                onChange={(e) => this.handleInput(e)}
+                                onChange={(e) => this.handleTextInput(e, 'university')}
                             />
                         </div>
                         <div>
                             <p className="">Stage</p>
-                            <Select defaultValue={this.state.defaultStage} style={searchConditionsStyle}
+                            <Select defaultValue={this.state.defaultStage} style={dropDownStyle}
                                     onSelect={(code) => this.onSearchFilterSelected(code, 'stageCode')}>
                                 {stagesChildren}
                             </Select>
                         </div>
                         <div>
                             <p className="">Track</p>
-                            <Select defaultValue={this.state.defaultTrack} style={searchConditionsStyle}
+                            <Select defaultValue={this.state.defaultTrack} style={dropDownStyle}
                                     onSelect={(code) => this.onSearchFilterSelected(code, 'trackCode')}>
                                 {tracksChildren}
                             </Select>
                         </div>
                         <div>
-                            <p className="">Name/Email</p>
+                            <p className="">Name/Email/Reference</p>
                             <Input
-                                placeholder="Name or Email"
-                                value={this.state.nameOrEmail}
-                                onChange={(e) => this.handleNameOrEmailInput(e)}
+                                style={inputStyle}
+                                placeholder="Name or Email or Reference"
+                                value={this.state.searchFilters.searchKey}
+                                onChange={(e) => this.handleTextInput(e, 'searchKey')}
                             />
                         </div>
                     </div>
@@ -243,11 +237,11 @@ export class CandidateApplicationManagementComponent extends React.Component {
                 {
                     pageHeaderDataLoaded &&
                     <div>
-                        <div className="applicants_page_subheader_row">
+                        <div className="applicants_page_subheader_row space-between">
                             <div style={{display: "flex"}}>
                                 <div style={{marginRight: "10px"}}>
                                     <p className="">Country of Study</p>
-                                    <Select defaultValue={this.state.defaultCountry} style={searchConditionsStyle}
+                                    <Select defaultValue={this.state.defaultCountry} style={dropDownStyle}
                                             onSelect={(code) => this.onSearchFilterSelected(code, 'country')}>
                                         {countriesChildren}
                                     </Select>
