@@ -18,7 +18,7 @@ export const getCandidates = async (cycleReference) => {
             params: {
                 cycleReference,
                 page: 0,
-                size: 20,
+                size: 10,
             },
         });
         const {responseBody} = data;
@@ -98,7 +98,7 @@ export const searchCandidateApplications = async (searchKeys, cycleReference) =>
                 status: searchKeys.status,
                 searchKey: searchKeys.searchKey,
                 page: 0,
-                size: 20,
+                size: 10,
             },
         });
         const {responseBody} = data;
@@ -190,6 +190,7 @@ export const downloadCandidateDocument = async (fileUrl, reference) => {
     const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
     const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
     const fileFullPath = fileUrl.split("/").pop();
+
     let fileName = '';
     let fileType = '';
     for (let i = fileFullPath.length; i > 0; i--) {

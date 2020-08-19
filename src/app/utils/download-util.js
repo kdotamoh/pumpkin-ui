@@ -3,7 +3,9 @@ const extensionMapper = {
     jpg: 'image/jpg',
     jpeg: 'image/jpeg',
     pdf: 'application/pdf',
-    csv: 'text/csv'
+    csv: 'text/csv',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 }
 
 export const downloadFile = (url, fileName, fileType) => {

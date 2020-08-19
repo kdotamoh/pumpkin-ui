@@ -99,7 +99,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
         };
 
     }
-
+    // TODO: MAKE SURE THE DATA BEING DISPLAYED ON THE TABLE IS FINE (EVEN WHEN LESS THAN 20)
     render() {
         return (
             <React.Fragment>
@@ -253,7 +253,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                         {statusChildren}
                                     </Select>
                                 </div>
-                                <p className="filter_count">Displaying {this.props.totalCandidates} of {this.props.totalCandidates} applicants</p>
+                                <p className="filter_count">Displaying {this.props.displayingCandidates} of {this.props.totalCandidates} applicants</p>
                             </div>
                             <div className="subheader_actions" style={{justifyContent: "flex-end"}}>
                                 <Button type="primary" onClick={() => this.handleSearch()}>
@@ -294,6 +294,7 @@ const mapStateToProps = (state) => ({
     tracks: state.candidateApplications.tracks,
     countries: state.candidateApplications.countries,
     totalCandidates: state.candidateApplications.totalCandidates,
+    displayingCandidates: state.candidateApplications.displayingCandidates
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -548,7 +548,6 @@ export const appMiddleware = (store) => (next) => async (action) => {
                 console.log(candidates)
                 candidates.content.map(candidate => candidate.name = `${candidate.firstName} ${candidate.lastName}`)
                 store.dispatch(setCandidates(candidates));
-                store.dispatch(setTotalCandidatesCount(candidates.totalElements))
             } catch (err) {
                 message.error(`Cannot get candidates: ${err}`);
             }

@@ -17,7 +17,9 @@ export const candidateApplicationReducer = (state = initialCandidateApplications
         case CandidateApplicationKeys.SET_CANDIDATES: {
             return {
                 ...state,
-                available: action.candidates.content
+                available: action.candidates.content,
+                displayingCandidates: action.candidates.numberOfElements,
+                totalCandidates: action.candidates.totalElements
             };
         }
 
