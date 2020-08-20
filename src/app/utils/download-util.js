@@ -10,7 +10,7 @@ const extensionMapper = {
 
 export const downloadFile = (url, fileName, fileType) => {
     const showFile = (blob) => {
-        const newBlob = new Blob([blob], {type: extensionMapper[fileType]});
+        const newBlob = new Blob([blob], {type: extensionMapper[fileType.toLowerCase()]});
         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(newBlob);
             return;
