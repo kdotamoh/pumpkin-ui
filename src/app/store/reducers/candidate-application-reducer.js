@@ -1,9 +1,15 @@
-import { CandidateApplicationKeys } from '../actions/action-constants';
+import {CandidateApplicationKeys} from '../actions/action-constants';
 
 export const initialCandidateApplications = {
     available: [],
     current: null,
-    candidateApplicationSummary: {}
+    candidateApplicationSummary: {},
+    stages: [],
+    tracks: [],
+    countries: [],
+    totalCandidates: 0,
+    displayingCandidates: 0,
+    reviewTypes: []
 };
 
 export const candidateApplicationReducer = (state = initialCandidateApplications, action) => {
@@ -11,7 +17,16 @@ export const candidateApplicationReducer = (state = initialCandidateApplications
         case CandidateApplicationKeys.SET_CANDIDATES: {
             return {
                 ...state,
-                available: action.candidates,   
+                available: action.candidates.content,
+                displayingCandidates: action.candidates.numberOfElements,
+                totalCandidates: action.candidates.totalElements
+            };
+        }
+
+        case CandidateApplicationKeys.SET_TOTAL_CANDIDATES: {
+            return {
+                ...state,
+                totalCandidates: action.count
             };
         }
 
@@ -26,6 +41,28 @@ export const candidateApplicationReducer = (state = initialCandidateApplications
             return {
                 ...state,
                 candidateApplicationSummary: action.candidateApplicationSummary
+            }
+        }
+
+        case CandidateApplicationKeys.SET_RECRUITMENT_CYCLE_DETAILS: {
+            return {
+                ...state,
+                stages: action.data.listOfStages,
+                tracks: action.data.recruitmentCycleTracks
+            }
+        }
+
+        case CandidateApplicationKeys.SET_COUNTRIES_FOR_SEARCH: {
+            return {
+                ...state,
+                countries: action.data
+            }
+        }
+
+        case CandidateApplicationKeys.SET_REVIEW_TYPES: {
+            return {
+                ...state,
+                reviewTypes: action.reviewTypes
             }
         }
 

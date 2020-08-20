@@ -98,8 +98,8 @@ export const ApplicationInformation = (params) => {
 
     const isDocOrPdf =
       fileList[0].type === 'application/pdf' ||
-      fileList[0].type === 'application/doc' ||
-      fileList[0].type === 'application/docx';
+      fileList[0].type === 'application/msword' ||
+      fileList[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
     if (!isDocOrPdf) {
       message.error('Please upload only pdf/doc/docx file');
