@@ -3,7 +3,7 @@ import client from '../../api';
 import store from '../../app/store';
 
 function getToken() {
-  return store ? store.getState().user.userToken : undefined
+  return store ? store.getState().user.userToken : undefined;
 }
 
 export async function inviteEmployee(email, employeeId) {

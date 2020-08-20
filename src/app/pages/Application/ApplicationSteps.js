@@ -8,6 +8,7 @@ export const ApplicationSteps = (params) => {
   const history = useHistory();
   const [form] = Form.useForm();
   const [current, setCurrent] = React.useState(0);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const formReference = sessionStorage.getItem('applicationFormReference');
   const next = () => {
     if (current < steps.length - 1) {
@@ -28,7 +29,7 @@ export const ApplicationSteps = (params) => {
       content: step.content(stepInformation),
     };
   });
-  
+
   steps.push({
     title: params.confirmation
       ? params.confirmation
@@ -42,6 +43,16 @@ export const ApplicationSteps = (params) => {
   });
   const onStepChange = (current) => {
     setCurrent(current);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      form.submit();
+    } catch (err) {
+      setIsSubmitting(false);
+      console.error(err);
+    }
   };
 
   return (
@@ -78,8 +89,13 @@ export const ApplicationSteps = (params) => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button type="primary" htmlType="submit" onClick={form.submit}>
-              Submit
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={isSubmitting}
+              onClick={() => handleSubmit()}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           )}
         </div>
