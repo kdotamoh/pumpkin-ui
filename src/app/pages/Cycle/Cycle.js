@@ -98,7 +98,7 @@ class Cycle extends React.Component {
     }
     try {
       await navigator.clipboard.writeText(
-        `${process.env.REACT_APP_BASE_URL}/apply?ref=${formCode}`
+        `${process.env.REACT_APP_API_BASE}/apply?ref=${formCode}`
       );
       message.success('Form link copied to clipboard');
     } catch (err) {
