@@ -8,7 +8,7 @@ const extensionMapper = {
     docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 }
 
-export const downloadFile = (url, fileName, fileType) => {
+export const downloadFile = (url, headers, fileName, fileType) => {
     const showFile = (blob) => {
         const newBlob = new Blob([blob], {type: extensionMapper[fileType.toLowerCase()]});
         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
@@ -24,7 +24,7 @@ export const downloadFile = (url, fileName, fileType) => {
             window.URL.revokeObjectURL(data);
         }, 100);
     }
-    fetch(url)
+    fetch(url, {headers})
         .then(res => {
             return res.blob()
         })

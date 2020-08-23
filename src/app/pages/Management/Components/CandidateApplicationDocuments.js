@@ -14,7 +14,7 @@ const CandidateApplicationDocuments = ({candidateApplicationSummary, application
                     <img src={Paper} alt="Paper" />
                 </div>
                 <div>
-                    <p>Applicant Resume - PDF</p>
+                    <p>Applicant Resume</p>
                     <button className="btn"
                             type="submit"
                             onClick={() => downloadCandidateDocument(candidateApplicationSummary.linkToCv, applicationReference)}>
@@ -28,7 +28,7 @@ const CandidateApplicationDocuments = ({candidateApplicationSummary, application
                     <img src={Picture} alt="Paper" />
                 </div>
                 <div>
-                    <p>Applicant Passport - JPEG</p>
+                    <p>Applicant Passport</p>
                     <button className="btn"
                             type="submit"
                             onClick={() => downloadCandidateDocument(candidateApplicationSummary.linkToHeadShot, applicationReference)}>

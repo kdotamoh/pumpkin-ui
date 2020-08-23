@@ -11,6 +11,7 @@ import {getCycles} from "../../store/actions/cycle-actions";
 import {getTracks} from "../../store/actions/track-actions";
 import "../../../style/candidate-application.css";
 import * as CandidateApplicationService from "../../../api/candidate-application";
+import {exportCandidates} from "../../../api/candidate-application";
 
 export class CandidateApplicationManagementComponent extends React.Component {
 
@@ -84,21 +85,19 @@ export class CandidateApplicationManagementComponent extends React.Component {
                 name: null,
                 searchKey: '',
             },
-            university: null,
-            stageCode: null,
-            trackCode: null,
-            status: null,
-            country: null,
-            defaultStage: 'Stage',
-            defaultTrack: 'Track',
-            defaultCountry: 'Country',
-            defaultStatue: 'Status',
+            dropdownValues: {
+                stage: 'Stage',
+                track: 'Track',
+                country: 'Country',
+                status: 'Status'
+            },
             cycleReference: '',
             cycleHasBeenLoaded: false,
-            tracksHasBeenLoaded: false,
+            candidatesHasBeenLoaded: false,
         };
 
     }
+
     // TODO: MAKE SURE THE DATA BEING DISPLAYED ON THE TABLE IS FINE (EVEN WHEN LESS THAN 20)
     render() {
         return (
@@ -121,10 +120,12 @@ export class CandidateApplicationManagementComponent extends React.Component {
         this.setState({searchFilters: filters})
     }
 
-    onSearchFilterSelected = (code, target) => {
+    onSearchFilterSelected = (code, dropdownData, target, dropdownTarget) => {
         let filters = {...this.state.searchFilters};
         filters[target] = code;
-        this.setState({searchFilters: filters})
+        let dropdownValues = {...this.state.dropdownValues};
+        dropdownValues[dropdownTarget || target] = dropdownData.children;
+        this.setState({searchFilters: filters, dropdownValues})
     }
 
     handleSearch = () => {
@@ -135,26 +136,31 @@ export class CandidateApplicationManagementComponent extends React.Component {
         this.resetSearchFields();
         this.setState({cycleReference: code});
         this.fetchSearchFilters(code);
-        this.props.getCandidates(code);
-        this.props.getTracks().then(() => this.setState({tracksHasBeenLoaded: true}));
+        this.props.getCandidates(code).then(() => this.setState({candidatesHasBeenLoaded: true}));
     };
 
     resetSearchFields = () => {
         this.setState({
-            university: null,
-            stageCode: null,
-            trackCode: null,
-            status: null,
-            country: null,
-            defaultStage: 'Stage',
-            defaultTrack: 'Track',
-            defaultCountry: 'Country',
-            defaultStatue: 'Status',
-        })
-        // this.onRecruitmentCycleSelected(this.state.cycleReference)
+            searchFilters: {
+                university: null,
+                stageCode: null,
+                trackCode: null,
+                status: null,
+                country: null,
+                name: null,
+                searchKey: '',
+            },
+            dropdownValues: {
+                stage: 'Stage',
+                track: 'Track',
+                country: 'Country',
+                status: 'Status'
+            }
+        });
     }
 
     exportCandidateApplications = () => {
+
         // CandidateApplicationService.exportCandidateApplications(this.state.searchFilters, this.state.cycleReference);
     }
 
@@ -186,7 +192,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
         const dropDownStyle = {width: 200}
         const inputStyle = {width: 160};
-        const pageHeaderDataLoaded = this.state.cyclesHaveBeenLoaded && this.state.tracksHasBeenLoaded;
+        const pageHeaderDataLoaded = this.state.cyclesHaveBeenLoaded && this.state.candidatesHasBeenLoaded;
         return (
             <div className="applicants_page_subheader">
                 {
@@ -211,15 +217,18 @@ export class CandidateApplicationManagementComponent extends React.Component {
                         </div>
                         <div>
                             <p className="">Stage</p>
-                            <Select defaultValue={this.state.defaultStage} style={dropDownStyle}
-                                    onSelect={(code) => this.onSearchFilterSelected(code, 'stageCode')}>
+                            <Select
+                                value={this.state.dropdownValues.stage}
+                                style={dropDownStyle}
+                                onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'stageCode', 'stage')}>
                                 {stagesChildren}
                             </Select>
                         </div>
                         <div>
                             <p className="">Track</p>
-                            <Select defaultValue={this.state.defaultTrack} style={dropDownStyle}
-                                    onSelect={(code) => this.onSearchFilterSelected(code, 'trackCode')}>
+                            <Select value={this.state.dropdownValues.track}
+                                    style={dropDownStyle}
+                                    onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'trackCode', 'track')}>
                                 {tracksChildren}
                             </Select>
                         </div>
@@ -241,15 +250,17 @@ export class CandidateApplicationManagementComponent extends React.Component {
                             <div style={{display: "flex"}}>
                                 <div style={{marginRight: "10px"}}>
                                     <p className="">Country of Study</p>
-                                    <Select defaultValue={this.state.defaultCountry} style={dropDownStyle}
-                                            onSelect={(code) => this.onSearchFilterSelected(code, 'country')}>
+                                    <Select value={this.state.dropdownValues.country}
+                                            style={dropDownStyle}
+                                            onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'country')}>
                                         {countriesChildren}
                                     </Select>
                                 </div>
                                 <div>
                                     <p className="">Status</p>
-                                    <Select defaultValue={this.state.defaultStatue} style={{width: 100}}
-                                            onSelect={(code) => this.onSearchFilterSelected(code, 'status')}>
+                                    <Select value={this.state.dropdownValues.status}
+                                            style={{width: 100}}
+                                            onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'status')}>
                                         {statusChildren}
                                     </Select>
                                 </div>
@@ -259,10 +270,14 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                 <Button type="primary" onClick={() => this.handleSearch()}>
                                     Apply Filter
                                 </Button>
-                                <Button onClick={() => this.resetSearchFields()}>
+                                <Button onClick={() => this.onRecruitmentCycleSelected(this.state.cycleReference)}>
                                     Clear Filter
                                 </Button>
-                                <Button type="link" onClick={() => this.exportCandidateApplications()}>
+                                <Button type="link"
+                                        onClick={() => exportCandidates({
+                                            ...this.state.searchFilters,
+                                            recruitmentCycleCode: this.state.cycleReference
+                                        })}>
                                     Export to Csv
                                 </Button>
                             </div>
@@ -280,7 +295,6 @@ CandidateApplicationManagementComponent.propTypes = {
     getCandidates: PropTypes.func.isRequired,
     setCurrentCandidate: PropTypes.func.isRequired,
     recruitmentCycles: PropTypes.array.isRequired,
-    getTracks: PropTypes.func.isRequired,
     tracks: PropTypes.array.isRequired,
 };
 
@@ -298,7 +312,6 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getTracks: () => dispatch(getTracks()),
     getCandidates: (code) => dispatch(getCandidates(code)),
     getCountriesForSearch: () => dispatch(getCountriesForSearch()),
     searchCandidateApplications: (searchKeys, cycleReference) => dispatch(searchCandidateApplication(searchKeys, cycleReference)),

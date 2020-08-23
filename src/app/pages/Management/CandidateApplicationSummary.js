@@ -23,14 +23,14 @@ const {TabPane} = Tabs;
 export class CandidateApplicationSummaryComponent extends React.Component {
 
     componentDidMount() {
-        this.props.getCandidateApplicationSummary(this.props.match.params.reference).then(() => {
+        this.props.getCandidateApplicationSummary(this.props.match.params.reference).then((data) => {
             this.setState({pageLoading: false});
             this.loadDetailsForReviewModal();
         })
     }
 
     loadDetailsForReviewModal = () => {
-        const cycleReference = this.props.location.search.split("=")[1];
+        const cycleReference = this.props.candidateApplicationSummary.recruitmentCycleCode;
         this.setState({cycleReference})
         this.props.getReviewTypes();
         this.props.getRecruitmentCycleDetails(cycleReference);
@@ -67,15 +67,13 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         try {
             const alumReview = this.state.alumReview;
             const request = {...alumReview, decision, cycleStageCode: this.state.cycleStageCode};
-            setTimeout(()=> {
-                addReview(request).then(res=>{
-                    if (!res) {
-                        this.clearAndCloseModal();
-                        this.componentDidMount();
-                    }
-                });
-            }, 1000)
 
+            addReview(request).then(res => {
+                if (!res) {
+                    this.clearAndCloseModal();
+                    this.componentDidMount();
+                }
+            });
         } catch (e) {
 
         }
@@ -88,7 +86,13 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 seoRemarks: this.state.seoRemark,
                 seoDecision
             }
-            const data = await makeFinalDecision(this.props.match.params.reference, request);
+
+            makeFinalDecision(this.props.match.params.reference, request).then(res => {
+                if (!res) {
+                    this.clearAndCloseModal();
+                    this.componentDidMount();
+                }
+            });
         } catch (e) {
 
         }

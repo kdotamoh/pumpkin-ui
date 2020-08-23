@@ -7,7 +7,7 @@ function getToken() {
     return store ? store.getState().user.userToken : undefined
 }
 
-const fileDownload = require('js-file-download');
+const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
 
 export const getCandidates = async (cycleReference) => {
     try {
@@ -185,9 +185,27 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
     }
 }
 
+export const exportCandidates = async (searchKeys) => {
 
-export const downloadCandidateDocument = async (fileUrl, reference) => {
-    const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
+    // let url = `${baseURL}/candidate-application/export`;
+    const url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export`;
+
+    const keys = Object.keys(searchKeys);
+    let query = '';
+
+    keys.forEach(key => {
+        if (searchKeys[key]) {
+            query += key + '=' + searchKeys[key] + '&'
+        }
+    });
+
+    url = url + "?" + query;
+    if (url.endsWith('&')) url = url.substring(0, url.length - 1);
+    console.log(url);
+    // downloadFile(url, {user_token: getToken()}, "Applicants", 'csv');
+}
+
+export const downloadCandidateDocument = (fileUrl, reference) => {
     const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
     const fileFullPath = fileUrl.split("/").pop();
 
@@ -201,6 +219,6 @@ export const downloadCandidateDocument = async (fileUrl, reference) => {
         }
     }
 
-    downloadFile(url, fileName, fileType);
+    downloadFile(url, {}, fileName, fileType);
 }
 
