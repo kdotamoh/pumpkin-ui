@@ -201,6 +201,7 @@ export const exportCandidates = async (searchKeys) => {
 
     url = url + "?" + query;
     if (url.endsWith('&')) url = url.substring(0, url.length - 1);
+    console.log(url);
     downloadFile(url,
         {user_token: getToken()},
         `Candidate Applications - ${searchKeys.recruitmentCycleCode}`,

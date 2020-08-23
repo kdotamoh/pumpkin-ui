@@ -8,7 +8,6 @@ import {
 import {Link} from "react-router-dom";
 import {Select, Input, Button} from 'antd';
 import {getCycles} from "../../store/actions/cycle-actions";
-import {getTracks} from "../../store/actions/track-actions";
 import "../../../style/candidate-application.css";
 import * as CandidateApplicationService from "../../../api/candidate-application";
 import {exportCandidates} from "../../../api/candidate-application";
@@ -54,8 +53,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
             fixed: 'right',
             render: (text, record) => (
                 <Link to={({
-                    pathname: `/application-summary/${record.reference}`,
-                    search: `?cycleReference=${this.state.cycleReference}`
+                    pathname: `/application-summary/${record.reference}`
                 })}
                       onClick={() => this.props.setCurrentCandidate(record)}>
                     View Applicant
