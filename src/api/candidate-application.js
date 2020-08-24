@@ -186,6 +186,9 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
 }
 
 export const exportCandidates = async (searchKeys) => {
+    searchKeys.firstChoice = searchKeys.trackCode;
+    searchKeys.currentStage = searchKeys.stageCode;
+    searchKeys.universityName = searchKeys.university;
 
     // let url = `${baseURL}/candidate-application/export`;
     let url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export`;
@@ -197,11 +200,13 @@ export const exportCandidates = async (searchKeys) => {
         if (searchKeys[key]) {
             query += key + '=' + searchKeys[key] + '&'
         }
+        else {
+            query += key + '=&'
+        }
     });
 
     url = url + "?" + query;
     if (url.endsWith('&')) url = url.substring(0, url.length - 1);
-    console.log(url);
     downloadFile(url,
         {user_token: getToken()},
         `Candidate Applications - ${searchKeys.recruitmentCycleCode}`,
