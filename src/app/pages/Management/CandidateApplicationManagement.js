@@ -3,14 +3,20 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-    getCandidates, getCountriesForSearch, getRecruitmentCycleDetails, searchCandidateApplication, setCurrentCandidate
+    clearFilter,
+    getCandidates,
+    getCountriesForSearch,
+    getRecruitmentCycleDetails,
+    searchCandidateApplication,
+    setCurrentCandidate,
+    setCycleReference
 } from 'app/store/actions/candidate-application-actions';
 import {Link} from "react-router-dom";
 import {Select, Input, Button} from 'antd';
 import {getCycles} from "../../store/actions/cycle-actions";
 import "../../../style/candidate-application.css";
-import * as CandidateApplicationService from "../../../api/candidate-application";
 import {exportCandidates} from "../../../api/candidate-application";
+import {onSearchFilterSelected, onTextInputChanged} from "../../store/actions/candidate-application-actions";
 
 export class CandidateApplicationManagementComponent extends React.Component {
 
@@ -62,34 +68,21 @@ export class CandidateApplicationManagementComponent extends React.Component {
     ];
 
     componentDidMount() {
-        this.props.getCycles().then(data => {
-                if (data && this.props.recruitmentCycles.length > 0) {
-                    this.onRecruitmentCycleSelected(this.props.recruitmentCycles[0].code);
-                    this.setState({cyclesHaveBeenLoaded: true});
+        console.log(this.props);
+        if (!this.props.candidatesHasBeenLoaded) {
+            this.props.getCycles().then(data => {
+                    if (data && this.props.recruitmentCycles.length > 0) {
+                        this.onRecruitmentCycleSelected(this.props.recruitmentCycles[0].code);
+                        this.setState({cyclesHaveBeenLoaded: true});
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            searchFilters: {
-                university: null,
-                stageCode: null,
-                trackCode: null,
-                status: null,
-                country: null,
-                name: null,
-                searchKey: '',
-            },
-            dropdownValues: {
-                stage: 'Stage',
-                track: 'Track',
-                country: 'Country',
-                status: 'Status'
-            },
-            cycleReference: '',
             cycleHasBeenLoaded: false,
             candidatesHasBeenLoaded: false,
         };
@@ -112,55 +105,16 @@ export class CandidateApplicationManagementComponent extends React.Component {
         );
     }
 
-    handleTextInput(e, target) {
-        let filters = {...this.state.searchFilters};
-        filters[target] = e.target.value;
-        this.setState({searchFilters: filters})
-    }
-
-    onSearchFilterSelected = (code, dropdownData, target, dropdownTarget) => {
-        let filters = {...this.state.searchFilters};
-        filters[target] = code;
-        let dropdownValues = {...this.state.dropdownValues};
-        dropdownValues[dropdownTarget || target] = dropdownData.children;
-        this.setState({searchFilters: filters, dropdownValues})
-    }
-
     handleSearch = () => {
-        this.props.searchCandidateApplications(this.state.searchFilters, this.state.cycleReference);
+        this.props.searchCandidateApplications(this.props.searchFilters, this.props.cycleReference);
     }
 
     onRecruitmentCycleSelected = (code) => {
-        this.resetSearchFields();
-        this.setState({cycleReference: code});
+        this.props.clearFilter();
+        this.props.setCycleReference(code);
         this.fetchSearchFilters(code);
         this.props.getCandidates(code).then(() => this.setState({candidatesHasBeenLoaded: true}));
     };
-
-    resetSearchFields = () => {
-        this.setState({
-            searchFilters: {
-                university: null,
-                stageCode: null,
-                trackCode: null,
-                status: null,
-                country: null,
-                name: null,
-                searchKey: '',
-            },
-            dropdownValues: {
-                stage: 'Stage',
-                track: 'Track',
-                country: 'Country',
-                status: 'Status'
-            }
-        });
-    }
-
-    exportCandidateApplications = () => {
-
-        // CandidateApplicationService.exportCandidateApplications(this.state.searchFilters, this.state.cycleReference);
-    }
 
     fetchSearchFilters = (code) => {
         this.props.getRecruitmentCycleDetails(code);
@@ -190,7 +144,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
         const dropDownStyle = {width: 200}
         const inputStyle = {width: 160};
-        const pageHeaderDataLoaded = this.state.cyclesHaveBeenLoaded && this.state.candidatesHasBeenLoaded;
+        const pageHeaderDataLoaded = this.props.candidatesHasBeenLoaded;
+
         return (
             <div className="applicants_page_subheader">
                 {
@@ -199,7 +154,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     <div className="applicants_page_subheader_row data-row">
                         <div>
                             <p className="management-component__subheader_title">Recruitment Cycle</p>
-                            <Select defaultValue={this.state.cycleReference} style={{width: 220}}
+                            <Select defaultValue={this.props.cycleReference} style={{width: 220}}
                                     onSelect={this.onRecruitmentCycleSelected}>
                                 {cyclesChildren}
                             </Select>
@@ -209,24 +164,24 @@ export class CandidateApplicationManagementComponent extends React.Component {
                             <Input
                                 style={inputStyle}
                                 placeholder="University"
-                                value={this.state.searchFilters.university}
-                                onChange={(e) => this.handleTextInput(e, 'university')}
+                                value={this.props.searchFilters.university}
+                                onChange={(e) => this.props.handleTextInput(e, 'university')}
                             />
                         </div>
                         <div>
                             <p className="">Stage</p>
                             <Select
-                                value={this.state.dropdownValues.stage}
+                                value={this.props.dropdownValues.stage}
                                 style={dropDownStyle}
-                                onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'stageCode', 'stage')}>
+                                onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'stageCode', 'stage')}>
                                 {stagesChildren}
                             </Select>
                         </div>
                         <div>
                             <p className="">Track</p>
-                            <Select value={this.state.dropdownValues.track}
+                            <Select value={this.props.dropdownValues.track}
                                     style={dropDownStyle}
-                                    onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'trackCode', 'track')}>
+                                    onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'trackCode', 'track')}>
                                 {tracksChildren}
                             </Select>
                         </div>
@@ -235,8 +190,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
                             <Input
                                 style={inputStyle}
                                 placeholder="Name or Email or Reference"
-                                value={this.state.searchFilters.searchKey}
-                                onChange={(e) => this.handleTextInput(e, 'searchKey')}
+                                value={this.props.searchFilters.searchKey}
+                                onChange={(e) => this.props.handleTextInput(e, 'searchKey')}
                             />
                         </div>
                     </div>
@@ -248,17 +203,17 @@ export class CandidateApplicationManagementComponent extends React.Component {
                             <div style={{display: "flex"}}>
                                 <div style={{marginRight: "10px"}}>
                                     <p className="">Country of Study</p>
-                                    <Select value={this.state.dropdownValues.country}
+                                    <Select value={this.props.dropdownValues.country}
                                             style={dropDownStyle}
-                                            onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'country')}>
+                                            onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'country')}>
                                         {countriesChildren}
                                     </Select>
                                 </div>
                                 <div>
                                     <p className="">Status</p>
-                                    <Select value={this.state.dropdownValues.status}
+                                    <Select value={this.props.dropdownValues.status}
                                             style={{width: 100}}
-                                            onSelect={(code, dropdownData) => this.onSearchFilterSelected(code, dropdownData, 'status')}>
+                                            onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'status')}>
                                         {statusChildren}
                                     </Select>
                                 </div>
@@ -268,13 +223,13 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                 <Button type="primary" onClick={() => this.handleSearch()}>
                                     Apply Filter
                                 </Button>
-                                <Button onClick={() => this.onRecruitmentCycleSelected(this.state.cycleReference)}>
+                                <Button onClick={() => this.onRecruitmentCycleSelected(this.props.cycleReference)}>
                                     Clear Filter
                                 </Button>
                                 <Button type="link"
                                         onClick={() => exportCandidates({
-                                            ...this.state.searchFilters,
-                                            recruitmentCycleCode: this.state.cycleReference
+                                            ...this.props.searchFilters,
+                                            recruitmentCycleCode: this.props.cycleReference
                                         })}>
                                     Export to Csv
                                 </Button>
@@ -293,7 +248,7 @@ CandidateApplicationManagementComponent.propTypes = {
     getCandidates: PropTypes.func.isRequired,
     setCurrentCandidate: PropTypes.func.isRequired,
     recruitmentCycles: PropTypes.array.isRequired,
-    tracks: PropTypes.array.isRequired,
+    tracks: PropTypes.array.isRequired
 };
 
 /**
@@ -301,12 +256,16 @@ CandidateApplicationManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
     data: state.candidateApplications.available,
+    candidatesHasBeenLoaded: state.candidateApplications.candidatesHasBeenLoaded,
     recruitmentCycles: state.cycles.available,
     stages: state.candidateApplications.stages,
     tracks: state.candidateApplications.tracks,
     countries: state.candidateApplications.countries,
     totalCandidates: state.candidateApplications.totalCandidates,
-    displayingCandidates: state.candidateApplications.displayingCandidates
+    displayingCandidates: state.candidateApplications.displayingCandidates,
+    cycleReference: state.candidateApplications.cycleReference,
+    searchFilters: state.candidateApplications.searchFilters,
+    dropdownValues: state.candidateApplications.dropdownValues
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -316,6 +275,11 @@ const mapDispatchToProps = (dispatch) => ({
     setCurrentCandidate: (candidate) => dispatch(setCurrentCandidate(candidate)),
     getRecruitmentCycleDetails: (code) => dispatch(getRecruitmentCycleDetails(code)),
     getCycles: () => dispatch(getCycles()),
+    setCycleReference: (cycleReference) => dispatch(setCycleReference(cycleReference)),
+    onSearchFilterSelected: (code, dropdownData, target, dropdownTarget) =>
+        dispatch(onSearchFilterSelected(code, dropdownData, target, dropdownTarget)),
+    handleTextInput: (e, target) => dispatch(onTextInputChanged(target, e.target.value)),
+    clearFilter: () => dispatch(clearFilter())
 });
 
 export const CandidateApplicationManagement = connect(

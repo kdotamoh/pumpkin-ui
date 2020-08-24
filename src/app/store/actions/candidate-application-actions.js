@@ -67,3 +67,26 @@ export const getReviewTypes = () => ({
 export const getApplicationStages = () => ({
     type: CandidateApplicationKeys.GET_APPLICATION_STAGES
 })
+
+export const setCycleReference = (cycleReference) => ({
+    type: CandidateApplicationKeys.SET_CYCLE_REFERENCE,
+    cycleReference
+})
+
+export const onSearchFilterSelected = (code, dropdownData, target, dropdownTarget) => ({
+    type: CandidateApplicationKeys.ON_SEARCH_FILTER_SELECTED,
+    code,
+    dropdownData,
+    target,
+    dropdownTarget
+})
+
+export const onTextInputChanged = (target, value) => ({
+    type: CandidateApplicationKeys.ON_TEXT_INPUT_CHANGED,
+    target,
+    value
+})
+
+export const clearFilter = () => ({
+    type: CandidateApplicationKeys.ON_CLEAR_FILTER
+})

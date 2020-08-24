@@ -1,6 +1,7 @@
 import {CandidateApplicationKeys} from '../actions/action-constants';
 
 export const initialCandidateApplications = {
+    candidatesHasBeenLoaded: false,
     available: [],
     current: null,
     candidateApplicationSummary: {},
@@ -9,7 +10,23 @@ export const initialCandidateApplications = {
     countries: [],
     totalCandidates: 0,
     displayingCandidates: 0,
-    reviewTypes: []
+    reviewTypes: [],
+    cycleReference: '',
+    searchFilters: {
+        university: null,
+        stageCode: null,
+        trackCode: null,
+        status: null,
+        country: null,
+        name: null,
+        searchKey: '',
+    },
+    dropdownValues: {
+        stage: 'Stage',
+        track: 'Track',
+        country: 'Country',
+        status: 'Status'
+    }
 };
 
 export const candidateApplicationReducer = (state = initialCandidateApplications, action) => {
@@ -18,6 +35,7 @@ export const candidateApplicationReducer = (state = initialCandidateApplications
             return {
                 ...state,
                 available: action.candidates.content,
+                candidatesHasBeenLoaded: true,
                 displayingCandidates: action.candidates.numberOfElements,
                 totalCandidates: action.candidates.totalElements
             };
@@ -63,6 +81,55 @@ export const candidateApplicationReducer = (state = initialCandidateApplications
             return {
                 ...state,
                 reviewTypes: action.reviewTypes
+            }
+        }
+
+        case CandidateApplicationKeys.SET_CYCLE_REFERENCE: {
+            return {
+                ...state,
+                cycleReference: action.cycleReference
+            }
+        }
+
+        case CandidateApplicationKeys.ON_SEARCH_FILTER_SELECTED: {
+            let filters = {...state.searchFilters};
+            filters[action.target] = action.code;
+            let dropdownValues = {...state.dropdownValues};
+            dropdownValues[action.dropdownTarget || action.target] = action.dropdownData.children;
+            return {
+                ...state,
+                searchFilters: filters,
+                dropdownValues
+            }
+        }
+
+        case CandidateApplicationKeys.ON_TEXT_INPUT_CHANGED: {
+            let filters = {...state.searchFilters};
+            filters[action.target] = action.value;
+            return {
+                ...state,
+                searchFilters: filters
+            }
+        }
+
+        case CandidateApplicationKeys.ON_CLEAR_FILTER: {
+            return {
+                ...state,
+                searchFilters: {
+                    university: null,
+                    stageCode: null,
+                    trackCode: null,
+                    status: null,
+                    country: null,
+                    name: null,
+                    searchKey: '',
+                },
+                dropdownValues: {
+                    stage: 'Stage',
+                    track: 'Track',
+                    country: 'Country',
+                    status: 'Status'
+                }
             }
         }
 
