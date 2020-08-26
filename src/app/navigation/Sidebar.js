@@ -55,7 +55,7 @@ export class SideBarComponent extends React.Component {
             <span>Applications</span>
           </NavLink>
         </Menu.Item>
-        {(isSuperAdmin || isAdmin) && (
+        {isSuperAdmin && (
           <Menu.Item key="cycles">
             <NavLink to="/cycles">
               <SyncOutlined />
@@ -63,7 +63,7 @@ export class SideBarComponent extends React.Component {
             </NavLink>
           </Menu.Item>
         )}
-        {(isSuperAdmin || isAdmin) && (
+        {isSuperAdmin && (
           <SubMenu title="Settings" icon={<SettingOutlined />}>
             <Menu.Item key="majors">
               <NavLink to="/university-majors">
