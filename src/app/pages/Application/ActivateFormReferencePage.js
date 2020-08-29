@@ -22,6 +22,9 @@ const ActivateFormReferencePage = () => {
     validateRef(dispatch);
   }, []);
   const formStatus = useSelector((state) => state.applicationForm.formStatus);
+  const questions = useSelector(
+    (state) => state.applicationForm.essayQuestions
+  );
 
   if (formStatus.valid) {
     return (
@@ -33,8 +36,28 @@ const ActivateFormReferencePage = () => {
           <p>
             Thank you for considering applying for this position. Note that your
             application cannot be saved and will need to be submitted
-            immediately once started. If you have any questions, send an email
-            to <a href="mailto:info@seo-africa.org"> info@seo-africa.org</a>
+            immediately once started.
+          </p>
+          <p>
+            As part of your application you will be required to answer the
+            following questions:
+          </p>
+          <ul>
+            {questions.map((essay) => (
+              <li key={essay.code}>{essay.question}</li>
+            ))}
+          </ul>
+          <p>
+            Additionally, you will be required to upload the following
+            documents:
+          </p>
+          <ul>
+            <li>Your CV</li>
+            <li>A recent photograph of yourself</li>
+          </ul>
+          <p>
+            If you have any questions, send an email to{' '}
+            <a href="mailto:info@seo-africa.org"> info@seo-africa.org</a>.
           </p>
         </div>
         <Button
