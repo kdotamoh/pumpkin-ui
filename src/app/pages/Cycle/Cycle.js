@@ -120,15 +120,18 @@ class Cycle extends React.Component {
     }
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     // eslint-disable-next-line
     const { loadingStatus, ...cycle } = this.state;
-    this.props.createCycle(cycle);
-
+    try {
+      this.props.createCycle(cycle);
+      this.props.history.push('/cycles');
+    } catch (err) {
+      console.error(err);
+    }
     // this.setState(...initialState);
     // window.scrollTo(0, 0);
-    this.props.history.push('/cycles');
   };
 
   render() {
