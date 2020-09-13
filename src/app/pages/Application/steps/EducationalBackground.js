@@ -69,11 +69,11 @@ export const EducationalBackground = (params) => {
       name="educational-background-form"
       size={params.size}
       onFinish={params.onFinish}
-      labelCol={{
-        sm: {
-          span: 4,
-        },
-      }}
+      // labelCol={{
+      //   sm: {
+      //     span: 4,
+      //   },
+      // }}
       labelAlign="left"
     >
       <Form.Item
@@ -130,7 +130,7 @@ export const EducationalBackground = (params) => {
 
       <Form.Item
         name="highSchoolAttended"
-        label="Name of High School"
+        label="Name of Senior High School"
         rules={[
           {
             required: true,
@@ -180,16 +180,32 @@ export const EducationalBackground = (params) => {
         <Select allowClear>{GetAcademicStandings(params.disabled)}</Select>
       </Form.Item>
       <Form.Item
-        name="currentGPA"
-        label="CGPA"
+        name="gpa"
+        label="GPA (eg: 3.4)"
         rules={[
           {
             required: true,
           },
         ]}
       >
-        <Input disabled={params.disabled} />
+        <Input type="number" step="0.01" min="0" disabled={params.disabled} />
       </Form.Item>
+      <Form.Item
+        name="out_of"
+        label="Out of (eg: 4.0)"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="number" step="0.01" min="0" disabled={params.disabled} />
+      </Form.Item>
+
+      <small>
+        Please choose an approximate date if you&apos;re unsure of your exact
+        graduation date.
+      </small>
       <Form.Item
         name="graduationDate"
         label="Expected Graduation Date"

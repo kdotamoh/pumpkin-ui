@@ -51,6 +51,8 @@ export const BasicInformation = (params) => {
       >
         <Input disabled={params.disabled} />
       </Form.Item>
+
+      <small>Please use the calendar drop-down to the right</small>
       <Form.Item
         name="dateOfBirth"
         label="Date of birth "
@@ -61,7 +63,6 @@ export const BasicInformation = (params) => {
         ]}
       >
         <Input type="date" disabled={params.disabled} />
-        <small>Please use the calendar drop-down to the right</small>
       </Form.Item>
       <Form.Item
         name="gender"
@@ -88,6 +89,8 @@ export const BasicInformation = (params) => {
       >
         <Input disabled={params.disabled} />
       </Form.Item>
+
+      <small>Please include your country code (eg: 233243456789)</small>
       <Form.Item
         name="phoneNumber"
         label="Phone Number"
@@ -98,7 +101,6 @@ export const BasicInformation = (params) => {
         ]}
       >
         <Input type="number" disabled={params.disabled} />
-        <small>Please include your country code (eg: +233243456789)</small>
       </Form.Item>
       <Form.Item name="secondaryPhoneNumber" label="Other Phone Number">
         <Input type="number" disabled={params.disabled} />

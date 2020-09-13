@@ -11,6 +11,7 @@ export const ApplicationSteps = (params) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const formReference = sessionStorage.getItem('applicationFormReference');
   const next = () => {
+    window.scrollTo(0, 0);
     if (current < steps.length - 1) {
       setCurrent(current + 1);
     } else if (current === steps.length - 1) {
