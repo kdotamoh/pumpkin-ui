@@ -243,6 +243,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     title={(isAdmin || isSuperAdmin) ? 'Final Decision' : 'Add Review'}
                     onCancel={() => this.hideModal()}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
+                    width={700}
                 >
                     {this.modalContent()}
                 </Modal>
@@ -291,7 +292,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             },
             {
                 title: 'F) Academics',
-                details: 'First class 1 mk, Second-upper 0.5 mk, Others 0.',
+                details: 'First class 1 mark, Second-upper 0.5, Others 0',
                 value: academics.value,
                 name: 'academics',
                 maxScore: academics.maxScore
@@ -306,7 +307,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                             <p>{question.details}</p>
                         </div>
                         <div>
-                            <span>Grade: </span>
                             <input type='number' min={0} max={2} value={question.value} className='score-input'
                                    onChange={e => this.onApplicationReadingInputsChanged(e, question.name)}/>
                             <span>/{question.maxScore}</span>
@@ -348,7 +348,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         return (
             <div>
                 {questions.map(question => (
-                    <div key={question.title} className='flex space-between margin-bottom-10'>
+                    <div key={question.title} className='flex space-between margin-bottom-10 items-start'>
                         <div className='flex-1'>
                             <div>
                                 <p className='bold margin-0'>{question.title}</p>
