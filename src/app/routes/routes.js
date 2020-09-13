@@ -75,7 +75,7 @@ export const authorized = [
     component: CandidateApplicationManagement,
   },
   {
-    path: '/application-summary/:reference',
+    path: '/candidate-application-summary/:reference',
     layout: DefaultLayout,
     component: CandidateSummary,
   },

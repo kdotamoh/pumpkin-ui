@@ -60,7 +60,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
             fixed: 'right',
             render: (text, record) => (
                 <Link to={({
-                    pathname: `/application-summary/${record.reference}`
+                    pathname: `/candidate-application-summary/${record.reference}`
                 })}
                       onClick={() => this.props.setCurrentCandidate(record)}>
                     View Applicant
