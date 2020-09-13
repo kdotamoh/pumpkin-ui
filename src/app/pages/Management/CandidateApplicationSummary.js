@@ -236,7 +236,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     onCancel={() => this.setState({modalVisible: false})}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
-                    <this.ModalContent />
+                    {/*<this.ModalContent />*/}
                 </Modal>
             </div>
 
