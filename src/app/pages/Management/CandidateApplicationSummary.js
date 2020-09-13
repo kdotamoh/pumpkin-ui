@@ -7,15 +7,15 @@ import {
     getCandidateApplicationSummary,
     getRecruitmentCycleDetails,
     getReviewTypes
-} from "../../store/actions/candidate-application-actions";
-import "../../../style/candidate-application.css";
-import {Tabs, Button, Modal, Select} from "antd";
-import CandidateApplicationDetails from "./Components/CandidateApplicationDetails";
-import CandidateApplicationEssays from "./Components/CandidateApplicationEssays";
-import CandidateApplicationDocuments from "./Components/CandidateApplicationDocuments";
-import CandidateApplicationReviews from "./Components/CandidateApplicationReviews";
-import TextArea from "antd/es/input/TextArea";
-import * as CandidateApplicationService from "../../../api/candidate-application";
+} from '../../store/actions/candidate-application-actions';
+import '../../../style/candidate-application.css';
+import {Tabs, Button, Modal, Select} from 'antd';
+import CandidateApplicationDetails from './Components/CandidateApplicationDetails';
+import CandidateApplicationEssays from './Components/CandidateApplicationEssays';
+import CandidateApplicationDocuments from './Components/CandidateApplicationDocuments';
+import CandidateApplicationReviews from './Components/CandidateApplicationReviews';
+import TextArea from 'antd/es/input/TextArea';
+import * as CandidateApplicationService from '../../../api/candidate-application';
 
 const {TabPane} = Tabs;
 
@@ -87,11 +87,11 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             const {reviewType} = alumReview;
             let request = {...alumReview, decision, cycleStageCode: this.state.cycleStageCode};
 
-            if (reviewType === "APPLICATION_READING") {
+            if (reviewType === 'APPLICATION_READING') {
                 const applicationReadingGrades = Object.values(applicationReadingInputs);
                 const applicationReviewDetails = this.buildGradesRequestFromInputs(applicationReadingGrades);
                 request = {...request, finalScore, applicationReviewDetails, remarks: comments}
-            } else if (reviewType === "INDIVIDUAL_INTERVIEW") {
+            } else if (reviewType === 'INDIVIDUAL_INTERVIEW') {
                 const individualInterviewGrades = Object.values(individualInterviewInputs);
                 const applicationReviewDetails = this.buildGradesRequestFromInputs(individualInterviewGrades);
                 request = {...request, finalScore, applicationReviewDetails, remarks: comments}
@@ -183,46 +183,46 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
         return (
             <div>
-                <div className="management-component__container candidate_application_container">
-                    <div className="management-component__header" style={{paddingLeft: "0px"}}>
+                <div className='management-component__container candidate_application_container'>
+                    <div className='management-component__header' style={{paddingLeft: '0px'}}>
                         <div style={{display: 'flex'}}>
                             <ArrowLeftOutlined
                                 style={{marginRight: 24, marginTop: 4}}
                                 onClick={() => this.props.history.goBack()}/>
-                            <h4 className="management-component__h4">{headerTitle}</h4>
+                            <h4 className='management-component__h4'>{headerTitle}</h4>
                         </div>
                     </div>
 
-                    <div className="management-component__header" style={{paddingLeft: "0px"}}>
-                        <div className="displayed_reference_row">
+                    <div className='management-component__header' style={{paddingLeft: '0px'}}>
+                        <div className='displayed_reference_row'>
                             <p>Reference - {this.props.match.params.reference}</p>
                             <Button onClick={() => this.setState({modalVisible: true})}
                                     className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
-                                {(isSuperAdmin || isAdmin) ? "Make Final Decision" : "Review"}
+                                {(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}
                             </Button>
                         </div>
                     </div>
 
-                    <Tabs type="card" className="tab-container">
-                        <TabPane tab="Application Details" key="1">
+                    <Tabs type='card' className='tab-container'>
+                        <TabPane tab='Application Details' key='1'>
                             <CandidateApplicationDetails
                                 candidateApplicationSummary={candidateApplicationSummary}
                                 pageLoading={pageLoading}/>
                         </TabPane>
-                        <TabPane tab="Essays" key="2">
+                        <TabPane tab='Essays' key='2'>
                             <CandidateApplicationEssays
                                 candidateApplicationSummary={candidateApplicationSummary}
                                 pageLoading={pageLoading}/>
                         </TabPane>
 
-                        <TabPane tab="Uploaded Documents" key="3">
+                        <TabPane tab='Uploaded Documents' key='3'>
                             <CandidateApplicationDocuments
                                 candidateApplicationSummary={candidateApplicationSummary}
                                 applicationReference={applicationReference}
                                 pageLoading={pageLoading}/>
                         </TabPane>
 
-                        {(isSuperAdmin || isAdmin) && <TabPane tab="Reviews" key="4">
+                        {(isSuperAdmin || isAdmin) && <TabPane tab='Reviews' key='4'>
                             <CandidateApplicationReviews
                                 candidateApplicationSummary={candidateApplicationSummary}
                                 pageLoading={pageLoading}/>
@@ -232,7 +232,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
                 <Modal
                     visible={this.state.modalVisible}
-                    title={(isAdmin || isSuperAdmin) ? "Final Decision" : "Add Review"}
+                    title={(isAdmin || isSuperAdmin) ? 'Final Decision' : 'Add Review'}
                     onCancel={() => this.setState({modalVisible: false})}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
@@ -245,73 +245,73 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     ApplicationReadingModalContent = () => {
         const {attentionToDetails, writing, leadership, interestInSeo, workExperience, academics} = this.state.applicationReadingInputs;
-
+console.log("Gotten app reading modal content")
         const questions = [
             {
-                title: "A) Attention to details:",
-                details: "How well did s/he pay attention to details",
+                title: 'A) Attention to details:',
+                details: 'How well did s/he pay attention to details',
                 value: attentionToDetails.value,
-                name: "attentionToDetails",
+                name: 'attentionToDetails',
                 maxScore: attentionToDetails.maxScore
             },
             {
-                title: "B) Writing:",
-                details: "How well did s/he pay attention to details",
+                title: 'B) Writing:',
+                details: 'How well did s/he pay attention to details',
                 value: writing.value,
-                name: "writing",
+                name: 'writing',
                 maxScore: writing.maxScore
             },
             {
-                title: "C) Leadership",
-                details: "How well did s/he pay attention to details",
+                title: 'C) Leadership',
+                details: 'How well did s/he pay attention to details',
                 value: leadership.value,
-                name: "leadership",
+                name: 'leadership',
                 maxScore: leadership.maxScore
             },
             {
-                title: "D) Interest in SEO/Finance",
-                details: "How well did s/he pay attention to details",
+                title: 'D) Interest in SEO/Finance',
+                details: 'How well did s/he pay attention to details',
                 value: interestInSeo.value,
-                name: "interestInSeo",
+                name: 'interestInSeo',
                 maxScore: interestInSeo.maxScore
             },
             {
-                title: "E) Work Experience",
-                details: "How well did s/he pay attention to details",
+                title: 'E) Work Experience',
+                details: 'How well did s/he pay attention to details',
                 value: workExperience.value,
-                name: "workExperience",
+                name: 'workExperience',
                 maxScore: workExperience.maxScore
             },
             {
-                title: "F) Academics",
-                details: "How well did s/he pay attention to details",
+                title: 'F) Academics',
+                details: 'How well did s/he pay attention to details',
                 value: academics.value,
-                name: "academics",
+                name: 'academics',
                 maxScore: academics.maxScore
             }
         ];
         return (
             <div>
                 {questions.map(question => (
-                    <div key={question.title} className="flex space-between margin-bottom-10">
+                    <div key={question.title} className='flex space-between margin-bottom-10'>
                         <div>
-                            <p className="bold margin-0">{question.title}</p>
+                            <p className='bold margin-0'>{question.title}</p>
                             <p>{question.details}</p>
                         </div>
                         <div>
                             <span>Grade: </span>
-                            <input type="number" min={0} max={2} value={question.value} className="score-input"
+                            <input type='number' min={0} max={2} value={question.value} className='score-input'
                                    onChange={e => this.onApplicationReadingInputsChanged(e, question.name)}/>
                             <span>/{question.maxScore}</span>
                         </div>
                     </div>
                 ))}
 
-                <div className="flex">
-                    <span className="margin-right-10">Comments</span>
-                    <input style={{width: "200px"}}
-                           className="single-line-text"
-                           type="text"
+                <div className='flex'>
+                    <span className='margin-right-10'>Comments</span>
+                    <input style={{width: '200px'}}
+                           className='single-line-text'
+                           type='text'
                            value={this.state.comments}
                            onChange={this.onCommentChange}/>
                 </div>
@@ -321,52 +321,53 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     IndividualInterviewModalContent = () => {
         const {drive, mentalAgility} = this.state.individualInterviewInputs;
+        console.log("Gotten individual interview modal content")
 
         const questions = [
             {
-                title: "A) Assess the candidate's DRIVE:",
-                details: "How well did s/he demonstrate drive towards goals, resilience, level of Preparation?",
+                title: 'A) Assess the candidate\'s DRIVE:',
+                details: 'How well did s/he demonstrate drive towards goals, resilience, level of Preparation?',
                 value: drive.value,
-                name: "drive",
+                name: 'drive',
                 maxScore: drive.maxScore
             },
             {
-                title: "B) Assess the candidate's MENTAL AGILITY:",
-                details: "How well did s/he pay demonstrate mental agility towards pro-activeness/Attention to Detail/Analytical Skills/Quick Study?",
+                title: 'B) Assess the candidate\'s MENTAL AGILITY',
+                details: 'How well did s/he pay demonstrate mental agility towards pro-activeness/Attention to Detail/Analytical Skills/Quick Study?',
                 value: mentalAgility.value,
-                name: "mentalAgility",
+                name: 'mentalAgility',
                 maxScore: mentalAgility.maxScore
             }
         ];
         return (
             <div>
                 {questions.map(question => (
-                    <div key={question.title} className="flex space-between margin-bottom-10">
-                        <div className="flex-1">
+                    <div key={question.title} className='flex space-between margin-bottom-10'>
+                        <div className='flex-1'>
                             <div>
-                                <p className="bold margin-0">{question.title}</p>
+                                <p className='bold margin-0'>{question.title}</p>
                                 <p>{question.details}</p>
                             </div>
                             <div>
-                                <p className="bold margin-0">Support your ratings</p>
+                                <p className='bold margin-0'>Support your ratings</p>
                                 <p>Note the strongest piece of evidence and Opportunity missed or negative indication of
                                     DRIVE</p>
                             </div>
                         </div>
                         <div>
                             <span>Grade: </span>
-                            <input type="number" min={0} max={5} value={question.value} className="score-input"
+                            <input type='number' min={0} max={5} value={question.value} className='score-input'
                                    onChange={e => this.onIndividualInterviewInputsChanged(e, question.name)}/>
                             <span>/{question.maxScore}</span>
                         </div>
                     </div>
                 ))}
 
-                <div className="flex">
-                    <span className="margin-right-10">Comments</span>
-                    <input style={{width: "200px"}}
-                           className="single-line-text"
-                           type="text"
+                <div className='flex'>
+                    <span className='margin-right-10'>Comments</span>
+                    <input style={{width: '200px'}}
+                           className='single-line-text'
+                           type='text'
                            value={this.state.comments}
                            onChange={this.onCommentChange}/>
                 </div>
@@ -375,11 +376,13 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     }
 
     DefaultModalContent = () => {
+        console.log("Gotten default modal content")
+
         return (
             <div>
-                <div style={{marginBottom: "20px"}}>
+                <div style={{marginBottom: '20px'}}>
                     <span>Grade: </span>
-                    <input type="number" min={0} max={5} value={this.state.grade.value} className="score-input"
+                    <input type='number' min={0} max={5} value={this.state.grade.value} className='score-input'
                            onChange={this.onGradeChanged}/>
                     <span>/5</span>
                 </div>
@@ -387,39 +390,39 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                           onChange={e => {
                               this.setState({alumReview: {...this.state.alumReview, remarks: e.target.value}})
                           }}
-                          placeholder="Review"
+                          placeholder='Review'
                           rows={5}/>
             </div>
 
         );
     }
     getAlumReviewActions = () => {
-        const finalScoreVisible = this.state.alumReview.reviewType === "APPLICATION_READING" ||
-            this.state.alumReview.reviewType === "INDIVIDUAL_INTERVIEW";
+        const finalScoreVisible = this.state.alumReview.reviewType === 'APPLICATION_READING' ||
+            this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW';
         const footerStyle = {};
 
         if (!finalScoreVisible) {
-            footerStyle["justifyContent"] = "flex-end";
+            footerStyle['justifyContent'] = 'flex-end';
         }
         return [
-            <div className="flex space-between" style={footerStyle}>
-                {finalScoreVisible && <div className="margin-right-50">
+            <div className='flex space-between' style={footerStyle}>
+                {finalScoreVisible && <div className='margin-right-50'>
                     Final Score: {this.state.finalScore}
                 </div>}
 
                 <div>
-                    <Button key="reject"
-                            className="red_bordered_button"
+                    <Button key='reject'
+                            className='red_bordered_button'
                             onClick={() => this.onAddReview('NO')}>
                         No
                     </Button>,
-                    <Button key="maybe"
-                            className="orange_bordered_button"
+                    <Button key='maybe'
+                            className='orange_bordered_button'
                             onClick={() => this.onAddReview('MAYBE')}>
                         Maybe
                     </Button>,
-                    <Button key="approve"
-                            className="green_bordered_button"
+                    <Button key='approve'
+                            className='green_bordered_button'
                             onClick={() => this.onAddReview('YES')}>
                         Yes
                     </Button>
@@ -432,18 +435,18 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     getAdminFinalDecisionActions = () => {
         return [
-            <Button key="reject"
-                    className="red_bordered_button"
+            <Button key='reject'
+                    className='red_bordered_button'
                     onClick={() => this.onMakeSeoDecision('REJECTED')}>
                 Reject
             </Button>,
-            <Button key="maybe"
-                    className="orange_bordered_button"
+            <Button key='maybe'
+                    className='orange_bordered_button'
                     onClick={() => this.onMakeSeoDecision('MAYBE')}>
                 Maybe
             </Button>,
-            <Button key="approve"
-                    className="green_bordered_button"
+            <Button key='approve'
+                    className='green_bordered_button'
                     onClick={() => this.onMakeSeoDecision('APPROVED')}>
                 Approve
             </Button>
@@ -454,45 +457,46 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     modalContent = () => {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
+        console.log("Opening modal")
         return <React.Fragment>
             {(isAdmin || isSuperAdmin) ?
                 <div>
-                    <p className="text-12">Considering <span style={{color: "blue"}}>ALL</span> reviews
+                    <p className='text-12'>Considering <span style={{color: 'blue'}}>ALL</span> reviews
                         give for this candidate's current stage, what is your final decision?</p>
-                    <p className="text-12 text-red">Note: Your final decision would determine if this
+                    <p className='text-12 text-red'>Note: Your final decision would determine if this
                         applicant would be
                         moving to the next stage</p>
-                    <div style={{marginBottom: "20px"}}>
-                        <Select defaultValue="Select application stage"
+                    <div style={{marginBottom: '20px'}}>
+                        <Select defaultValue='Select application stage'
                                 onSelect={(code, dropdownData) => this.onCycleStageCodeChanged(code, dropdownData)}>
                             {this.getDropdownChildren(this.props.stages)}
                         </Select>
                     </div>
                     <TextArea value={this.state.seoRemark}
                               onChange={e => this.setState({seoRemark: e.target.value})}
-                              placeholder="Remark"
+                              placeholder='Remark'
                               rows={5}/>
                 </div> :
 
                 <div>
-                    <div style={{marginBottom: "20px"}}>
-                        <Select defaultValue="Select application stage" style={{width: 200, marginLeft: 40}}
+                    <div style={{marginBottom: '20px'}}>
+                        <Select defaultValue='Select application stage' style={{width: 200, marginLeft: 40}}
                                 onSelect={(code, dropdownData) => this.onCycleStageCodeChanged(code, dropdownData)}>
                             {this.getDropdownChildren(this.props.stages)}
                         </Select>
-                        <Select defaultValue="Select review type" style={{width: 200}}
+                        <Select defaultValue='Select review type' style={{width: 200}}
 
                                 onSelect={(code) => this.onReviewTypeSelected(code, 'reviewType')}>
                             {this.getDropdownChildren(this.props.reviewTypes)}
                         </Select>
                     </div>
 
-                    {this.state.alumReview.reviewType === "APPLICATION_READING" &&
+                    {this.state.alumReview.reviewType === 'APPLICATION_READING' &&
                     <this.ApplicationReadingModalContent/>}
-                    {this.state.alumReview.reviewType === "INDIVIDUAL_INTERVIEW" &&
+                    {this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&
                     <this.IndividualInterviewModalContent/>}
-                    {this.state.alumReview.reviewType !== "APPLICATION_READING" &&
-                    this.state.alumReview.reviewType !== "INDIVIDUAL_INTERVIEW" &&
+                    {this.state.alumReview.reviewType !== 'APPLICATION_READING' &&
+                    this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&
                     <this.DefaultModalContent/>}
 
                 </div>
