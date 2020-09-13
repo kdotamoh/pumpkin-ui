@@ -205,9 +205,9 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     <div className='management-component__header' style={{paddingLeft: '0px'}}>
                         <div className='displayed_reference_row'>
                             <p>Reference - {this.props.match.params.reference}</p>
-                            <Button onClick={() => this.showModal()}>
-                                {/*className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>*/}
-                                {/*{(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}*/}
+                            <Button onClick={() => this.showModal()}
+                                className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
+                                {(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}
                                 REVIEW
                             </Button>
                         </div>
@@ -466,7 +466,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     ModalContent = () => {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
-        console.log("Opening modal")
+
         return <React.Fragment>
             {(isAdmin || isSuperAdmin) ?
                 <div>
