@@ -7,18 +7,18 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
     const [modalVisible, setModalVisible] = useState(false);
     const [extraReviewDetails, setExtraReviewDetails] = useState({});
 
-    const onSeeMoreDetails = async (reviewCode) => {
+    const onSeeMoreDetails = async (reviewCode, comment) => {
         try {
             CandidateApplicationService.seeMoreReviewDetails(reviewCode).then(data => {
-                console.log(data);
+                const finalScore = data.reduce((acc, reviewDetail) => {
+                    if (reviewDetail.grade.length > 0) {
+                        return Number(acc) + Number(reviewDetail.grade.substring(0, 1))
+                    }
+                }, 0);
                 setExtraReviewDetails({
-                    details: [
-                        {title: 'Attention to Details', grade: '1/2'},
-                        {title: 'Attention to Details', grade: '1/2'},
-                        {title: 'Attention to Details', grade: '1/2'},
-                        {title: 'Attention to Details', grade: '1/2'}],
-                    comment: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi.',
-                    finalScore: 6
+                    details: data,
+                    comment,
+                    finalScore
                 });
                 setModalVisible(true);
             });
@@ -111,9 +111,9 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                 </div>}
                                                             </div>
                                                             <div>
-                                                                {!review.hasMoreDetails && <div>
+                                                                {review.hasMoreDetails && <div>
                                                                     <Button className='btn'
-                                                                            onClick={() => onSeeMoreDetails(review.code)}>See
+                                                                            onClick={() => onSeeMoreDetails(review.code, review.remarks)}>See
                                                                         details</Button>
                                                                 </div>
                                                                 }
@@ -141,7 +141,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                             {extraReviewDetails.details?.map(review => {
                                 return (
                                     <div className='flex space-between'>
-                                        <p className='semi-bold'>{review.title}</p>
+                                        <p className='semi-bold'>{review.name}</p>
                                         <p className='semi-bold'>Grade: {review.grade}</p>
                                     </div>
                                 )
