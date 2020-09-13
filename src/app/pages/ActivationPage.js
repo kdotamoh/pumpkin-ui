@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Spin, Form } from 'antd';
+import { Input, Spin, Form, message } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import { validateUser, activateUser } from '../../api/user-management/user';
 
@@ -10,7 +11,12 @@ import pumpkin from 'assets/logo-large.png';
 const ActivationPage = () => {
   const [ref, setRef] = React.useState('');
   const [status, setStatus] = React.useState('loading');
+  const [submitting, setSubmitting] = React.useState(false);
   const [countryCode, setCountryCode] = React.useState(233);
+
+  const roundSpinIcon = (
+    <LoadingOutlined style={{ fontSize: 20, color: 'white' }} spin />
+  );
 
   const getRef = async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -37,10 +43,14 @@ const ActivationPage = () => {
 
   const handleSubmit = async (values) => {
     const data = { ...values, phoneNumber: countryCode + values.phoneNumber };
-    console.log(data);
-    setStatus('loading');
+    // console.log(data);
+    setSubmitting(true);
+    // setStatus('loading');
     const { requestSuccessful } = await activateUser(ref, data);
-    requestSuccessful ? setStatus('activated') : setStatus('failed');
+    requestSuccessful
+      ? setStatus('activated')
+      : message.error('Oops, something went wrong. Please try again');
+    setSubmitting(false);
   };
 
   if (status === 'loading') {
@@ -59,19 +69,19 @@ const ActivationPage = () => {
       </div>
     );
   }
-  if (status === 'failed') {
-    return (
-      <div className="center-all activation-page--min-height">
-        <div>
-          Oops! Something went wrong. Please{' '}
-          <a href="#/" onClick={() => window.location.reload()}>
-            refresh
-          </a>{' '}
-          and try again.
-        </div>
-      </div>
-    );
-  }
+  // if (status === 'failed') {
+  //   return (
+  //     <div className="center-all activation-page--min-height">
+  //       <div>
+  //         Oops! Something went wrong. Please{' '}
+  //         <a href="#/" onClick={() => window.location.reload()}>
+  //           refresh
+  //         </a>{' '}
+  //         and try again.
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -222,7 +232,11 @@ const ActivationPage = () => {
               className="button button--primary login-form__button"
               type="submit"
             >
-              Submit
+              {submitting ? (
+                <Spin indicator={roundSpinIcon} size="small" />
+              ) : (
+                'Submit'
+              )}
             </button>
           </Form>
         </div>

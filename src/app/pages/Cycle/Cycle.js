@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getTracks } from 'app/store/actions/track-actions';
-import { createCycle } from 'app/store/actions/cycle-actions';
 import { Select, Row, Col, Button, Input, message } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 
 import {
+  createCycle,
   getCycleByCode,
   updateCycle,
   updateCycleForm,
@@ -125,8 +125,11 @@ class Cycle extends React.Component {
     // eslint-disable-next-line
     const { loadingStatus, ...cycle } = this.state;
     try {
-      this.props.createCycle(cycle);
-      this.props.history.push('/cycles');
+      let res = await createCycle(cycle);
+      if (res) {
+        this.props.history.push('/cycles');
+      }
+      console.log(res);
     } catch (err) {
       console.error(err);
     }
@@ -559,7 +562,6 @@ class Cycle extends React.Component {
 }
 Cycle.propTypes = {
   getTracks: PropTypes.func.isRequired,
-  createCycle: PropTypes.func.isRequired,
   editMode: PropTypes.bool,
   id: PropTypes.string,
   history: PropTypes.object,
@@ -572,7 +574,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getTracks: () => dispatch(getTracks()),
-  createCycle: (cycle) => dispatch(createCycle(cycle)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cycle));

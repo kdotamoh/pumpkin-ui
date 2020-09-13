@@ -22,11 +22,12 @@ export async function createCycle(cycle) {
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage, requestSuccessful },
     } = err.response;
     message.error(
       `Cannot create recruitment cycle with name - ${cycle.recruitmentCycleName}: ${responseMessage}`
     );
+    return requestSuccessful;
   }
 }
 
