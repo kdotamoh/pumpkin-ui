@@ -246,7 +246,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     onCancel={() => this.hideModal()}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
-                    {/*<this.ModalContent />*/}
+                    <this.ModalContent />
                 </Modal>
             </div>
 
@@ -386,7 +386,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     }
 
     DefaultModalContent = () => {
-        console.log("Gotten default modal content")
 
         return (
             <div>
@@ -501,13 +500,13 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         </Select>
                     </div>
 
-                    {/*{this.state.alumReview.reviewType === 'APPLICATION_READING' &&*/}
-                    {/*<this.ApplicationReadingModalContent/>}*/}
-                    {/*{this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&*/}
-                    {/*<this.IndividualInterviewModalContent/>}*/}
-                    {/*{this.state.alumReview.reviewType !== 'APPLICATION_READING' &&*/}
-                    {/*this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&*/}
-                    {/*<this.DefaultModalContent/>}*/}
+                    {this.state.alumReview.reviewType === 'APPLICATION_READING' &&
+                    <this.ApplicationReadingModalContent/>}
+                    {this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&
+                    <this.IndividualInterviewModalContent/>}
+                    {this.state.alumReview.reviewType !== 'APPLICATION_READING' &&
+                    this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&
+                    <this.DefaultModalContent/>}
 
                 </div>
             }
