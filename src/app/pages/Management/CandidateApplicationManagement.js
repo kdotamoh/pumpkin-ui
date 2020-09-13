@@ -12,11 +12,12 @@ import {
     setCycleReference
 } from 'app/store/actions/candidate-application-actions';
 import {Link} from "react-router-dom";
-import {Select, Input, Button} from 'antd';
+import {Select, Input, Button, Modal} from 'antd';
 import {getCycles} from "../../store/actions/cycle-actions";
 import "../../../style/candidate-application.css";
 import {exportCandidates} from "../../../api/candidate-application";
 import {onSearchFilterSelected, onTextInputChanged} from "../../store/actions/candidate-application-actions";
+import TextArea from "antd/es/input/TextArea";
 
 export class CandidateApplicationManagementComponent extends React.Component {
 
@@ -68,7 +69,6 @@ export class CandidateApplicationManagementComponent extends React.Component {
     ];
 
     componentDidMount() {
-        console.log(this.props);
         if (!this.props.candidatesHasBeenLoaded) {
             this.props.getCycles().then(data => {
                     if (data && this.props.recruitmentCycles.length > 0) {
@@ -80,11 +80,22 @@ export class CandidateApplicationManagementComponent extends React.Component {
         }
     }
 
+    onCommentChange = (e) => {
+        this.setState({comment: e.target.value})
+    }
+
+    onBulkDeclineStagesSelected = (code) => {
+        // console.log(code)
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             cycleHasBeenLoaded: false,
             candidatesHasBeenLoaded: false,
+            bulkDeclineModalVisible: false,
+            comment: '',
+            bulkDeclineModalStages: []
         };
 
     }
@@ -117,7 +128,10 @@ export class CandidateApplicationManagementComponent extends React.Component {
     };
 
     fetchSearchFilters = (code) => {
-        this.props.getRecruitmentCycleDetails(code);
+        this.props.getRecruitmentCycleDetails(code).then(() => {
+            console.log(this.props);
+            this.setState({bulkDeclineModalStages: this.props.stages})
+        });
         this.props.getCountriesForSearch();
     }
 
@@ -233,15 +247,47 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                         })}>
                                     Export to Csv
                                 </Button>
+                                <Button type="primary" danger
+                                        onClick={() => this.setState({bulkDeclineModalVisible: true})}>
+                                    Bulk Decline
+                                </Button>
                             </div>
                         </div>
 
                     </div>
                 }
+
+                <Modal
+                    visible={this.state.bulkDeclineModalVisible}
+                    title="Bulk Reject"
+                    onCancel={() => this.setState({bulkDeclineModalVisible: false})}
+                >
+                    <div>
+                        <p className="">Stage</p>
+                        <Select
+                            defaultValue="Stage"
+                            style={dropDownStyle}
+                            onSelect={this.onBulkDeclineStagesSelected}>
+                            {this.getDropdownChildren(this.state.bulkDeclineModalStages)}
+                        </Select>
+                    </div>
+                    <p>Comment</p>
+                    <TextArea value={this.state.comment}
+                              onChange={this.onCommentChange}
+                              placeholder="Comment"
+                              rows={5}/>
+                    <p style={{color: "red"}}>Clicking reject will automatically reject all the applicant currently on
+                        the specified stage.</p>
+
+                </Modal>
             </div>
 
         );
     };
+
+    bulkDeclineModalFooter = () => {
+
+    }
 }
 
 CandidateApplicationManagementComponent.propTypes = {

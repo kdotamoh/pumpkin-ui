@@ -134,10 +134,6 @@ export const getApplicationStages = async () => {
         const {data} = await client.get('/candidate-application/search', {
             headers: {
                 user_token: getToken(),
-            },
-            params: {
-                // recruitmentCycleCode: cycleReference,
-                // firstChoice: searchKeys.trackCode,
             }
         })
     } catch (err) {
@@ -167,8 +163,6 @@ export const addReview = async (review) => {
 }
 
 export const makeFinalDecision = async (applicationReference, seoDecision) => {
-    console.log(applicationReference)
-    console.log(seoDecision)
     try {
         const {data} = await client.put(`/candidate-review/approve/${applicationReference}`, seoDecision, {
             headers: {
@@ -181,6 +175,26 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
             data: {responseMessage},
         } = err.response;
         message.error(`Cannot make final decision: ${responseMessage}`);
+        return "error";
+    }
+}
+
+export const seeMoreReviewDetails = async (reviewCode) => {
+    try {
+        const {data} = await client.get(`/candidate-review/details`, {
+            headers: {
+                user_token: getToken(),
+            },
+            params: {
+                reviewCode
+            }
+        });
+        return data.responseBody;
+    } catch (err) {
+        const {
+            data: {responseMessage},
+        } = err.response;
+        message.error(`Could not view more details: ${responseMessage}`);
         return "error";
     }
 }
