@@ -64,7 +64,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     }
 
     showModal = () => {
-        console.log("Request to show Modal")
         this.setState({modalVisible: true})
     }
 
@@ -205,10 +204,9 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     <div className='management-component__header' style={{paddingLeft: '0px'}}>
                         <div className='displayed_reference_row'>
                             <p>Reference - {this.props.match.params.reference}</p>
-                            <Button onClick={() => this.showModal()}>
-                                {/*className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>*/}
-                                {/*{(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}*/}
-                                REVIEW
+                            <Button onClick={() => this.showModal()}
+                                className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
+                                {(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}
                             </Button>
                         </div>
                     </div>
@@ -246,7 +244,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     onCancel={() => this.hideModal()}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
-                    {/*<this.ModalContent />*/}
+                    <this.ModalContent />
                 </Modal>
             </div>
 
@@ -255,7 +253,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     ApplicationReadingModalContent = () => {
         const {attentionToDetails, writing, leadership, interestInSeo, workExperience, academics} = this.state.applicationReadingInputs;
-        console.log("Gotten app reading modal content")
         const questions = [
             {
                 title: 'A) Attention to details:',
@@ -331,7 +328,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     IndividualInterviewModalContent = () => {
         const {drive, mentalAgility} = this.state.individualInterviewInputs;
-        console.log("Gotten individual interview modal content")
 
         const questions = [
             {
@@ -386,7 +382,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     }
 
     DefaultModalContent = () => {
-        console.log("Gotten default modal content")
 
         return (
             <div>
@@ -467,7 +462,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     ModalContent = () => {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
-        console.log("Opening modal")
+
         return <React.Fragment>
             {(isAdmin || isSuperAdmin) ?
                 <div>
@@ -501,13 +496,13 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         </Select>
                     </div>
 
-                    {/*{this.state.alumReview.reviewType === 'APPLICATION_READING' &&*/}
-                    {/*<this.ApplicationReadingModalContent/>}*/}
-                    {/*{this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&*/}
-                    {/*<this.IndividualInterviewModalContent/>}*/}
-                    {/*{this.state.alumReview.reviewType !== 'APPLICATION_READING' &&*/}
-                    {/*this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&*/}
-                    {/*<this.DefaultModalContent/>}*/}
+                    {this.state.alumReview.reviewType === 'APPLICATION_READING' &&
+                    <this.ApplicationReadingModalContent/>}
+                    {this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&
+                    <this.IndividualInterviewModalContent/>}
+                    {this.state.alumReview.reviewType !== 'APPLICATION_READING' &&
+                    this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&
+                    <this.DefaultModalContent/>}
 
                 </div>
             }
