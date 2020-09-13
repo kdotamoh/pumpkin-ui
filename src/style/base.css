@@ -14,10 +14,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 html {
   font-size: 62.5%; /* Now 10px = 1rem! */
+  height: 100%;
+  overflow: auto;
 }
 
 /* code {

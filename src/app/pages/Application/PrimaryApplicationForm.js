@@ -61,6 +61,7 @@ export const PrimaryApplicationForm = () => {
             delete values[essay.essayQuestionCode];
           });
           values.essays = essayToSbumit;
+          values.gpa = values.gpa + '/' + values.out_of;
           values.applicationFormReference = sessionStorage.getItem(
             'applicationFormReference'
           );
