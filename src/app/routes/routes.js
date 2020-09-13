@@ -16,7 +16,7 @@ import { PrimaryApplicationForm } from 'app/pages/Application/PrimaryApplication
 import AddCycle from 'app/pages/Cycle/AddCycle';
 import UpdateCycle from 'app/pages/Cycle/UpdateCycle';
 import {CandidateApplicationManagement} from "../pages/Management/CandidateApplicationManagement";
-import {CandidateApplicationSummary} from "../pages/Management/CandidateApplicationSummary";
+import {CandidateApplicationSummary1} from "../pages/Management/CandidateApplicationSummary1";
 
 export const authorized = [
   {
@@ -77,7 +77,7 @@ export const authorized = [
   {
     path: '/application-summary/:reference',
     layout: DefaultLayout,
-    component: CandidateApplicationSummary,
+    component: CandidateApplicationSummary1,
   },
 ];
 

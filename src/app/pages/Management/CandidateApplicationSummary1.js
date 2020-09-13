@@ -568,7 +568,7 @@ const mapDispatchToProps = (dispatch) => ({
 /**
  * The connected CandidateApplicationSummaryManagement
  */
-export const CandidateApplicationSummary = connect(
+export const CandidateApplicationSummary1 = connect(
     mapStateToProps,
     mapDispatchToProps
 )(withRouter(CandidateApplicationSummaryComponent));
