@@ -63,6 +63,15 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         comments: ''
     }
 
+    showModal = () => {
+        console.log("Request to show Modal")
+        this.setState({modalVisible: true})
+    }
+
+    hideModal = () => {
+        this.setState({modalVisible: false})
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -196,7 +205,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     <div className='management-component__header' style={{paddingLeft: '0px'}}>
                         <div className='displayed_reference_row'>
                             <p>Reference - {this.props.match.params.reference}</p>
-                            <Button onClick={() => this.setState({modalVisible: true})}
+                            <Button onClick={() => this.showModal()}
                                     className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
                                 {(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}
                             </Button>
@@ -233,7 +242,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 <Modal
                     visible={this.state.modalVisible}
                     title={(isAdmin || isSuperAdmin) ? 'Final Decision' : 'Add Review'}
-                    onCancel={() => this.setState({modalVisible: false})}
+                    onCancel={() => this.hideModal()}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
                     {/*<this.ModalContent />*/}
