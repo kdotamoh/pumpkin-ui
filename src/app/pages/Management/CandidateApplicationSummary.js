@@ -9,14 +9,14 @@ import {
     getReviewTypes
 } from '../../store/actions/candidate-application-actions';
 import '../../../style/candidate-application.css';
-import {Tabs, Button, Modal, Select} from 'antd';
+import {Tabs, Button, Modal, Select, Input} from 'antd';
 import CandidateApplicationDetails from './Components/CandidateApplicationDetails';
 import CandidateApplicationEssays from './Components/CandidateApplicationEssays';
 import CandidateApplicationDocuments from './Components/CandidateApplicationDocuments';
 import CandidateApplicationReviews from './Components/CandidateApplicationReviews';
-import TextArea from 'antd/es/input/TextArea';
 import * as CandidateApplicationService from '../../../api/candidate-application';
 
+const {TextArea} = Input;
 const {TabPane} = Tabs;
 
 export class CandidateApplicationSummaryComponent extends React.Component {
@@ -206,7 +206,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         <div className='displayed_reference_row'>
                             <p>Reference - {this.props.match.params.reference}</p>
                             <Button onClick={() => this.showModal()}>
-                                    {/*className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>*/}
+                                {/*className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>*/}
                                 {/*{(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}*/}
                                 REVIEW
                             </Button>
