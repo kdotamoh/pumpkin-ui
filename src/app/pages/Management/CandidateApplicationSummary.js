@@ -100,7 +100,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 request = {...request, finalScore: `${grade.value}/${grade.maxScore}`}
             }
 
-          CandidateApplicationService.addReview(request).then(res => {
+            CandidateApplicationService.addReview(request).then(res => {
                 if (!res) {
                     this.componentDidMount();
                 }
@@ -113,7 +113,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     buildGradesRequestFromInputs = (grades) => {
         let data = [];
         for (let grade of grades) {
-            data.push({name: grade.name, grade:`${grade.value}/${grade.maxScore}`});
+            data.push({name: grade.name, grade: `${grade.value}/${grade.maxScore}`});
         }
         return data;
     }
@@ -236,7 +236,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     onCancel={() => this.setState({modalVisible: false})}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
-                    {this.modalContent()}
+                    <this.ModalContent />
                 </Modal>
             </div>
 
@@ -245,7 +245,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     ApplicationReadingModalContent = () => {
         const {attentionToDetails, writing, leadership, interestInSeo, workExperience, academics} = this.state.applicationReadingInputs;
-console.log("Gotten app reading modal content")
+        console.log("Gotten app reading modal content")
         const questions = [
             {
                 title: 'A) Attention to details:',
@@ -454,7 +454,7 @@ console.log("Gotten app reading modal content")
     }
 
     // TODO: MAKE THE MODAL FOR EITHER ADMIN OR ALUM DIFFERENT
-    modalContent = () => {
+    ModalContent = () => {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
         console.log("Opening modal")
