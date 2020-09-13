@@ -7,14 +7,9 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
     const [modalVisible, setModalVisible] = useState(false);
     const [extraReviewDetails, setExtraReviewDetails] = useState({});
 
-    const onSeeMoreDetails = async (reviewCode, comment) => {
+    const onSeeMoreDetails = async (reviewCode, comment, finalScore) => {
         try {
             CandidateApplicationService.seeMoreReviewDetails(reviewCode).then(data => {
-                const finalScore = data.reduce((acc, reviewDetail) => {
-                    if (reviewDetail.grade.length > 0) {
-                        return Number(acc) + Number(reviewDetail.grade.substring(0, 1))
-                    }
-                }, 0);
                 setExtraReviewDetails({
                     details: data,
                     comment,
@@ -46,6 +41,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                             } else {
                                 seoDecisionStyle.color = 'orange';
                             }
+
 
                             return (
                                 <div className='tab-container'>
@@ -113,7 +109,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                             <div>
                                                                 {review.hasMoreDetails && <div>
                                                                     <Button className='btn'
-                                                                            onClick={() => onSeeMoreDetails(review.code, review.remarks)}>See
+                                                                            onClick={() => onSeeMoreDetails(review.code, review.remarks, review.finalScore)}>See
                                                                         details</Button>
                                                                 </div>
                                                                 }
@@ -133,8 +129,13 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                 <Modal
                     visible={modalVisible}
                     title='Review Details'
-                    onOk={() => setModalVisible(false)}
                     onCancel={() => setModalVisible(false)}
+                    footer={[
+                        <Button key='ok'
+                                type="primary"
+                                onClick={() => setModalVisible(false)}>
+                            Ok
+                        </Button>]}
                 >
                     <div>
                         <div className='margin-bottom-20'>
@@ -152,7 +153,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                             <p>{extraReviewDetails.comment}</p>
                         </div>
                         <div>
-                            <p className='semi-bold'>Final Score: {extraReviewDetails.finalScore}</p>
+                            <p className='bold'>Final Score: {extraReviewDetails.finalScore}</p>
                         </div>
                     </div>
                 </Modal>

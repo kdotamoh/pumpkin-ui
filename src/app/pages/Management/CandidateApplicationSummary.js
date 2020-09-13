@@ -50,9 +50,9 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             attentionToDetails: {value: '', name: 'Attention to Details', maxScore: 2},
             writing: {value: '', name: 'Writing', maxScore: 2},
             leadership: {value: '', name: 'Leadership', maxScore: 2},
-            interestInSeo: {value: '', name: 'Interest in SEO', maxScore: 1},
+            interestInSeo: {value: '', name: 'Interest in SEO', maxScore: 2},
             workExperience: {value: '', name: 'Work Experience', maxScore: 1},
-            academics: {value: '', name: 'Academics', maxScore: 2}
+            academics: {value: '', name: 'Academics', maxScore: 1}
         },
         individualInterviewInputs: {
             drive: {value: '', name: 'Drive', maxScore: 5},
@@ -105,7 +105,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 request = {...request, finalScore, applicationReviewDetails, remarks: comments}
             } else {
                 const {grade} = this.state;
-                request = {...request, finalScore: `${grade.value}/${grade.maxScore}`}
+                request = {...request, finalScore: grade.value}
             }
 
             CandidateApplicationService.addReview(request).then(res => {
@@ -256,42 +256,42 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         const questions = [
             {
                 title: 'A) Attention to details:',
-                details: 'How well did s/he pay attention to details',
+                details: 'How well did this applicant pay attention to details',
                 value: attentionToDetails.value,
                 name: 'attentionToDetails',
                 maxScore: attentionToDetails.maxScore
             },
             {
                 title: 'B) Writing:',
-                details: 'How well did s/he pay attention to details',
+                details: 'What do you think about this applicant\'s writing skills?',
                 value: writing.value,
                 name: 'writing',
                 maxScore: writing.maxScore
             },
             {
                 title: 'C) Leadership',
-                details: 'How well did s/he pay attention to details',
+                details: 'How well has this applicant displayed leadership through their CV and essay(s)?',
                 value: leadership.value,
                 name: 'leadership',
                 maxScore: leadership.maxScore
             },
             {
                 title: 'D) Interest in SEO/Finance',
-                details: 'How well did s/he pay attention to details',
+                details: 'How interested is this applicant in this particular SEO opportunity?',
                 value: interestInSeo.value,
                 name: 'interestInSeo',
                 maxScore: interestInSeo.maxScore
             },
             {
                 title: 'E) Work Experience',
-                details: 'How well did s/he pay attention to details',
+                details: 'How relevant/impressive is this applicant\'s work experience?',
                 value: workExperience.value,
                 name: 'workExperience',
                 maxScore: workExperience.maxScore
             },
             {
                 title: 'F) Academics',
-                details: 'How well did s/he pay attention to details',
+                details: 'First class 1 mk, Second-upper 0.5 mk, Others 0.',
                 value: academics.value,
                 name: 'academics',
                 maxScore: academics.maxScore
@@ -412,7 +412,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         }
         return [
             <div className='flex space-between' style={footerStyle}>
-                {finalScoreVisible && <div className='margin-right-50'>
+                {finalScoreVisible && <div className='margin-right-50 bold'>
                     Final Score: {this.state.finalScore}
                 </div>}
 
@@ -559,7 +559,7 @@ const mapDispatchToProps = (dispatch) => ({
 /**
  * The connected CandidateApplicationSummaryManagement
  */
-export const CandidateSummary = connect(
+export const CandidateApplicationSummary = connect(
     mapStateToProps,
     mapDispatchToProps
 )(withRouter(CandidateApplicationSummaryComponent));
