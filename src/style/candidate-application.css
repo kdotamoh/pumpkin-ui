@@ -215,3 +215,7 @@ margin-top: -60px;
     border: none;
     border-bottom: 1px solid black;
 }
+
+.items-start {
+    align-items: flex-start;
+}

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Collapse, Skeleton, Tag, Button, Modal} from 'antd';
+import {Collapse, Skeleton, Tag, Button, Modal, Divider} from 'antd';
 import * as CandidateApplicationService from '../../../../api/candidate-application';
 
 const {Panel} = Collapse;
@@ -62,7 +62,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                     <div className='sub-content-header'>SEO'S DECISION</div>
                                                     <div className='flex-1'>Decision
                                                         - <span
-                                                            style={seoDecisionStyle}>{reviewsPerStage.seoDecision}</span> by {reviewsPerStage.seoDecisionMadeBy}
+                                                            style={seoDecisionStyle}>{reviewsPerStage.seoDecision}</span> by {reviewsPerStage.seoDecisionMadeBy || 'N/A'}
                                                     </div>
                                                     <div>
                                                         {reviewsPerStage.seoRemarks && <div>
@@ -72,7 +72,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                 </div>
 
                                                 <div className='sub-content-header'>ALUMNAE Review</div>
-                                                {reviews.map(review => {
+                                                {reviews.map((review, index) => {
                                                     const decisionStyle = {};
                                                     if (review.decision.includes('YES')) {
                                                         decisionStyle.color = 'green';
@@ -88,6 +88,8 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                     - {review.reviewerName}</div>
                                                                 <div className='flex-1'>SEO YEAR
                                                                     - {review.reviewerSeoYear || 'N/A'}</div>
+                                                                <div className='flex-1'>Total Grade
+                                                                    - {review.finalScore || 'N/A'}</div>
                                                             </div>
                                                             <div className='data-row'>
                                                                 <div className='flex-1'>Review Type
@@ -114,6 +116,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                 </div>
                                                                 }
                                                             </div>
+                                                            {index + 1 < reviews.length && <Divider />}
                                                         </div>
                                                     );
                                                 })}
@@ -141,8 +144,8 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                         <div className='margin-bottom-20'>
                             {extraReviewDetails.details?.map(review => {
                                 return (
-                                    <div className='flex space-between'>
-                                        <p className='semi-bold'>{review.name}</p>
+                                    <div className='flex'>
+                                        <p className='semi-bold' style={{width: '80%'}}>{review.name}</p>
                                         <p className='semi-bold'>Grade: {review.grade}</p>
                                     </div>
                                 )
