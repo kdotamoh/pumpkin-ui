@@ -244,14 +244,14 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     onCancel={() => this.hideModal()}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
                 >
-                    <this.ModalContent />
+                    {this.modalContent()}
                 </Modal>
             </div>
 
         );
     }
 
-    ApplicationReadingModalContent = () => {
+    applicationReadingModalContent = () => {
         const {attentionToDetails, writing, leadership, interestInSeo, workExperience, academics} = this.state.applicationReadingInputs;
         const questions = [
             {
@@ -326,7 +326,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         );
     }
 
-    IndividualInterviewModalContent = () => {
+    individualInterviewModalContent = () => {
         const {drive, mentalAgility} = this.state.individualInterviewInputs;
 
         const questions = [
@@ -381,7 +381,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         );
     }
 
-    DefaultModalContent = () => {
+    defaultModalContent = () => {
 
         return (
             <div>
@@ -401,6 +401,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
         );
     }
+
     getAlumReviewActions = () => {
         const finalScoreVisible = this.state.alumReview.reviewType === 'APPLICATION_READING' ||
             this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW';
@@ -433,8 +434,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     </Button>
                 </div>
             </div>
-
-
         ];
     }
 
@@ -459,7 +458,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     }
 
     // TODO: MAKE THE MODAL FOR EITHER ADMIN OR ALUM DIFFERENT
-    ModalContent = () => {
+    modalContent = () => {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
 
@@ -496,10 +495,10 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         </Select>
                     </div>
                     {this.state.alumReview.reviewType === 'APPLICATION_READING' ?
-                        <this.ApplicationReadingModalContent/> :
+                        this.applicationReadingModalContent() :
                         this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' ?
-                            <this.IndividualInterviewModalContent/> :
-                            <this.DefaultModalContent/>
+                            this.individualInterviewModalContent() :
+                            this.defaultModalContent()
                     }
 
                     {/*{this.state.alumReview.reviewType === 'APPLICATION_READING' &&*/}
