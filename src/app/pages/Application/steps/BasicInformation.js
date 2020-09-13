@@ -22,11 +22,11 @@ export const BasicInformation = (params) => {
       name="basic-information-form"
       size={params.size}
       onFinish={params.onFinish}
-      labelCol={{
-        sm: {
-          span: 3,
-        },
-      }}
+      // labelCol={{
+      //   sm: {
+      //     span: 3,
+      //   },
+      // }}
       labelAlign="left"
     >
       <Form.Item
@@ -53,7 +53,7 @@ export const BasicInformation = (params) => {
       </Form.Item>
       <Form.Item
         name="dateOfBirth"
-        label="Date of birth"
+        label="Date of birth "
         rules={[
           {
             required: true,
@@ -61,6 +61,7 @@ export const BasicInformation = (params) => {
         ]}
       >
         <Input type="date" disabled={params.disabled} />
+        <small>Please use the calendar drop-down to the right</small>
       </Form.Item>
       <Form.Item
         name="gender"
@@ -97,6 +98,7 @@ export const BasicInformation = (params) => {
         ]}
       >
         <Input type="number" disabled={params.disabled} />
+        <small>Please include your country code (eg: +233243456789)</small>
       </Form.Item>
       <Form.Item name="secondaryPhoneNumber" label="Other Phone Number">
         <Input type="number" disabled={params.disabled} />

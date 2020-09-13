@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {Collapse, Skeleton, Tag, Button, Modal} from "antd";
-import * as CandidateApplicationService from "../../../../api/candidate-application";
+import React, {useState} from 'react';
+import {Collapse, Skeleton, Tag, Button, Modal} from 'antd';
+import * as CandidateApplicationService from '../../../../api/candidate-application';
 
 const {Panel} = Collapse;
 const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading}) => {
@@ -13,11 +13,11 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                 console.log(data);
                 setExtraReviewDetails({
                     details: [
-                        {title: "Attention to Details", grade: "1/2"},
-                        {title: "Attention to Details", grade: "1/2"},
-                        {title: "Attention to Details", grade: "1/2"},
-                        {title: "Attention to Details", grade: "1/2"}],
-                    comment: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi.",
+                        {title: 'Attention to Details', grade: '1/2'},
+                        {title: 'Attention to Details', grade: '1/2'},
+                        {title: 'Attention to Details', grade: '1/2'},
+                        {title: 'Attention to Details', grade: '1/2'}],
+                    comment: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi.',
                     finalScore: 6
                 });
                 setModalVisible(true);
@@ -30,7 +30,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
     return (pageLoading ?
             <Skeleton paragraph={{rows: 2}}/> :
             <React.Fragment>
-                <div className="sub-content-header">Stages</div>
+                <div className='sub-content-header'>Stages</div>
                 {candidateApplicationSummary.reviewsGroupedByStage?.length > 0 ?
                     candidateApplicationSummary.reviewsGroupedByStage?.map(reviewsPerStage => {
                             const {reviews} = reviewsPerStage;
@@ -39,32 +39,32 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                             const numberOfMaybes = reviews.filter(review => review.decision?.includes('MAYBE')).length;
 
                             const seoDecisionStyle = {};
-                            if (reviewsPerStage.seoDecision.includes("APPROVED")) {
-                                seoDecisionStyle.color = "green";
-                            } else if (reviewsPerStage.seoDecision.includes("REJECTED")) {
-                                seoDecisionStyle.color = "red";
+                            if (reviewsPerStage.seoDecision.includes('APPROVED')) {
+                                seoDecisionStyle.color = 'green';
+                            } else if (reviewsPerStage.seoDecision.includes('REJECTED')) {
+                                seoDecisionStyle.color = 'red';
                             } else {
-                                seoDecisionStyle.color = "orange";
+                                seoDecisionStyle.color = 'orange';
                             }
 
                             return (
-                                <div className="tab-container">
-                                    <Collapse expandIconPosition="right">
+                                <div className='tab-container'>
+                                    <Collapse expandIconPosition='right'>
                                         <Panel header={<div>
                                             {reviewsPerStage.stageName}
-                                            <Tag color="blue" style={{borderRadius: "15px", marginLeft: "30px"}}>Reviews
+                                            <Tag color='blue' style={{borderRadius: '15px', marginLeft: '30px'}}>Reviews
                                                 - {reviews.length}</Tag>
-                                            <Tag style={{borderRadius: "15px", marginLeft: "10px"}}>No
+                                            <Tag style={{borderRadius: '15px', marginLeft: '10px'}}>No
                                                 - {numberOfNos}</Tag>
-                                            <Tag style={{borderRadius: "15px", marginLeft: "10px"}}>Maybe
+                                            <Tag style={{borderRadius: '15px', marginLeft: '10px'}}>Maybe
                                                 - {numberOfMaybes}</Tag>
-                                            <Tag style={{borderRadius: "15px", marginLeft: "10px"}}>Yes
+                                            <Tag style={{borderRadius: '15px', marginLeft: '10px'}}>Yes
                                                 - {numberOfYes}</Tag>
-                                        </div>} key="1">
+                                        </div>} key='1'>
                                             <div>
-                                                <div className="sub-content">
-                                                    <div className="sub-content-header">SEO'S DECISION</div>
-                                                    <div className="flex-1">Decision
+                                                <div className='sub-content'>
+                                                    <div className='sub-content-header'>SEO'S DECISION</div>
+                                                    <div className='flex-1'>Decision
                                                         - <span
                                                             style={seoDecisionStyle}>{reviewsPerStage.seoDecision}</span> by {reviewsPerStage.seoDecisionMadeBy}
                                                     </div>
@@ -75,28 +75,28 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                     </div>
                                                 </div>
 
-                                                <div className="sub-content-header">ALUMNAE Review</div>
+                                                <div className='sub-content-header'>ALUMNAE Review</div>
                                                 {reviews.map(review => {
                                                     const decisionStyle = {};
-                                                    if (review.decision.includes("YES")) {
-                                                        decisionStyle.color = "green";
-                                                    } else if (review.decision.includes("NO")) {
-                                                        decisionStyle.color = "red";
+                                                    if (review.decision.includes('YES')) {
+                                                        decisionStyle.color = 'green';
+                                                    } else if (review.decision.includes('NO')) {
+                                                        decisionStyle.color = 'red';
                                                     } else {
-                                                        decisionStyle.color = "orange";
+                                                        decisionStyle.color = 'orange';
                                                     }
                                                     return (
-                                                        <div style={{marginBottom: "40px"}}>
-                                                            <div className="data-row">
-                                                                <div className="flex-1">Reviewer's Name
+                                                        <div style={{marginBottom: '40px'}}>
+                                                            <div className='data-row'>
+                                                                <div className='flex-1'>Reviewer's Name
                                                                     - {review.reviewerName}</div>
-                                                                <div className="flex-1">SEO YEAR
-                                                                    - {review.reviewerSeoYear || "N/A"}</div>
+                                                                <div className='flex-1'>SEO YEAR
+                                                                    - {review.reviewerSeoYear || 'N/A'}</div>
                                                             </div>
-                                                            <div className="data-row">
-                                                                <div className="flex-1">Review Type
+                                                            <div className='data-row'>
+                                                                <div className='flex-1'>Review Type
                                                                     - {review.reviewType}</div>
-                                                                <div className="flex-1">Reviewer's
+                                                                <div className='flex-1'>Reviewer's
                                                                     Decision
                                                                     - <span
                                                                         style={decisionStyle}>{review.decision}</span>
@@ -112,7 +112,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                             </div>
                                                             <div>
                                                                 {!review.hasMoreDetails && <div>
-                                                                    <Button className="btn"
+                                                                    <Button className='btn'
                                                                             onClick={() => onSeeMoreDetails(review.code)}>See
                                                                         details</Button>
                                                                 </div>
@@ -128,31 +128,31 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
 
                             )
                         }
-                    ) : "NO REVIEWS FOUND"}
+                    ) : 'NO REVIEWS FOUND'}
 
                 <Modal
                     visible={modalVisible}
-                    title="Review Details"
+                    title='Review Details'
                     onOk={() => setModalVisible(false)}
                     onCancel={() => setModalVisible(false)}
                 >
                     <div>
-                        <div className="margin-bottom-20">
+                        <div className='margin-bottom-20'>
                             {extraReviewDetails.details?.map(review => {
                                 return (
-                                    <div className="flex space-between">
-                                        <p className="semi-bold">{review.title}</p>
-                                        <p className="semi-bold">Grade: {review.grade}</p>
+                                    <div className='flex space-between'>
+                                        <p className='semi-bold'>{review.title}</p>
+                                        <p className='semi-bold'>Grade: {review.grade}</p>
                                     </div>
                                 )
                             })}
                         </div>
                         <div>
-                            <p className="semi-bold">Final Remark/comment</p>
+                            <p className='semi-bold'>Final Remark/comment</p>
                             <p>{extraReviewDetails.comment}</p>
                         </div>
                         <div>
-                            <p className="semi-bold">Final Score: {extraReviewDetails.finalScore}</p>
+                            <p className='semi-bold'>Final Score: {extraReviewDetails.finalScore}</p>
                         </div>
                     </div>
                 </Modal>

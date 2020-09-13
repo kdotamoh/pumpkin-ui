@@ -98,7 +98,7 @@ class Cycle extends React.Component {
     }
     try {
       await navigator.clipboard.writeText(
-        `${process.env.REACT_APP_API_BASE}/apply?ref=${formCode}`
+        `${process.env.REACT_APP_BASE_URL}/apply?ref=${formCode}`
       );
       message.success('Form link copied to clipboard');
     } catch (err) {
@@ -120,15 +120,18 @@ class Cycle extends React.Component {
     }
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     // eslint-disable-next-line
     const { loadingStatus, ...cycle } = this.state;
-    this.props.createCycle(cycle);
-
+    try {
+      this.props.createCycle(cycle);
+      this.props.history.push('/cycles');
+    } catch (err) {
+      console.error(err);
+    }
     // this.setState(...initialState);
     // window.scrollTo(0, 0);
-    this.props.history.push('/cycles');
   };
 
   render() {

@@ -18,14 +18,13 @@ import {
 
 const columns = [
   {
-    title: 'First Name',
-    dataIndex: 'firstName',
-    key: 'firstName',
-  },
-  {
-    title: 'Last Name',
-    dataIndex: 'lastName',
-    key: 'lastName',
+    title: 'Name',
+    key: 'fullName',
+    dataIndex: 'fullName',
+    // eslint-disable-next-line
+    render: (_text, record) => (
+      <span>{record.firstName + ' ' + record.lastName}</span>
+    ),
   },
   {
     title: 'Email Address',
