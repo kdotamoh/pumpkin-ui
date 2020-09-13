@@ -491,13 +491,13 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         </Select>
                     </div>
 
-                    {this.state.alumReview.reviewType === 'APPLICATION_READING' &&
-                    <this.ApplicationReadingModalContent/>}
-                    {this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&
-                    <this.IndividualInterviewModalContent/>}
-                    {this.state.alumReview.reviewType !== 'APPLICATION_READING' &&
-                    this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&
-                    <this.DefaultModalContent/>}
+                    {/*{this.state.alumReview.reviewType === 'APPLICATION_READING' &&*/}
+                    {/*<this.ApplicationReadingModalContent/>}*/}
+                    {/*{this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&*/}
+                    {/*<this.IndividualInterviewModalContent/>}*/}
+                    {/*{this.state.alumReview.reviewType !== 'APPLICATION_READING' &&*/}
+                    {/*this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&*/}
+                    {/*<this.DefaultModalContent/>}*/}
 
                 </div>
             }
