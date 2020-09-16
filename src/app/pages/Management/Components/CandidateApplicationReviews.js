@@ -88,7 +88,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                     - {review.reviewerName}</div>
                                                                 <div className='flex-1'>SEO YEAR
                                                                     - {review.reviewerSeoYear || 'N/A'}</div>
-                                                                <div className='flex-1'>Total Grade
+                                                                <div className='flex-1 bold'>Total Grade
                                                                     - {review.finalScore || 'N/A'}</div>
                                                             </div>
                                                             <div className='data-row'>
