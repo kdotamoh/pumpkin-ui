@@ -139,8 +139,12 @@ class ManagementComponent extends React.Component {
           <>
             {this.props.newEntityName !== 'EMPLOYEE' && (
               <Menu.Item
+                style={{
+                  cursor: 'pointer',
+                  paddingLeft: '1.2rem',
+                  paddingRight: '1.2rem',
+                }}
                 onClick={() => {
-                  // this.props.setCurrentEntity(record);
                   this.props.onActivateEntity(record);
                 }}
               >
@@ -152,8 +156,12 @@ class ManagementComponent extends React.Component {
           <>
             {this.props.newEntityName !== 'EMPLOYEE' && (
               <Menu.Item
+                style={{
+                  cursor: 'pointer',
+                  paddingLeft: '1.2rem',
+                  paddingRight: '1.2rem',
+                }}
                 onClick={() => {
-                  // this.props.setCurrentEntity(record);
                   this.props.onDeactivateEntity(record);
                 }}
               >

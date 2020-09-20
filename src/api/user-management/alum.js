@@ -18,7 +18,9 @@ export async function inviteAlum(email, seoGraduationYear) {
       }
     );
     const { responseBody } = data;
-    message.success('Alumnus added successfully');
+    message.success(
+      'Alumnus added successfully. Please remind them to check their junk mail/spam as well.'
+    );
     return responseBody;
   } catch (err) {
     const {
