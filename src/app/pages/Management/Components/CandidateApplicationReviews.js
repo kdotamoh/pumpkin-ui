@@ -99,6 +99,9 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                     - <span
                                                                         style={decisionStyle}>{review.decision}</span>
                                                                 </div>
+                                                                <div className="flex-1">
+                                                                    Review Date - <span>{review.reviewDate}</span>
+                                                                </div>
                                                             </div>
                                                             <div>
                                                                 {review.remarks && <div>
@@ -116,7 +119,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                 </div>
                                                                 }
                                                             </div>
-                                                            {index + 1 < reviews.length && <Divider />}
+                                                            {index + 1 < reviews.length && <Divider/>}
                                                         </div>
                                                     );
                                                 })}

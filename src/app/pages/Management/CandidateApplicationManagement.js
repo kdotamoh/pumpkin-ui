@@ -42,10 +42,13 @@ export class CandidateApplicationManagementComponent extends React.Component {
             dataIndex: 'currentStage',
             key: 'currentStage',
             render: (stage, record) => {
-                if (record.status === 'ACTIVE') {
+                let stageColour = 'orange';
+                if (record.decisionAtStage === 'YES') {
                     return <div style={{color: 'green'}}>{stage}</div>;
+                } else if (record.decisionAtStage === 'NO') {
+                    return <div style={{color: 'red'}}>{stage}</div>;
                 }
-                return <div style={{color: 'red'}}>{stage}</div>;
+                return <div style={{color: stageColour}}>{stage}</div>;
             },
         },
         {
@@ -102,6 +105,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
     // TODO: MAKE SURE THE DATA BEING DISPLAYED ON THE TABLE IS FINE (EVEN WHEN LESS THAN 20)
     render() {
+
         return (
             <React.Fragment>
                 <ManagementComponent
@@ -147,6 +151,9 @@ export class CandidateApplicationManagementComponent extends React.Component {
     }
 
     subHeaderView = () => {
+        const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
+        const isAdmin = this.props.user.roles.includes('ADMIN');
+
         const status = [{name: 'ACTIVE', code: 'ACTIVE'}, {name: 'INACTIVE', code: 'INACTIVE'}];
 
         const cyclesChildren = this.getDropdownChildren(this.props.recruitmentCycles);
@@ -155,7 +162,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
         const tracksChildren = this.getDropdownChildren(this.props.tracks)
         const countriesChildren = this.getDropdownChildren(this.props.countries)
 
-        const dropDownStyle = {width: 200}
+        const dropDownStyle = {width: 200};
         const inputStyle = {width: 160};
         const pageHeaderDataLoaded = this.props.candidatesHasBeenLoaded;
 
@@ -164,7 +171,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
                 {
                     pageHeaderDataLoaded &&
                     <div>
-                        <div  className="flex flex-end margin-bottom-40">
+                        {(isSuperAdmin || isAdmin) &&
+                        <div className="flex flex-end margin-bottom-40">
                             <Button type="link"
                                     style={{fontSize: "16px"}}
                                     className="semi-bold"
@@ -172,12 +180,14 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                     danger>
                                 Bulk Reject
                             </Button>
-                        </div>
+                        </div>}
                         <div className="applicants_page_subheader_row data-row">
                             <div>
                                 <p className="management-component__subheader_title">Recruitment Cycle</p>
-                                <Select defaultValue={this.props.cycleReference} style={{width: 220}}
-                                        onSelect={this.onRecruitmentCycleSelected}>
+                                <Select
+                                    defaultValue={this.props.cycleReference}
+                                    style={{width: 220}}
+                                    onSelect={this.onRecruitmentCycleSelected}>
                                     {cyclesChildren}
                                 </Select>
                             </div>
@@ -316,7 +326,8 @@ const mapStateToProps = (state) => ({
     displayingCandidates: state.candidateApplications.displayingCandidates,
     cycleReference: state.candidateApplications.cycleReference,
     searchFilters: state.candidateApplications.searchFilters,
-    dropdownValues: state.candidateApplications.dropdownValues
+    dropdownValues: state.candidateApplications.dropdownValues,
+    user: state.user
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -2,10 +2,10 @@ import React from "react";
 import {Skeleton} from "antd";
 
 const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading}) => {
-    const stageStyle = {};
-    if (candidateApplicationSummary.stillBeingConsidered) {
-        stageStyle.color = "green";
-    } else {
+    const stageStyle = {color: 'orange'};
+    if (candidateApplicationSummary.decisionAtStage === 'YES') {
+        stageStyle.color = 'green';
+    } else if (candidateApplicationSummary.decisionAtStage === 'NO'){
         stageStyle.color = "red";
     }
 
