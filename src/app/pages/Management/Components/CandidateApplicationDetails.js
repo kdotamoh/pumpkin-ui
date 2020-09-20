@@ -101,7 +101,7 @@ const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading})
                         </div>
                         <div className="data-row">
                             <div className="flex-1">Academic Reference Phone
-                                - {candidateApplicationSummary.academicReferencePhonee || 'N/A'}</div>
+                                - {candidateApplicationSummary.academicReferencePhone || 'N/A'}</div>
                         </div>
                     </div>
                 </div>

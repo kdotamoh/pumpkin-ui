@@ -171,16 +171,16 @@ export class CandidateApplicationManagementComponent extends React.Component {
                 {
                     pageHeaderDataLoaded &&
                     <div>
-                        {(isSuperAdmin || isAdmin) &&
+
                         <div className="flex flex-end margin-bottom-40">
-                            <Button type="link"
+                            {(isSuperAdmin || isAdmin) &&   <Button type="link"
                                     style={{fontSize: "16px"}}
                                     className="semi-bold"
                                     onClick={() => this.setState({bulkRejectModalVisible: true})}
                                     danger>
                                 Bulk Reject
-                            </Button>
-                        </div>}
+                            </Button> }
+                        </div>
                         <div className="applicants_page_subheader_row data-row">
                             <div>
                                 <p className="management-component__subheader_title">Recruitment Cycle</p>
