@@ -109,7 +109,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                 </div>
                                                                 <div className="flex-1">
                                                                     Review Date
-                                                                    - <span>{review.reviewDate?.substring(10)}</span>
+                                                                    - <span>{review.reviewDate}</span>
                                                                 </div>
                                                             </div>
                                                             <div>
