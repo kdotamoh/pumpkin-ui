@@ -5,21 +5,30 @@ import * as CandidateApplicationService from '../../../../api/candidate-applicat
 const {Panel} = Collapse;
 const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading}) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [extraReviewDetails, setExtraReviewDetails] = useState({});
+    const [reviewDetails, setReviewDetails] = useState({});
+    const [reviewDetailsLoaded, setReviewDetailsLoaded] = useState(false);
 
     const onSeeMoreDetails = async (reviewCode, comment, finalScore) => {
+        setModalVisible(true);
         try {
             CandidateApplicationService.seeMoreReviewDetails(reviewCode).then(data => {
-                setExtraReviewDetails({
+                setReviewDetails({
                     details: data,
                     comment,
                     finalScore
                 });
-                setModalVisible(true);
+                setReviewDetailsLoaded(true);
             });
         } catch (e) {
 
         }
+    }
+
+    const closeModal = () => {
+        setModalVisible(false);
+        setTimeout(() => {
+            setReviewDetailsLoaded(false);
+        }, 400)
     }
 
     return (pageLoading ?
@@ -100,7 +109,8 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                         style={decisionStyle}>{review.decision}</span>
                                                                 </div>
                                                                 <div className="flex-1">
-                                                                    Review Date - <span>{review.reviewDate}</span>
+                                                                    Review Date
+                                                                    - <span>{review.reviewDate?.substring(10)}</span>
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -135,32 +145,43 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                 <Modal
                     visible={modalVisible}
                     title='Review Details'
-                    onCancel={() => setModalVisible(false)}
+                    onCancel={() => closeModal()}
                     footer={[
                         <Button key='ok'
                                 type="primary"
-                                onClick={() => setModalVisible(false)}>
+                                onClick={() => closeModal()}>
                             Ok
                         </Button>]}
                 >
                     <div>
-                        <div className='margin-bottom-20'>
-                            {extraReviewDetails.details?.map(review => {
-                                return (
-                                    <div className='flex'>
-                                        <p className='semi-bold' style={{width: '80%'}}>{review.name}</p>
-                                        <p className='semi-bold'>Grade: {review.grade}</p>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        <div>
-                            <p className='semi-bold'>Final Remark/comment</p>
-                            <p>{extraReviewDetails.comment}</p>
-                        </div>
-                        <div>
-                            <p className='bold'>Final Score: {extraReviewDetails.finalScore}</p>
-                        </div>
+                        {reviewDetailsLoaded ?
+                            <div>
+                                <div className='margin-bottom-20'>
+                                    {reviewDetails.details?.map(review => {
+                                        return (
+                                            <div className='flex'>
+                                                <p className='semi-bold' style={{width: '82%'}}>{review.name}</p>
+                                                <div className='semi-bold flex space-between flex-1' >
+                                                    <span>Grade: </span>
+                                                    <span>{review.grade}</span>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                                <div>
+                                    <p className='semi-bold'>Final Remark/comment</p>
+                                    <p>{reviewDetails.comment}</p>
+                                </div>
+                                <div>
+                                    <p className='bold'>Final Score: {reviewDetails.finalScore}</p>
+                                </div>
+                            </div> :
+                            <div>
+                                <Skeleton/>
+                                <Skeleton/>
+                            </div>
+                        }
                     </div>
                 </Modal>
             </React.Fragment>
