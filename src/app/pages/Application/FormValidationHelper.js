@@ -46,7 +46,7 @@ export const formSubmissionError = (error) => {
     <Result
       status="error"
       title="Form submission failed"
-      subTitle="Please check that you have provided the correct application details according to the error message and try again. If the error persists, please reach out to your SEO Africa contact"
+      subTitle="Please check that you have provided the correct application details according to the error message and try again. If the error persists, please reach out to your SEO Africa contact."
     >
       <div className="desc">
         <Paragraph>
@@ -73,7 +73,7 @@ export const formSubmissionSuccess = () => {
     <Result
       status="success"
       title="Form submission successful"
-      subTitle="Congratulations! You've successfully submitted your application. You'll receive a confirmation email shortly."
+      subTitle="Congratulations! You've successfully submitted your application. You'll receive a confirmation email shortly. Be sure to check your junk mail/spam folder as well."
     />
   );
 };

@@ -20,7 +20,7 @@
 
 .login-page__image {
   grid-area: image;
-  background-image: url('../assets/beach.jpeg');
+  background-image: url('../assets/EMC-200.jpg');
   background-size: cover;
   background-position: center center;
 }

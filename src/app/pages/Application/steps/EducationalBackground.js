@@ -217,6 +217,43 @@ export const EducationalBackground = (params) => {
       >
         <Input type="date" disabled={params.disabled} />
       </Form.Item>
+
+      <Form.Item
+        name="academicReference"
+        label="Academic reference's name"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input disabled={params.disabled} />
+      </Form.Item>
+
+      <Form.Item
+        name="academicReferenceEmail"
+        label="Academic reference's email address"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="email" disabled={params.disabled} />
+      </Form.Item>
+
+      <small>Please include their country code (eg: 233243456789)</small>
+      <Form.Item
+        name="academicReferencePhone"
+        label="Academic reference's phone number"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="number" step="0.01" min="0" disabled={params.disabled} />
+      </Form.Item>
     </Form>
   );
 };

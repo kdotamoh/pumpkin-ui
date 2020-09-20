@@ -206,8 +206,9 @@ export async function deactivateCycle(code) {
 
 export async function reactivateCycle(code) {
   try {
-    const { data } = await client.delete(
+    const { data } = await client.patch(
       `/recruitment/cycle/reactivate/${code}`,
+      null,
       {
         headers: {
           user_token: getToken(),
@@ -215,6 +216,7 @@ export async function reactivateCycle(code) {
       }
     );
     const { responseBody } = data;
+    message.success('Cycle reactivated');
     return responseBody;
   } catch (err) {
     const {
