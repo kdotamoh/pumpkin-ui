@@ -51,7 +51,6 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                 seoDecisionStyle.color = 'orange';
                             }
 
-
                             return (
                                 <div className='tab-container'>
                                     <Collapse expandIconPosition='right'>
