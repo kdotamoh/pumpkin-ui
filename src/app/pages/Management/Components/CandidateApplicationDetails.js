@@ -89,6 +89,23 @@ const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading})
                         </div>
                     </div>
                 </div>
+
+                <div className="sub-content">
+                    <div className="sub-content-header">Academic Reference</div>
+                    <div>
+                        <div className="data-row">
+                            <div className="flex-1">Academic Reference
+                                - {candidateApplicationSummary.academicReference || 'N/A'}</div>
+                            <div className="flex-1">Academic Reference Email
+                                - {candidateApplicationSummary.academicReferenceEmail || 'N/A'}</div>
+                        </div>
+                        <div className="data-row">
+                            <div className="flex-1">Academic Reference Phone
+                                - {candidateApplicationSummary.academicReferencePhonee || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+
             </React.Fragment>
     )
 }

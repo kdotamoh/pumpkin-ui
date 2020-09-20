@@ -100,7 +100,7 @@ const CandidateApplicationReviews = ({candidateApplicationSummary, pageLoading})
                                                                         style={decisionStyle}>{review.decision}</span>
                                                                 </div>
                                                                 <div className="flex-1">
-                                                                    Review Date - <span>{review.reviewDate}</span>
+                                                                    Review Date - <span>{review.reviewDate?.substring(10)}</span>
                                                                 </div>
                                                             </div>
                                                             <div>
