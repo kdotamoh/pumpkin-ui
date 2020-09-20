@@ -98,7 +98,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
             candidatesHasBeenLoaded: false,
             bulkRejectModalVisible: false,
             comment: '',
-            bulkDeclineModalStages: []
+            bulkDeclineModalStages: [],
+            currentPage: 1
         };
 
     }
@@ -115,9 +116,14 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     newEntityName="CANDIDATES"
                     setCurrentEntity={this.props.setCurrentCandidate}
                     subHeaderView={this.subHeaderView()}
+                    currentPage={this.state.currentPage}
                 />
             </React.Fragment>
         );
+    }
+
+    onPaginationChanged = (currentPage) => {
+        this.setState({currentPage});
     }
 
     handleSearch = () => {
