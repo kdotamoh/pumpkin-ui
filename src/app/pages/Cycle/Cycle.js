@@ -92,13 +92,13 @@ class Cycle extends React.Component {
     this.handleTrackCodes();
   };
 
-  handleCopyForm = async (formCode) => {
+  handleCopyForm = async (formCode, cycleCode) => {
     if (!navigator.clipboard) {
       return;
     }
     try {
       await navigator.clipboard.writeText(
-        `${process.env.REACT_APP_BASE_URL}/apply?ref=${formCode}`
+        `${process.env.REACT_APP_BASE_URL}/apply?ref=${formCode}&cycle=${cycleCode}`
       );
       message.success('Form link copied to clipboard');
     } catch (err) {
@@ -310,7 +310,9 @@ class Cycle extends React.Component {
                       )}
                       <span
                         className="ml-3 text--blue action--blue"
-                        onClick={() => this.handleCopyForm(form.code)}
+                        onClick={() =>
+                          this.handleCopyForm(form.code, this.props.id)
+                        }
                       >
                         <CopyOutlined title="Copy form link to clipboard" />
                       </span>

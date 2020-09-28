@@ -108,12 +108,14 @@ export class RecruitmentCycleManagementComponent extends React.Component {
     this.props.history.push(`/cycles/update/${record.code}`);
     // callback();
   };
-  onActivateCycle = (record) => {
-    this.props.reactivateCycle(record.code);
+  onActivateCycle = async (record) => {
+    await this.props.reactivateCycle(record.code);
+    this.componentDidMount();
     // callback();
   };
-  onDeactivateCycle = (record) => {
-    this.props.deactivateCycle(record.code);
+  onDeactivateCycle = async (record) => {
+    await this.props.deactivateCycle(record.code);
+    this.componentDidMount();
     // callback();
   };
   onCancelAddCycle = (callback) => {
