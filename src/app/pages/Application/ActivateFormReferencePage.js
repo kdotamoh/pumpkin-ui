@@ -24,9 +24,12 @@ export const validateRef = async (dispatch) => {
 const ActivateFormReferencePage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const cycleRef = sessionStorage.getItem('cycleReference');
-  React.useEffect(async () => {
-    await validateRef(dispatch, cycleRef);
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const cycleRef = urlParams.get('cycle');
+  React.useEffect(() => {
+    validateRef(dispatch, cycleRef);
   }, []);
   const formStatus = useSelector((state) => state.applicationForm.formStatus);
   const questions = useSelector(
@@ -52,7 +55,9 @@ const ActivateFormReferencePage = () => {
           </p>
           <ul>
             {questions.map((essay) => (
-              <li key={essay.code}>{essay.question}</li>
+              <li key={essay.code}>
+                {essay.question} <em>({essay.wordCount}) words</em>
+              </li>
             ))}
           </ul>
           <p>
@@ -78,7 +83,7 @@ const ActivateFormReferencePage = () => {
             history.push(
               `/apply/application-form/?ref=${sessionStorage.getItem(
                 'applicationFormReference'
-              )}`
+              )}&cycle=${sessionStorage.getItem('cycleReference')}`
             )
           }
           className="application-page-component__primary"

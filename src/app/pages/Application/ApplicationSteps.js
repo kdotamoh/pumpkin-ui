@@ -7,7 +7,7 @@ const { Step } = Steps;
 export const ApplicationSteps = (params) => {
   const history = useHistory();
   const [form] = Form.useForm();
-  const [current, setCurrent] = React.useState(1);
+  const [current, setCurrent] = React.useState(0);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const formReference = sessionStorage.getItem('applicationFormReference');
   const next = () => {
@@ -57,7 +57,7 @@ export const ApplicationSteps = (params) => {
   };
 
   return (
-    <React.Fragment>
+    <React.Fragment key="">
       <Steps
         current={current}
         onChange={onStepChange}

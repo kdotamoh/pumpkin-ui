@@ -97,11 +97,11 @@ export const EducationalBackground = (params) => {
       <Form.Item
         name="universityCode"
         label="Name of University"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //   },
+        // ]}
       >
         <Select placeholder="Select your university" allowClear>
           {
@@ -109,6 +109,14 @@ export const EducationalBackground = (params) => {
             // might have to append other
           }
         </Select>
+      </Form.Item>
+
+      <small>
+        If your university is not listed above, state the name of your school
+        here. Otherwise, leave this field blank.
+      </small>
+      <Form.Item name="newUniversity">
+        <Input disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         noStyle
