@@ -109,7 +109,7 @@ export const LoginPage = () => {
               />
               Remember me
             </label>
-            <Link style={{ color: 'rgb(223, 226, 229)' }} to="/password-reset">
+            <Link style={{ color: 'rgb(134, 134, 134)' }} to="/password-reset">
               Forgot password?
             </Link>
           </div>
