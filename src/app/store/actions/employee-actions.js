@@ -1,12 +1,18 @@
 import { EmployeeKeys } from './action-constants';
 
-export const getEmployees = () => ({
+export const getEmployees = (currentPage) => ({
   type: EmployeeKeys.GET_EMPLOYEES,
+  currentPage
 });
 
 export const setEmployees = (employees) => ({
   type: EmployeeKeys.SET_EMPLOYEES,
   employees,
+});
+
+export const setEmployeesCount = (total) => ({
+  type: EmployeeKeys.SET_EMPLOYEES_COUNT,
+  total,
 });
 
 export const inviteEmployee = (email, employeeId) => ({

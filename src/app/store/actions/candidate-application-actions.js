@@ -1,8 +1,9 @@
 import {CandidateApplicationKeys} from "./action-constants";
 
-export const getCandidates = (cycleReference) => ({
+export const getCandidates = (cycleReference, currentPage) => ({
     type: CandidateApplicationKeys.GET_CANDIDATES,
-    cycleReference
+    cycleReference,
+    currentPage
 });
 
 export const setCandidates = (candidates) => ({

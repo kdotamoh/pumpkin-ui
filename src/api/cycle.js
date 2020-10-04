@@ -31,15 +31,15 @@ export async function createCycle(cycle) {
   }
 }
 
-export async function getCycles() {
+export async function getCycles(currentPage) {
   try {
     const { data } = await client.get('/recruitment/cycle/all', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 20,
+        page: currentPage,
+        size: 10,
       },
     });
     const { responseBody } = data;

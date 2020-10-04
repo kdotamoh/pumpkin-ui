@@ -101,7 +101,6 @@ export class CandidateApplicationManagementComponent extends React.Component {
             bulkDeclineModalStages: [],
             currentPage: 1
         };
-
     }
 
     // TODO: MAKE SURE THE DATA BEING DISPLAYED ON THE TABLE IS FINE (EVEN WHEN LESS THAN 20)
@@ -117,6 +116,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     setCurrentEntity={this.props.setCurrentCandidate}
                     subHeaderView={this.subHeaderView()}
                     currentPage={this.state.currentPage}
+                    total={this.props.totalCandidates}
+                    onPaginationChanged={this.onPaginationChanged}
                 />
             </React.Fragment>
         );
@@ -124,17 +125,19 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
     onPaginationChanged = (currentPage) => {
         this.setState({currentPage});
+        this.props.getCandidates(this.props.cycleReference, currentPage);
     }
 
-    handleSearch = () => {
+    onSearchCandidateApplications = () => {
         this.props.searchCandidateApplications(this.props.searchFilters, this.props.cycleReference);
     }
 
     onRecruitmentCycleSelected = (code) => {
+        this.setState({currentPage: 1});
         this.props.clearFilter();
         this.props.setCycleReference(code);
         this.fetchSearchFilters(code);
-        this.props.getCandidates(code).then(() => this.setState({candidatesHasBeenLoaded: true}));
+        this.props.getCandidates(code, 1).then(() => this.setState({candidatesHasBeenLoaded: true}));
     };
 
     fetchSearchFilters = (code) => {
@@ -179,13 +182,13 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     <div>
 
                         <div className="flex flex-end margin-bottom-40">
-                            {(isSuperAdmin || isAdmin) &&   <Button type="link"
-                                    style={{fontSize: "16px"}}
-                                    className="semi-bold"
-                                    onClick={() => this.setState({bulkRejectModalVisible: true})}
-                                    danger>
+                            {(isSuperAdmin || isAdmin) && <Button type="link"
+                                                                  style={{fontSize: "16px"}}
+                                                                  className="semi-bold"
+                                                                  onClick={() => this.setState({bulkRejectModalVisible: true})}
+                                                                  danger>
                                 Bulk Reject
-                            </Button> }
+                            </Button>}
                         </div>
                         <div className="applicants_page_subheader_row data-row">
                             <div>
@@ -260,7 +263,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                 <p className="filter_count">Displaying {this.props.displayingCandidates} of {this.props.totalCandidates} applicants</p>
                             </div>
                             <div className="subheader_actions" style={{justifyContent: "flex-end"}}>
-                                <Button type="primary" onClick={() => this.handleSearch()}>
+                                <Button type="primary" onClick={() => this.onSearchCandidateApplications()}>
                                     Apply Filter
                                 </Button>
                                 <Button onClick={() => this.onRecruitmentCycleSelected(this.props.cycleReference)}>
@@ -337,7 +340,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getCandidates: (code) => dispatch(getCandidates(code)),
+    getCandidates: (code, currentPage) => dispatch(getCandidates(code, currentPage - 1)),
     getCountriesForSearch: () => dispatch(getCountriesForSearch()),
     searchCandidateApplications: (searchKeys, cycleReference) => dispatch(searchCandidateApplication(searchKeys, cycleReference)),
     setCurrentCandidate: (candidate) => dispatch(setCurrentCandidate(candidate)),

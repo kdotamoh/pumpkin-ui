@@ -42,13 +42,14 @@ const columns = [
 
 export class UniversitySetupManagementComponent extends React.Component {
   componentDidMount() {
-    this.props.getUniversities(); // TODO: move to root
+    this.props.getUniversities(this.state.currentPage); // TODO: move to root
   }
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       country: '',
+      currentPage: 1
     };
   }
   render() {
@@ -65,9 +66,16 @@ export class UniversitySetupManagementComponent extends React.Component {
           onSearch={this.onSearchUniversity}
           onDelete={this.showDeleteConfirmationModal}
           setCurrentEntity={this.props.setCurrentUniversity}
+          currentPage={this.state.currentPage}
+          total={this.props.totalUniversities}
+          onPaginationChanged={this.onPaginationChanged}
         />
       </React.Fragment>
     );
+  }
+  onPaginationChanged = (currentPage) => {
+    this.setState({currentPage});
+    this.props.getUniversities(currentPage);
   }
   addNewUniversityContent() {
     return (
@@ -141,6 +149,7 @@ UniversitySetupManagementComponent.propTypes = {
   data: PropTypes.array.isRequired, //  TODO: make arrayOf
   // searchUniversity: PropTypes.func.isRequired,
   setCurrentUniversity: PropTypes.func,
+  totalUniversities: PropTypes.number
 };
 
 /**
@@ -148,9 +157,10 @@ UniversitySetupManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
   data: state.universities.available,
+  totalUniversities: state.universities.total
 });
 const mapDispatchToProps = (dispatch) => ({
-  getUniversities: () => dispatch(getUniversities()),
+  getUniversities: (currentPage) => dispatch(getUniversities(currentPage - 1)),
   createUniversity: (name, country) =>
     dispatch(createUniversity(name, country)),
   deleteUniversity: (code) => dispatch(deleteUniversity(code)),

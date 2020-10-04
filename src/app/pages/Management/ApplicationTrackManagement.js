@@ -27,12 +27,13 @@ const columns = [
 
 export class ApplicationTrackManagementComponent extends React.Component {
   componentDidMount() {
-    this.props.getTracks(); // TODO: move to root
+    this.props.getTracks(this.state.currentPage); // TODO: move to root
   }
   constructor(props) {
     super(props);
     this.state = {
       name: props.currentTrack ? props.currentTrack.name : '',
+      currentPage: 1
     };
   }
   componentDidUpdate(prevProps) {
@@ -59,9 +60,16 @@ export class ApplicationTrackManagementComponent extends React.Component {
           onDelete={this.showDeleteConfirmationModal}
           onEditEntity={this.onEditTrack}
           setCurrentEntity={this.props.setCurrentTrack}
+          currentPage={this.state.currentPage}
+          total={this.props.totalTracks}
+          onPaginationChanged={this.onPaginationChanged}
         />
       </React.Fragment>
     );
+  }
+  onPaginationChanged = (currentPage) => {
+    this.setState({currentPage});
+    this.props.getTracks(currentPage);
   }
   addNewTrackContent = () => {
     return (
@@ -120,6 +128,7 @@ ApplicationTrackManagementComponent.propTypes = {
   updateTrack: PropTypes.func.isRequired,
   setCurrentTrack: PropTypes.func.isRequired,
   currentTrack: PropTypes.object,
+  totalTracks: PropTypes.number,
   data: PropTypes.array.isRequired, //  TODO: make arrayOf
 };
 
@@ -128,10 +137,11 @@ ApplicationTrackManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
   data: state.tracks.available,
+  totalTracks: state.tracks.total,
   currentTrack: state.tracks.current,
 });
 const mapDispatchToProps = (dispatch) => ({
-  getTracks: () => dispatch(getTracks()),
+  getTracks: (currentPage) => dispatch(getTracks(currentPage -1)),
   createTrack: (name) => dispatch(createTrack(name)),
   deleteTrack: (code) => dispatch(deleteTrack(code)),
   updateTrack: (name, code) => dispatch(updateTrack(name, code)),

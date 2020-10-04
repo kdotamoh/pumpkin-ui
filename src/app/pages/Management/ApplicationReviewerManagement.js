@@ -64,6 +64,9 @@ export class ApplicationReviewerManagementComponent extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            currentPage: 1
+        };
     }
 
     render() {
@@ -76,8 +79,16 @@ export class ApplicationReviewerManagementComponent extends React.Component {
                 onSearch={this.onSearchApplicationReviewers}
                 setCurrentEntity={this.props.setCurrentApplicationReviewer}
                 subHeaderView={this.subHeaderView()}
+                currentPage={this.state.currentPage}
+                total={this.props.recruitmentCycleSummary.totalReviewers}
+                onPaginationChanged={this.onPaginationChanged}
             />
         );
+    }
+
+    onPaginationChanged = (currentPage) => {
+        this.setState({currentPage});
+        this.props.getApplicationReviewers(this.props.cycleReference, currentPage);
     }
 
     onSearchApplicationReviewers = async (searchKey) => {
@@ -87,7 +98,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
     onRecruitmentCycleSelected = (code) => {
         this.props.setCycleReference( code);
         this.props.setCyclesHaveBeenLoaded(true);
-        this.props.getApplicationReviewers(code);
+        this.props.getApplicationReviewers(code, 1);
         this.props.getRecruitmentCycleReviewSummary(code);
     };
 
@@ -180,8 +191,8 @@ const mapDispatchToProps = (dispatch) => ({
     getCycles: () => dispatch(getCycles()),
     getRecruitmentCycleReviewSummary: (cycleReference) =>
         dispatch(getRecruitmentCycleReviewSummary(cycleReference)),
-    getApplicationReviewers: (cycleReference) =>
-        dispatch(getApplicationReviewers(cycleReference)),
+    getApplicationReviewers: (cycleReference, currentPage) =>
+        dispatch(getApplicationReviewers(cycleReference, currentPage - 1)),
     searchApplicationReviewers: (cycleReference, searchKey) =>
         dispatch(searchApplicationReviewers(cycleReference, searchKey)),
     setCurrentApplicationReviewer: (reviewer) =>

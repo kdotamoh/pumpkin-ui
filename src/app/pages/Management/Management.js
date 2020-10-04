@@ -18,7 +18,6 @@ class ManagementComponent extends React.Component {
             visible: false,
             action: '',
             columnDefs: this.props.columnDefs,
-            currentPage: 1
         };
     }
 
@@ -89,9 +88,9 @@ class ManagementComponent extends React.Component {
                     columns={this.state.columnDefs}
                     pagination={{
                         current: this.props.currentPage,
-                        total: 50,
+                        total: this.props.total,
                         pageSize: 10,
-                        // onChange: this.onPaginationChanged
+                        onChange: this.props.onPaginationChanged
                     }}
                 />
 
@@ -212,7 +211,8 @@ ManagementComponent.propTypes = {
     subHeaderView: PropTypes.element,
     showShowBackButton: PropTypes.bool,
     currentPage: PropTypes.number,
-    onPaginationChanged: PropTypes.func
+    onPaginationChanged: PropTypes.func,
+    total: PropTypes.number
 };
 
 export default withRouter(ManagementComponent);

@@ -52,7 +52,8 @@ export async function getApplicationReviewerSummary(reviewerCode) {
 
 export async function getCandidateApplicationReviews(
   reviewerCode,
-  seoDecision
+  seoDecision,
+  currentPage
 ) {
   try {
     const { data } = await client.get('/candidate-review', {
@@ -60,8 +61,8 @@ export async function getCandidateApplicationReviews(
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 20,
+        page: currentPage,
+        size: 10,
         reviewerCode,
         seoDecision,
       },
@@ -90,7 +91,7 @@ export async function searchCandidateApplicationReviews(
       },
       params: {
         page: 0,
-        size: 20,
+        size: 10,
         reviewerCode,
         seoDecision,
         searchKey,

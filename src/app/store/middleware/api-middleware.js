@@ -22,10 +22,10 @@ import * as CandidateService from 'api/candidates';
 import * as ApplicationReviewerService from 'api/application-reviewer';
 import * as CandidateReviewService from 'api/candidate-review';
 import * as CandidateApplicationService from 'api/candidate-application';
-import {setEmployees, getEmployees} from '../actions/employee-actions';
-import {setAlumni, getAlumni} from '../actions/alum-actions';
+import {setEmployees, getEmployees, setEmployeesCount} from '../actions/employee-actions';
+import {setAlumni, getAlumni, setAlumniCount} from '../actions/alum-actions';
 import {message} from 'antd';
-import {setTracks, getTracks} from '../actions/track-actions';
+import {setTracks, getTracks, setTracksCount} from '../actions/track-actions';
 import {
     setCountries,
     setGenders,
@@ -38,12 +38,12 @@ import {
     setApplicationFormMajors,
     setSubmissionResponse,
 } from '../actions/application-form-actions';
-import {setCycles, getCycles} from '../actions/cycle-actions';
+import {setCycles, getCycles, setCyclesCount} from '../actions/cycle-actions';
 import {
     setUniversities,
-    getUniversities,
+    getUniversities, setUniversitiesCount,
 } from '../actions/university-actions';
-import {setMajors, getMajors} from '../actions/major-actions';
+import {setMajors, getMajors, setMajorsCount} from '../actions/major-actions';
 import {setApplicationReviewers} from '../actions/application-reviewer-actions';
 import {
     setRecruitmentCycleReviewSummary,
@@ -61,7 +61,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
     switch (action.type) {
         case EmployeeKeys.GET_EMPLOYEES:
             try {
-                const employees = await EmployeeService.getEmployees();
+                const employees = await EmployeeService.getEmployees(action.currentPage);
+                store.dispatch(setEmployeesCount(employees.totalElements));
                 const employeeContent = employees.content;
                 store.dispatch(setEmployees(employeeContent));
             } catch (err) {
@@ -97,7 +98,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
         }
         case AlumKeys.GET_ALUMNI:
             try {
-                const alumni = await AlumService.getAlumni();
+                const alumni = await AlumService.getAlumni(action.currentPage);
+                store.dispatch(setAlumniCount(alumni.totalElements));
                 const alumniContent = alumni.content;
                 store.dispatch(setAlumni(alumniContent));
             } catch (err) {
@@ -132,7 +134,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
 
         case TrackKeys.GET_TRACKS:
             try {
-                const tracks = await TrackService.getTracks();
+                const tracks = await TrackService.getTracks(action.currentPage);
+                store.dispatch(setTracksCount(tracks.totalElements));
                 const trackContent = tracks.content;
                 store.dispatch(setTracks(trackContent));
             } catch (err) {
@@ -291,7 +294,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
 
         case UniversityKeys.GET_UNIVERSITIES: {
             try {
-                const universities = await UniversityService.getUniversities();
+                const universities = await UniversityService.getUniversities(action.currentPage);
+                store.dispatch(setUniversitiesCount(universities.totalElements));
                 const universitiesContent = universities.content;
                 store.dispatch(setUniversities(universitiesContent));
             } catch (err) {
@@ -336,7 +340,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
 
         case MajorKeys.GET_MAJORS:
             try {
-                const majors = await MajorService.getMajors();
+                const majors = await MajorService.getMajors(action.currentPage);
+                store.dispatch(setMajorsCount(majors.totalElements));
                 const majorContent = majors.content;
                 store.dispatch(setMajors(majorContent));
             } catch (err) {
@@ -377,7 +382,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
         }
         case CycleKeys.GET_CYCLES:
             try {
-                const cycles = await CycleService.getCycles();
+                const cycles = await CycleService.getCycles(action.currentPage);
+                store.dispatch(setCyclesCount(cycles.totalElements));
                 const cycleContent = cycles.content;
                 store.dispatch(setCycles(cycleContent));
             } catch (err) {
@@ -467,7 +473,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
         case ApplicationReviewerKeys.GET_APPLICATION_REVIEWERS: {
             try {
                 const applicationReviewers = await ApplicationReviewerService.getApplicationReviewers(
-                    action.cycleReference
+                    action.cycleReference,
+                    action.currentPage
                 );
                 const reviewersContent = applicationReviewers.content;
                 store.dispatch(setApplicationReviewers(reviewersContent));
@@ -516,7 +523,8 @@ export const appMiddleware = (store) => (next) => async (action) => {
             try {
                 const applicationReviews = await CandidateReviewService.getCandidateApplicationReviews(
                     action.reviewerCode,
-                    action.seoDecision
+                    action.seoDecision,
+                    action.currentPage
                 );
                 store.dispatch(
                     setCandidateApplicationReviews(applicationReviews.content)
@@ -544,8 +552,7 @@ export const appMiddleware = (store) => (next) => async (action) => {
 
         case CandidateApplicationKeys.GET_CANDIDATES: {
             try {
-                const candidates = await CandidateApplicationService.getCandidates(action.cycleReference);
-                console.log(candidates)
+                const candidates = await CandidateApplicationService.getCandidates(action.cycleReference, action.currentPage);
                 candidates.content.map(candidate => candidate.name = `${candidate.firstName} ${candidate.lastName}`)
                 store.dispatch(setCandidates(candidates));
             } catch (err) {

@@ -1,12 +1,18 @@
 import { AlumKeys } from './action-constants';
 
-export const getAlumni = () => ({
+export const getAlumni = (currentPage) => ({
   type: AlumKeys.GET_ALUMNI,
+  currentPage
 });
 
 export const setAlumni = (alumni) => ({
   type: AlumKeys.SET_ALUMNI,
   alumni,
+});
+
+export const setAlumniCount = (total) => ({
+  type: AlumKeys.SET_ALUMNI_COUNT,
+  total,
 });
 
 export const inviteAlum = (email, seoGraduationYear) => ({

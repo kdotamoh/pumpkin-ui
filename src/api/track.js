@@ -30,15 +30,15 @@ export async function createTrack(name) {
   }
 }
 
-export async function getTracks() {
+export async function getTracks(currentPage) {
   try {
     const { data } = await client.get('/application-track', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 50,
+        page: currentPage,
+        size: 10,
       },
     });
     const { responseBody } = data;

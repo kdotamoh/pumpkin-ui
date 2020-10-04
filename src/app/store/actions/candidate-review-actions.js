@@ -20,10 +20,11 @@ export const setApplicationReviewerSummary = (applicationReviewerSummary) => ({
   applicationReviewerSummary,
 });
 
-export const getCandidateApplicationReviews = (reviewerCode, seoDecision) => ({
+export const getCandidateApplicationReviews = (reviewerCode, seoDecision, currentPage) => ({
   type: CandidateApplicationReviewKeys.GET_CANDIDATE_APPLICATION_REVIEWS,
   reviewerCode,
   seoDecision,
+  currentPage
 });
 
 export const searchCandidateApplicationReviews = (reviewerCode, seoDecision, searchKey) => ({

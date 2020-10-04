@@ -37,13 +37,14 @@ const columns = [
 
 export class MajorManagementComponent extends React.Component {
   componentDidMount() {
-    this.props.getMajors(); // TODO: move to root
+    this.props.getMajors(this.state.currentPage); // TODO: move to root
   }
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       seoGraduationYear: '',
+      currentPage: 1,
     };
   }
   render() {
@@ -60,9 +61,16 @@ export class MajorManagementComponent extends React.Component {
           onSearch={this.onSearchMajor}
           onDelete={this.showDeleteConfirmationModal}
           setCurrentEntity={this.props.setCurrentMajor}
+          currentPage={this.state.currentPage}
+          total={this.props.totalMajors}
+          onPaginationChanged={this.onPaginationChanged}
         />
       </React.Fragment>
     );
+  }
+  onPaginationChanged = (currentPage) => {
+    this.setState({currentPage});
+    this.props.getMajors( currentPage);
   }
   addNewMajorContent() {
     return (
@@ -121,6 +129,7 @@ MajorManagementComponent.propTypes = {
   updateMajor: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired, //  TODO: make arrayOf
   setCurrentMajor: PropTypes.func,
+  totalMajors: PropTypes.number
 };
 
 /**
@@ -128,9 +137,10 @@ MajorManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
   data: state.majors.available,
+  totalMajors: state.majors.total
 });
 const mapDispatchToProps = (dispatch) => ({
-  getMajors: () => dispatch(getMajors()),
+  getMajors: (currentPage) => dispatch(getMajors(currentPage - 1)),
   createMajor: (name) => dispatch(createMajor(name)),
   deleteMajor: (code) => dispatch(deleteMajor(code)),
   updateMajor: (name, code) => dispatch(updateMajor(name, code)),

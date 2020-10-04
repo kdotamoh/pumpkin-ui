@@ -1,12 +1,18 @@
 import { TrackKeys } from './action-constants';
 
-export const getTracks = () => ({
+export const getTracks = (currentPage) => ({
   type: TrackKeys.GET_TRACKS,
+  currentPage
 });
 
 export const setTracks = (tracks) => ({
   type: TrackKeys.SET_TRACKS,
   tracks,
+});
+
+export const setTracksCount = (total) => ({
+  type: TrackKeys.SET_TRACKS_COUNT,
+  total,
 });
 
 export const updateTrack = (name, code) => ({

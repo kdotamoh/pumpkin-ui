@@ -9,7 +9,7 @@ function getToken() {
 
 const baseURL = `${process.env.REACT_APP_API_BASE}/api/v1`;
 
-export const getCandidates = async (cycleReference) => {
+export const getCandidates = async (cycleReference, currentPage) => {
   try {
     const { data } = await client.get('/candidate-application/all', {
       headers: {
@@ -17,7 +17,7 @@ export const getCandidates = async (cycleReference) => {
       },
       params: {
         cycleReference,
-        page: 0,
+        page: currentPage,
         size: 10,
       },
     });

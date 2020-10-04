@@ -30,15 +30,15 @@ export async function inviteAlum(email, seoGraduationYear) {
   }
 }
 
-export async function getAlumni() {
+export async function getAlumni(currentPage) {
   try {
     const { data } = await client.get('/seo-alum', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 20,
+        page: currentPage,
+        size: 10,
       },
     });
     const { responseBody } = data;

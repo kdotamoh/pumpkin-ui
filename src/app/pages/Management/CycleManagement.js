@@ -44,9 +44,10 @@ const columns = [
 export class RecruitmentCycleManagementComponent extends React.Component {
   state = {
     name: this.props.currentCycle ? this.props.currentCycle.name : '',
+    currentPage: 1
   };
   componentDidMount() {
-    this.props.getCycles();
+    this.props.getCycles(this.state.currentPage);
   }
   componentDidUpdate(prevProps) {
     if (
@@ -75,8 +76,15 @@ export class RecruitmentCycleManagementComponent extends React.Component {
         setCurrentEntity={this.props.setCurrentCycle}
         willNavigate={true}
         navigateTo="/cycles/new"
+        currentPage={this.state.currentPage}
+        total={this.props.totalAlumni}
+        onPaginationChanged={this.onPaginationChanged}
       />
     );
+  }
+  onPaginationChanged = (currentPage) => {
+    this.setState({currentPage});
+    this.props.getCycles( currentPage);
   }
   addNewCycleContent = () => {
     return (
@@ -147,6 +155,7 @@ RecruitmentCycleManagementComponent.propTypes = {
   currentCycle: PropTypes.object,
   data: PropTypes.array.isRequired,
   history: PropTypes.object,
+  totalCycles: PropTypes.number
 };
 
 /**
@@ -155,9 +164,10 @@ RecruitmentCycleManagementComponent.propTypes = {
 const mapStateToProps = (state) => ({
   data: state.cycles.available,
   currentCycle: state.cycles.current,
+  totalCycles: state.cycles.total
 });
 const mapDispatchToProps = (dispatch) => ({
-  getCycles: () => dispatch(getCycles()),
+  getCycles: (currentPage) => dispatch(getCycles(currentPage - 1)),
   createCycle: (name) => dispatch(createCycle(name)),
   deleteCycle: (code) => dispatch(deleteCycle(code)),
   updateCycle: (name, code) => dispatch(updateCycle(name, code)),
