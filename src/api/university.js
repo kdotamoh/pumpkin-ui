@@ -30,15 +30,15 @@ export async function createUniversity(name, country) {
   }
 }
 
-export async function getUniversities() {
+export async function getUniversities(currentPage) {
   try {
     const { data } = await client.get('/universities', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 20,
+        page: currentPage,
+        size: 10,
       },
     });
     const { responseBody } = data;

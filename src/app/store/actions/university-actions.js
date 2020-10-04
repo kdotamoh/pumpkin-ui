@@ -1,7 +1,8 @@
 import { UniversityKeys } from './action-constants';
 
-export const getUniversities = () => ({
+export const getUniversities = (currentPage ) => ({
   type: UniversityKeys.GET_UNIVERSITIES,
+  currentPage
 });
 
 export const deleteUniversity = (code) => ({
@@ -17,6 +18,11 @@ export const activateUniversity = (code) => ({
 export const setUniversities = (universities) => ({
   type: UniversityKeys.SET_UNIVERSITIES,
   universities,
+});
+
+export const setUniversitiesCount = (total) => ({
+  type: UniversityKeys.SET_UNIVERSITIES_COUNT,
+  total,
 });
 
 export const updateUniversity = (name, code) => ({

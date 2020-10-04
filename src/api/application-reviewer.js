@@ -6,14 +6,14 @@ function getToken() {
   return store ? store.getState().user.userToken : undefined;
 }
 
-export async function getApplicationReviewers(cycleReference) {
+export async function getApplicationReviewers(cycleReference, currentPage) {
   try {
     const { data } = await client.get('/application-reviewer', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
+        page: currentPage,
         size: 20,
         cycleReference,
       },

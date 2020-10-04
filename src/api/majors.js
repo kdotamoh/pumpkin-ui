@@ -30,15 +30,15 @@ export async function createMajor(name, country) {
   }
 }
 
-export async function getMajors() {
+export async function getMajors(currentPage) {
   try {
     const { data } = await client.get('/course-of-study', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 20,
+        page: currentPage,
+        size: 10,
       },
     });
     const { responseBody } = data;

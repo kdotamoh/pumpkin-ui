@@ -1,12 +1,18 @@
 import { CycleKeys } from './action-constants';
 
-export const getCycles = () => ({
+export const getCycles = (currentPage = 0) => ({
   type: CycleKeys.GET_CYCLES,
+  currentPage
 });
 
 export const setCycles = (cycles) => ({
   type: CycleKeys.SET_CYCLES,
   cycles,
+});
+
+export const setCyclesCount = (total) => ({
+  type: CycleKeys.SET_CYCLES_COUNT,
+  total,
 });
 
 export const updateCycle = (name, code) => ({

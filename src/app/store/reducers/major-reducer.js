@@ -4,6 +4,7 @@ import { message } from 'antd';
 export const initialMajorState = {
   available: [],
   current: null,
+  total: 0
 };
 
 export const majorReducer = (state = initialMajorState, action) => {
@@ -12,6 +13,12 @@ export const majorReducer = (state = initialMajorState, action) => {
       return {
         ...state,
         available: action.majors,
+      };
+    }
+    case MajorKeys.SET_MAJORS_COUNT: {
+      return {
+        ...state,
+        total: action.total,
       };
     }
     case MajorKeys.DELETE_MAJOR: {

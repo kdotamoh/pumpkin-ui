@@ -32,15 +32,16 @@ export async function inviteEmployee(email, employeeId) {
   }
 }
 
-export async function getEmployees() {
+export async function getEmployees(currentPage) {
+  console.log(currentPage);
   try {
     const { data } = await client.get('/seo-employee', {
       headers: {
         user_token: getToken(),
       },
       params: {
-        page: 0,
-        size: 20,
+        page: currentPage,
+        size: 10,
       },
     });
     const { responseBody } = data;

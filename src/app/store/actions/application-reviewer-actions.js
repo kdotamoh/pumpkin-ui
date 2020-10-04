@@ -1,8 +1,9 @@
 import {ApplicationReviewerKeys} from './action-constants';
 
-export const getApplicationReviewers = (cycleReference) => ({
+export const getApplicationReviewers = (cycleReference, currentPage) => ({
     type: ApplicationReviewerKeys.GET_APPLICATION_REVIEWERS,
     cycleReference,
+    currentPage
 });
 
 export const setApplicationReviewers = (applicationReviewers) => ({
