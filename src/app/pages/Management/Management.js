@@ -90,6 +90,7 @@ class ManagementComponent extends React.Component {
                         current: this.props.currentPage,
                         total: this.props.total,
                         pageSize: 10,
+                        showSizeChanger: false,
                         onChange: this.props.onPaginationChanged
                     }}
                 />
