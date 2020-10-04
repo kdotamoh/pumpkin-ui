@@ -7,7 +7,7 @@ function getToken() {
   return store ? store.getState().user.userToken : undefined;
 }
 
-const baseURL = `${process.env.REACT_APP_API_BASE}/api/v1`;
+const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
 
 export const getCandidates = async (cycleReference, currentPage) => {
   try {
@@ -134,19 +134,19 @@ export const getReviewTypes = async () => {
 };
 
 export const getApplicationStages = async () => {
-    try {
-        const {data} = await client.get('/candidate-application/search', {
-            headers: {
-                user_token: getToken(),
-            }
-        })
-    } catch (err) {
-        const {
-            data: {responseMessage},
-        } = err.response;
-        message.error(`Cannot load application stages: ${responseMessage}`);
-    }
-}
+  try {
+    const { data } = await client.get('/candidate-application/search', {
+      headers: {
+        user_token: getToken(),
+      },
+    });
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot load application stages: ${responseMessage}`);
+  }
+};
 
 export const addReview = async (review) => {
   try {
@@ -167,49 +167,53 @@ export const addReview = async (review) => {
 };
 
 export const makeFinalDecision = async (applicationReference, seoDecision) => {
-    try {
-        const {data} = await client.put(`/candidate-review/approve/${applicationReference}`, seoDecision, {
-            headers: {
-                user_token: getToken(),
-            },
-        });
-        message.success("Decision added");
-    } catch (err) {
-        const {
-            data: {responseMessage},
-        } = err.response;
-        message.error(`Cannot make final decision: ${responseMessage}`);
-        return "error";
-    }
-}
+  try {
+    const { data } = await client.put(
+      `/candidate-review/approve/${applicationReference}`,
+      seoDecision,
+      {
+        headers: {
+          user_token: getToken(),
+        },
+      }
+    );
+    message.success('Decision added');
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Cannot make final decision: ${responseMessage}`);
+    return 'error';
+  }
+};
 
 export const seeMoreReviewDetails = async (reviewCode) => {
-    try {
-        const {data} = await client.get(`/candidate-review/details`, {
-            headers: {
-                user_token: getToken(),
-            },
-            params: {
-                reviewCode
-            }
-        });
-        return data.responseBody;
-    } catch (err) {
-        const {
-            data: {responseMessage},
-        } = err.response;
-        message.error(`Could not view more details: ${responseMessage}`);
-        return "error";
-    }
-}
+  try {
+    const { data } = await client.get(`/candidate-review/details`, {
+      headers: {
+        user_token: getToken(),
+      },
+      params: {
+        reviewCode,
+      },
+    });
+    return data.responseBody;
+  } catch (err) {
+    const {
+      data: { responseMessage },
+    } = err.response;
+    message.error(`Could not view more details: ${responseMessage}`);
+    return 'error';
+  }
+};
 
 export const exportCandidates = async (searchKeys) => {
-    searchKeys.firstChoice = searchKeys.trackCode;
-    searchKeys.currentStage = searchKeys.stageCode;
-    searchKeys.universityName = searchKeys.university;
+  searchKeys.firstChoice = searchKeys.trackCode;
+  searchKeys.currentStage = searchKeys.stageCode;
+  searchKeys.universityName = searchKeys.university;
 
-    // let url = `${baseURL}/candidate-application/export`;
-    let url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export`;
+  // let url = `${baseURL}/candidate-application/export`;
+  let url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export`;
 
   const keys = Object.keys(searchKeys);
   let query = '';

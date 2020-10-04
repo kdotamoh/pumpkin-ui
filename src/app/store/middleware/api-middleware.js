@@ -1,15 +1,15 @@
 import {
-    EmployeeKeys,
-    AlumKeys,
-    TrackKeys,
-    ApplicationFormKeys,
-    UniversityKeys,
-    CycleKeys,
-    MajorKeys,
-    CandidateKeys,
-    ApplicationReviewerKeys,
-    CandidateApplicationReviewKeys,
-    CandidateApplicationKeys,
+  EmployeeKeys,
+  AlumKeys,
+  TrackKeys,
+  ApplicationFormKeys,
+  UniversityKeys,
+  CycleKeys,
+  MajorKeys,
+  CandidateKeys,
+  ApplicationReviewerKeys,
+  CandidateApplicationReviewKeys,
+  CandidateApplicationKeys,
 } from '../actions/action-constants';
 import * as EmployeeService from 'api/user-management/employee';
 import * as AlumService from 'api/user-management/alum';
@@ -27,16 +27,16 @@ import {setAlumni, getAlumni, setAlumniCount} from '../actions/alum-actions';
 import {message} from 'antd';
 import {setTracks, getTracks, setTracksCount} from '../actions/track-actions';
 import {
-    setCountries,
-    setGenders,
-    setAcademicStandings,
-    setApplicationTracks,
-    setApplicationEssayQuestions,
-    setFormValidationStatus,
-    setEssayValidationStatus,
-    setApplicationFormUniversities,
-    setApplicationFormMajors,
-    setSubmissionResponse,
+  setCountries,
+  setGenders,
+  setAcademicStandings,
+  setApplicationTracks,
+  setApplicationEssayQuestions,
+  setFormValidationStatus,
+  setEssayValidationStatus,
+  setApplicationFormUniversities,
+  setApplicationFormMajors,
+  setSubmissionResponse,
 } from '../actions/application-form-actions';
 import {setCycles, getCycles, setCyclesCount} from '../actions/cycle-actions';
 import {
@@ -46,15 +46,18 @@ import {
 import {setMajors, getMajors, setMajorsCount} from '../actions/major-actions';
 import {setApplicationReviewers} from '../actions/application-reviewer-actions';
 import {
-    setRecruitmentCycleReviewSummary,
-    setCandidateApplicationReviews,
-    setApplicationReviewerSummary,
+  setRecruitmentCycleReviewSummary,
+  setCandidateApplicationReviews,
+  setApplicationReviewerSummary,
 } from '../actions/candidate-review-actions';
 import {
-    setCandidateApplicationSummary,
-    setCandidates, setCountriesForSearch,
-    setRecruitmentCycleDetails, setReviewTypes, setTotalCandidatesCount
-} from "../actions/candidate-application-actions";
+  setCandidateApplicationSummary,
+  setCandidates,
+  setCountriesForSearch,
+  setRecruitmentCycleDetails,
+  setReviewTypes,
+  setTotalCandidatesCount,
+} from '../actions/candidate-application-actions';
 
 export const appMiddleware = (store) => (next) => async (action) => {
     const result = next(action);
@@ -328,15 +331,15 @@ export const appMiddleware = (store) => (next) => async (action) => {
             break;
         }
 
-        case UniversityKeys.UPDATE_UNIVERSITY: {
-            try {
-                await UniversityService.updateUniversity(action.name, action.code);
-                store.dispatch(getUniversities());
-            } catch (err) {
-                message.error(`Cannot update university: ${err}`);
-            }
-            break;
-        }
+    case UniversityKeys.UPDATE_UNIVERSITY: {
+      try {
+        await UniversityService.updateUniversity(action.name, action.code);
+        store.dispatch(getUniversities());
+      } catch (err) {
+        message.error(`Cannot update university: ${err}`);
+      }
+      break;
+    }
 
         case MajorKeys.GET_MAJORS:
             try {
@@ -550,99 +553,119 @@ export const appMiddleware = (store) => (next) => async (action) => {
             break;
         }
 
-        case CandidateApplicationKeys.GET_CANDIDATES: {
-            try {
-                const candidates = await CandidateApplicationService.getCandidates(action.cycleReference, action.currentPage);
-                candidates.content.map(candidate => candidate.name = `${candidate.firstName} ${candidate.lastName}`)
-                store.dispatch(setCandidates(candidates));
-            } catch (err) {
-                message.error(`Cannot get candidates: ${err}`);
-            }
-            break;
-        }
-
-        case CandidateApplicationKeys.GET_CANDIDATE_SUMMARY: {
-            try {
-                const candidate = await CandidateApplicationService.getCandidateSummary(action.reference);
-                candidate.academicStanding = candidate.academicStanding.replace(new RegExp('_', ''), ' ');
-                candidate.secondaryPhoneNumber = candidate.secondaryPhoneNumber?.trim();
-                if (!candidate.secondaryPhoneNumber || candidate.secondaryPhoneNumber.includes("undefined")) {
-                    candidate.secondaryPhoneNumber = null;
-                }
-                store.dispatch(setCandidateApplicationSummary(candidate));
-            } catch (err) {
-                message.error(`Cannot get candidate summary: ${err}`);
-            }
-            break;
-        }
-
-        case CandidateApplicationKeys.GET_RECRUITMENT_CYCLE_DETAILS: {
-            try {
-                const recruitmentCycleDetails = await CandidateApplicationService.getRecruitmentCycleDetails(action.code);
-                store.dispatch(setRecruitmentCycleDetails(recruitmentCycleDetails));
-            } catch (err) {
-                message.error(`Cannot get candidate summary: ${err}`);
-            }
-            break;
-        }
-
-        case CandidateApplicationKeys.GET_COUNTRIES_FOR_SEARCH: {
-            try {
-                let countries = await CandidateApplicationService.getCountriesForSearch();
-                countries = countries.map(country => {
-                    return {
-                        code: country,
-                        name: country
-                    }
-                })
-                store.dispatch(setCountriesForSearch(countries));
-            } catch (err) {
-                message.error(`Cannot get countries summary: ${err}`);
-            }
-            break;
-        }
-
-        case CandidateApplicationKeys.SEARCH_CANDIDATE_APPLICATION: {
-            try {
-                const candidates = await CandidateApplicationService.searchCandidateApplications(action.searchKeys, action.cycleReference);
-                candidates.content.map(candidate => candidate.name = `${candidate.firstName} ${candidate.lastName}`)
-                store.dispatch(setCandidates(candidates));
-            } catch (err) {
-                message.error(`Cannot get candidate summary: ${err}`);
-            }
-            break;
-        }
-
-        case CandidateApplicationKeys.GET_REVIEW_TYPES: {
-            try {
-                let reviewTypes = await CandidateApplicationService.getReviewTypes();
-
-                reviewTypes = reviewTypes
-                    .map(reviewType => {
-                        return {
-                            code: reviewType,
-                            name: reviewType.replace(new RegExp('_', ''), ' ')
-                        }
-                    });
-                store.dispatch(setReviewTypes(reviewTypes));
-            } catch (err) {
-                message.error(`Cannot get candidate summary: ${err}`);
-            }
-            break;
-        }
-
-        case CandidateApplicationKeys.GET_APPLICATION_STAGES: {
-            try {
-                const applicationStages = await CandidateApplicationService.getApplicationStages();
-                store.dispatch(setCandidates(applicationStages));
-            } catch (err) {
-                message.error(`Cannot get candidate summary: ${err}`);
-            }
-            break;
-        }
-
-        default:
-            return {};
+    case CandidateApplicationKeys.GET_CANDIDATES: {
+      try {
+        const candidates = await CandidateApplicationService.getCandidates(
+          action.cycleReference
+        );
+        candidates.content.map(
+          (candidate) =>
+            (candidate.name = `${candidate.firstName} ${candidate.lastName}`)
+        );
+        store.dispatch(setCandidates(candidates));
+      } catch (err) {
+        message.error(`Cannot get candidates: ${err}`);
+      }
+      break;
     }
-    return result;
+
+    case CandidateApplicationKeys.GET_CANDIDATE_SUMMARY: {
+      try {
+        const candidate = await CandidateApplicationService.getCandidateSummary(
+          action.reference
+        );
+        candidate.academicStanding = candidate.academicStanding.replace(
+          new RegExp('_', ''),
+          ' '
+        );
+        candidate.secondaryPhoneNumber = candidate.secondaryPhoneNumber?.trim();
+        if (
+          !candidate.secondaryPhoneNumber ||
+          candidate.secondaryPhoneNumber.includes('undefined')
+        ) {
+          candidate.secondaryPhoneNumber = null;
+        }
+        store.dispatch(setCandidateApplicationSummary(candidate));
+      } catch (err) {
+        message.error(`Cannot get candidate summary: ${err}`);
+      }
+      break;
+    }
+
+    case CandidateApplicationKeys.GET_RECRUITMENT_CYCLE_DETAILS: {
+      try {
+        const recruitmentCycleDetails = await CandidateApplicationService.getRecruitmentCycleDetails(
+          action.code
+        );
+        store.dispatch(setRecruitmentCycleDetails(recruitmentCycleDetails));
+      } catch (err) {
+        message.error(`Cannot get candidate summary: ${err}`);
+      }
+      break;
+    }
+
+    case CandidateApplicationKeys.GET_COUNTRIES_FOR_SEARCH: {
+      try {
+        let countries = await CandidateApplicationService.getCountriesForSearch();
+        countries = countries.map((country) => {
+          return {
+            code: country,
+            name: country,
+          };
+        });
+        store.dispatch(setCountriesForSearch(countries));
+      } catch (err) {
+        message.error(`Cannot get countries summary: ${err}`);
+      }
+      break;
+    }
+
+    case CandidateApplicationKeys.SEARCH_CANDIDATE_APPLICATION: {
+      try {
+        const candidates = await CandidateApplicationService.searchCandidateApplications(
+          action.searchKeys,
+          action.cycleReference
+        );
+        candidates.content.map(
+          (candidate) =>
+            (candidate.name = `${candidate.firstName} ${candidate.lastName}`)
+        );
+        store.dispatch(setCandidates(candidates));
+      } catch (err) {
+        message.error(`Cannot get candidate summary: ${err}`);
+      }
+      break;
+    }
+
+    case CandidateApplicationKeys.GET_REVIEW_TYPES: {
+      try {
+        let reviewTypes = await CandidateApplicationService.getReviewTypes();
+
+        reviewTypes = reviewTypes.map((reviewType) => {
+          return {
+            code: reviewType,
+            name: reviewType.replace(new RegExp('_', ''), ' '),
+          };
+        });
+        store.dispatch(setReviewTypes(reviewTypes));
+      } catch (err) {
+        message.error(`Cannot get candidate summary: ${err}`);
+      }
+      break;
+    }
+
+    case CandidateApplicationKeys.GET_APPLICATION_STAGES: {
+      try {
+        const applicationStages = await CandidateApplicationService.getApplicationStages();
+        store.dispatch(setCandidates(applicationStages));
+      } catch (err) {
+        message.error(`Cannot get candidate summary: ${err}`);
+      }
+      break;
+    }
+
+    default:
+      return {};
+  }
+  return result;
 };

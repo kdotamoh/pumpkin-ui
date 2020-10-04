@@ -41,6 +41,7 @@ export const PrimaryApplicationForm = () => {
     }
     return (
       <ApplicationSteps
+        key={'primaryApplicationForm'}
         steps={[
           {
             title: 'Basic Information',
@@ -61,7 +62,7 @@ export const PrimaryApplicationForm = () => {
             delete values[essay.essayQuestionCode];
           });
           values.essays = essayToSbumit;
-          values.gpa = values.gpa + '/' + values.out_of;
+          values.currentGPA = values.gpa + '/' + values.out_of;
           values.applicationFormReference = sessionStorage.getItem(
             'applicationFormReference'
           );

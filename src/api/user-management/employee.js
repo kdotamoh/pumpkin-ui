@@ -18,7 +18,9 @@ export async function inviteEmployee(email, employeeId) {
       }
     );
     const { responseBody } = data;
-    message.success('Employee added successfully');
+    message.success(
+      'Employee added successfully. Please remind them to check their junk mail/spam folder as well.'
+    );
     return responseBody;
   } catch (err) {
     const {

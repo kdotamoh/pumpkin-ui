@@ -1,5 +1,8 @@
 import React from 'react';
-import { validateApplicationForm } from '../../store/actions/application-form-actions';
+import {
+  validateApplicationForm,
+  getApplicationEssayQuestions,
+} from '../../store/actions/application-form-actions';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'antd';
@@ -8,18 +11,25 @@ import {
   formValidationLoading,
 } from './FormValidationHelper';
 
-export const validateRef = (dispatch) => {
+export const validateRef = async (dispatch) => {
   const urlParams = new URLSearchParams(window.location.search);
   const reference = urlParams.get('ref');
   sessionStorage.setItem('applicationFormReference', reference);
   dispatch(validateApplicationForm(reference));
+
+  const cycleRef = urlParams.get('cycle');
+  await dispatch(getApplicationEssayQuestions(cycleRef));
 };
 
 const ActivateFormReferencePage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const cycleRef = urlParams.get('cycle');
   React.useEffect(() => {
-    validateRef(dispatch);
+    validateRef(dispatch, cycleRef);
   }, []);
   const formStatus = useSelector((state) => state.applicationForm.formStatus);
   const questions = useSelector(
@@ -36,7 +46,8 @@ const ActivateFormReferencePage = () => {
           <p>
             Thank you for considering applying for this position. Note that your
             application cannot be saved and will need to be submitted
-            immediately once started.
+            immediately once started. However, you can click through to see what
+            is required before submitting.
           </p>
           <p>
             As part of your application you will be required to answer the
@@ -44,7 +55,9 @@ const ActivateFormReferencePage = () => {
           </p>
           <ul>
             {questions.map((essay) => (
-              <li key={essay.code}>{essay.question}</li>
+              <li key={essay.code}>
+                {essay.question} <em>({essay.wordCount}) words</em>
+              </li>
             ))}
           </ul>
           <p>
@@ -56,6 +69,10 @@ const ActivateFormReferencePage = () => {
             <li>A recent photograph of yourself</li>
           </ul>
           <p>
+            This website works best in Chrome. Be sure to backup whatever
+            information you submit.
+          </p>
+          <p>
             If you have any questions, send an email to{' '}
             <a href="mailto:info@seo-africa.org"> info@seo-africa.org</a>.
           </p>
@@ -66,7 +83,7 @@ const ActivateFormReferencePage = () => {
             history.push(
               `/apply/application-form/?ref=${sessionStorage.getItem(
                 'applicationFormReference'
-              )}`
+              )}&cycle=${sessionStorage.getItem('cycleReference')}`
             )
           }
           className="application-page-component__primary"

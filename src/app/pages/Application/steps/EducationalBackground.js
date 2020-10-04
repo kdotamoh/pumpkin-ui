@@ -97,11 +97,11 @@ export const EducationalBackground = (params) => {
       <Form.Item
         name="universityCode"
         label="Name of University"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //   },
+        // ]}
       >
         <Select placeholder="Select your university" allowClear>
           {
@@ -109,6 +109,14 @@ export const EducationalBackground = (params) => {
             // might have to append other
           }
         </Select>
+      </Form.Item>
+
+      <small>
+        If your university is not listed above, state the name of your school
+        here. Otherwise, leave this field blank.
+      </small>
+      <Form.Item name="newUniversity">
+        <Input disabled={params.disabled} />
       </Form.Item>
       <Form.Item
         noStyle
@@ -216,6 +224,43 @@ export const EducationalBackground = (params) => {
         ]}
       >
         <Input type="date" disabled={params.disabled} />
+      </Form.Item>
+
+      <Form.Item
+        name="academicReference"
+        label="Academic reference's name"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input disabled={params.disabled} />
+      </Form.Item>
+
+      <Form.Item
+        name="academicReferenceEmail"
+        label="Academic reference's email address"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="email" disabled={params.disabled} />
+      </Form.Item>
+
+      <small>Please include their country code (eg: 233243456789)</small>
+      <Form.Item
+        name="academicReferencePhone"
+        label="Academic reference's phone number"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="number" step="0.01" min="0" disabled={params.disabled} />
       </Form.Item>
     </Form>
   );

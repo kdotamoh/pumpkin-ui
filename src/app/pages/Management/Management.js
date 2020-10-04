@@ -94,101 +94,102 @@ class ManagementComponent extends React.Component {
                     }}
                 />
 
-                <Modal
-                    title={`${this.state.action} ${this.props.newEntityName}`}
-                    visible={this.state.visible}
-                    onOk={() =>
-                        this.state.action === ModalActions.ADD
-                            ? this.props.onAddNewEntity(() =>
-                                this.setState({visible: false})
-                            )
-                            : this.props.onEditEntity(() => this.setState({visible: false}))
-                    }
-                    onCancel={this.onCancelAddEntity}
-                >
-                    {this.props.entityContent}
-                </Modal>
-            </div>
-        );
-    }
-
-    onClickEntity = (action) => {
-        this.props.willNavigate
-            ? this.props.history.push(this.props.navigateTo)
-            : this.setState({
-                visible: true,
-                action: action,
-            });
-    };
-
-    onPaginationChanged = (currentPage) => {
-        this.props.onPaginationChanged();
-        // carry out an action that should happen when the pagination has changed
-    }
-
-    onCancelAddEntity = () => {
-        this.props.onCancelAddEntity(() => this.setState({visible: false}));
-    };
-    menu = (record) => {
-        return (
-            <Menu>
-                {this.props.newEntityName === 'TRACK' && (
-                    <Menu.Item
-                        onClick={() => {
-                            this.props.setCurrentEntity(record);
-                            this.onClickEntity(ModalActions.UPDATE);
-                        }}
-                    >
-                        Edit
-                    </Menu.Item>
-                )}
-                {this.props.newEntityName === 'CYCLE' && (
-                    <Menu.Item
-                        onClick={() => {
-                            this.props.onEditEntity(record);
-                        }}
-                    >
-                        Edit
-                    </Menu.Item>
-                )}
-                {record.status === 'INACTIVE' ? (
-                    <>
-                        {this.props.newEntityName !== 'EMPLOYEE' && (
-                            <Menu.Item
-                                onClick={() => {
-                                    // this.props.setCurrentEntity(record);
-                                    this.props.onActivateEntity(record);
-                                }}
-                            >
-                                Reactivate
-                            </Menu.Item>
-                        )}
-                    </>
-                ) : (
-                    <>
-                        {this.props.newEntityName !== 'EMPLOYEE' && (
-                            <Menu.Item
-                                onClick={() => {
-                                    // this.props.setCurrentEntity(record);
-                                    this.props.onDeactivateEntity(record);
-                                }}
-                            >
-                                Deactivate
-                            </Menu.Item>
-                        )}
-                    </>
-                )}
-                <Menu.Item
-                    onClick={() => {
-                        this.props.setCurrentEntity(record);
-                        this.props.onDelete(record);
-                    }}
-                >
-                    Remove
-                </Menu.Item>
-            </Menu>
-        );
-    };
+        <Modal
+          title={`${this.state.action} ${this.props.newEntityName}`}
+          visible={this.state.visible}
+          onOk={() =>
+            this.state.action === ModalActions.ADD
+              ? this.props.onAddNewEntity(() =>
+                  this.setState({ visible: false })
+                )
+              : this.props.onEditEntity(() => this.setState({ visible: false }))
+          }
+          onCancel={this.onCancelAddEntity}
+        >
+          {this.props.entityContent}
+        </Modal>
+      </div>
+    );
+  }
+  onClickEntity = (action) => {
+    this.props.willNavigate
+      ? this.props.history.push(this.props.navigateTo)
+      : this.setState({
+          visible: true,
+          action: action,
+        });
+  };
+  onCancelAddEntity = () => {
+    this.props.onCancelAddEntity(() => this.setState({ visible: false }));
+  };
+  menu = (record) => {
+    return (
+      <Menu>
+        {this.props.newEntityName === 'TRACK' && (
+          <Menu.Item
+            onClick={() => {
+              this.props.setCurrentEntity(record);
+              this.onClickEntity(ModalActions.UPDATE);
+            }}
+          >
+            Edit
+          </Menu.Item>
+        )}
+        {this.props.newEntityName === 'CYCLE' && (
+          <Menu.Item
+            onClick={() => {
+              this.props.onEditEntity(record);
+            }}
+          >
+            Edit
+          </Menu.Item>
+        )}
+        {record.status === 'INACTIVE' ? (
+          <>
+            {this.props.newEntityName !== 'EMPLOYEE' && (
+              <Menu.Item
+                style={{
+                  cursor: 'pointer',
+                  paddingLeft: '1.2rem',
+                  paddingRight: '1.2rem',
+                }}
+                onClick={() => {
+                  this.props.onActivateEntity(record);
+                }}
+              >
+                Reactivate
+              </Menu.Item>
+            )}
+          </>
+        ) : (
+          <>
+            {this.props.newEntityName !== 'EMPLOYEE' && (
+              <Menu.Item
+                style={{
+                  cursor: 'pointer',
+                  paddingLeft: '1.2rem',
+                  paddingRight: '1.2rem',
+                }}
+                onClick={() => {
+                  this.props.onDeactivateEntity(record);
+                }}
+              >
+                Deactivate
+              </Menu.Item>
+            )}
+          </>
+        )}
+        <Menu.Item
+          onClick={() => {
+            this.props.setCurrentEntity(record);
+            this.props.onDelete(record);
+          }}
+        >
+          Remove
+        </Menu.Item>
+      </Menu>
+    );
+  };
 }
 
 ManagementComponent.propTypes = {
