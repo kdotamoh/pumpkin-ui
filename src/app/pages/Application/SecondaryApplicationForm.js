@@ -32,6 +32,9 @@ export const SecondaryApplicationForm = () => {
   const submissionError = useSelector(
     (state) => state.applicationForm.submissionStatus.error
   );
+  const wordCount = useSelector(
+    (state) => state.applicationForm.additionalEssayWordCount
+  );
   if (essayQuestionStatus) {
     if (submissionResponse === 'success') {
       return formSubmissionSuccess();
@@ -41,6 +44,7 @@ export const SecondaryApplicationForm = () => {
     }
     return (
       <ApplicationSteps
+        key={'secondaryApplicationForm'}
         steps={[
           {
             title: 'Additional Essay',
@@ -51,6 +55,7 @@ export const SecondaryApplicationForm = () => {
         onFinish={(values) => {
           delete values.fullName;
           values.essayQuestionCode = questionCode;
+          values.wordCount = wordCount;
           dispatch(submitAdditionalEssay(values));
         }}
       />

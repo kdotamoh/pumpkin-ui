@@ -42,10 +42,13 @@ export class CandidateApplicationManagementComponent extends React.Component {
             dataIndex: 'currentStage',
             key: 'currentStage',
             render: (stage, record) => {
-                if (record.status === 'ACTIVE') {
+                let stageColour = 'orange';
+                if (record.decisionAtStage === 'YES') {
                     return <div style={{color: 'green'}}>{stage}</div>;
+                } else if (record.decisionAtStage === 'NO') {
+                    return <div style={{color: 'red'}}>{stage}</div>;
                 }
-                return <div style={{color: 'red'}}>{stage}</div>;
+                return <div style={{color: stageColour}}>{stage}</div>;
             },
         },
         {
@@ -60,7 +63,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
             fixed: 'right',
             render: (text, record) => (
                 <Link to={({
-                    pathname: `/candidate-application-summary/${record.reference}`
+                    pathname: `/application-summary/${record.reference}`
                 })}
                       onClick={() => this.props.setCurrentCandidate(record)}>
                     View Applicant
@@ -93,7 +96,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
         this.state = {
             cycleHasBeenLoaded: false,
             candidatesHasBeenLoaded: false,
-            bulkDeclineModalVisible: false,
+            bulkRejectModalVisible: false,
             comment: '',
             bulkDeclineModalStages: []
         };
@@ -102,6 +105,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
     // TODO: MAKE SURE THE DATA BEING DISPLAYED ON THE TABLE IS FINE (EVEN WHEN LESS THAN 20)
     render() {
+
         return (
             <React.Fragment>
                 <ManagementComponent
@@ -129,7 +133,6 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
     fetchSearchFilters = (code) => {
         this.props.getRecruitmentCycleDetails(code).then(() => {
-            console.log(this.props);
             this.setState({bulkDeclineModalStages: this.props.stages})
         });
         this.props.getCountriesForSearch();
@@ -148,6 +151,9 @@ export class CandidateApplicationManagementComponent extends React.Component {
     }
 
     subHeaderView = () => {
+        const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
+        const isAdmin = this.props.user.roles.includes('ADMIN');
+
         const status = [{name: 'ACTIVE', code: 'ACTIVE'}, {name: 'INACTIVE', code: 'INACTIVE'}];
 
         const cyclesChildren = this.getDropdownChildren(this.props.recruitmentCycles);
@@ -156,7 +162,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
         const tracksChildren = this.getDropdownChildren(this.props.tracks)
         const countriesChildren = this.getDropdownChildren(this.props.countries)
 
-        const dropDownStyle = {width: 200}
+        const dropDownStyle = {width: 200};
         const inputStyle = {width: 160};
         const pageHeaderDataLoaded = this.props.candidatesHasBeenLoaded;
 
@@ -164,51 +170,65 @@ export class CandidateApplicationManagementComponent extends React.Component {
             <div className="applicants_page_subheader">
                 {
                     pageHeaderDataLoaded &&
+                    <div>
 
-                    <div className="applicants_page_subheader_row data-row">
-                        <div>
-                            <p className="management-component__subheader_title">Recruitment Cycle</p>
-                            <Select defaultValue={this.props.cycleReference} style={{width: 220}}
+                        <div className="flex flex-end margin-bottom-40">
+                            {(isSuperAdmin || isAdmin) &&   <Button type="link"
+                                    style={{fontSize: "16px"}}
+                                    className="semi-bold"
+                                    onClick={() => this.setState({bulkRejectModalVisible: true})}
+                                    danger>
+                                Bulk Reject
+                            </Button> }
+                        </div>
+                        <div className="applicants_page_subheader_row data-row">
+                            <div>
+                                <p className="management-component__subheader_title">Recruitment Cycle</p>
+                                <Select
+                                    defaultValue={this.props.cycleReference}
+                                    style={{width: 220}}
                                     onSelect={this.onRecruitmentCycleSelected}>
-                                {cyclesChildren}
-                            </Select>
-                        </div>
-                        <div>
-                            <p className="">University</p>
-                            <Input
-                                style={inputStyle}
-                                placeholder="University"
-                                value={this.props.searchFilters.university}
-                                onChange={(e) => this.props.handleTextInput(e, 'university')}
-                            />
-                        </div>
-                        <div>
-                            <p className="">Stage</p>
-                            <Select
-                                value={this.props.dropdownValues.stage}
-                                style={dropDownStyle}
-                                onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'stageCode', 'stage')}>
-                                {stagesChildren}
-                            </Select>
-                        </div>
-                        <div>
-                            <p className="">Track</p>
-                            <Select value={this.props.dropdownValues.track}
+                                    {cyclesChildren}
+                                </Select>
+                            </div>
+                            <div>
+                                <p className="">University</p>
+                                <Input
+                                    style={inputStyle}
+                                    placeholder="University"
+                                    value={this.props.searchFilters.university}
+                                    onChange={(e) => this.props.handleTextInput(e, 'university')}
+                                />
+                            </div>
+                            <div>
+                                <p className="">Stage</p>
+                                <Select
+                                    value={this.props.dropdownValues.stage}
                                     style={dropDownStyle}
-                                    onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'trackCode', 'track')}>
-                                {tracksChildren}
-                            </Select>
-                        </div>
-                        <div>
-                            <p className="">Name/Email/Reference</p>
-                            <Input
-                                style={inputStyle}
-                                placeholder="Name or Email or Reference"
-                                value={this.props.searchFilters.searchKey}
-                                onChange={(e) => this.props.handleTextInput(e, 'searchKey')}
-                            />
+                                    onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'stageCode', 'stage')}>
+                                    {stagesChildren}
+                                </Select>
+                            </div>
+                            <div>
+                                <p className="">Track</p>
+                                <Select value={this.props.dropdownValues.track}
+                                        style={dropDownStyle}
+                                        onSelect={(code, dropdownData) => this.props.onSearchFilterSelected(code, dropdownData, 'trackCode', 'track')}>
+                                    {tracksChildren}
+                                </Select>
+                            </div>
+                            <div>
+                                <p className="">Name/Email/Reference</p>
+                                <Input
+                                    style={{width: 190}}
+                                    placeholder="Name or Email or Reference"
+                                    value={this.props.searchFilters.searchKey}
+                                    onChange={(e) => this.props.handleTextInput(e, 'searchKey')}
+                                />
+                            </div>
                         </div>
                     </div>
+
                 }
                 {
                     pageHeaderDataLoaded &&
@@ -247,20 +267,15 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                         })}>
                                     Export to Csv
                                 </Button>
-                                <Button type="primary" danger
-                                        onClick={() => this.setState({bulkDeclineModalVisible: true})}>
-                                    Bulk Decline
-                                </Button>
                             </div>
                         </div>
-
                     </div>
                 }
 
                 <Modal
-                    visible={this.state.bulkDeclineModalVisible}
+                    visible={this.state.bulkRejectModalVisible}
                     title="Bulk Reject"
-                    onCancel={() => this.setState({bulkDeclineModalVisible: false})}
+                    onCancel={() => this.setState({bulkRejectModalVisible: false})}
                 >
                     <div>
                         <p className="">Stage</p>
@@ -311,7 +326,8 @@ const mapStateToProps = (state) => ({
     displayingCandidates: state.candidateApplications.displayingCandidates,
     cycleReference: state.candidateApplications.cycleReference,
     searchFilters: state.candidateApplications.searchFilters,
-    dropdownValues: state.candidateApplications.dropdownValues
+    dropdownValues: state.candidateApplications.dropdownValues,
+    user: state.user
 })
 
 const mapDispatchToProps = (dispatch) => ({

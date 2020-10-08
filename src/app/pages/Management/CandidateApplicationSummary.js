@@ -50,9 +50,9 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             attentionToDetails: {value: '', name: 'Attention to Details', maxScore: 2},
             writing: {value: '', name: 'Writing', maxScore: 2},
             leadership: {value: '', name: 'Leadership', maxScore: 2},
-            interestInSeo: {value: '', name: 'Interest in SEO', maxScore: 1},
+            interestInSeo: {value: '', name: 'Interest in SEO', maxScore: 2},
             workExperience: {value: '', name: 'Work Experience', maxScore: 1},
-            academics: {value: '', name: 'Academics', maxScore: 2}
+            academics: {value: '', name: 'Academics', maxScore: 1}
         },
         individualInterviewInputs: {
             drive: {value: '', name: 'Drive', maxScore: 5},
@@ -105,7 +105,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 request = {...request, finalScore, applicationReviewDetails, remarks: comments}
             } else {
                 const {grade} = this.state;
-                request = {...request, finalScore: `${grade.value}/${grade.maxScore}`}
+                request = {...request, finalScore: grade.value}
             }
 
             CandidateApplicationService.addReview(request).then(res => {
@@ -243,55 +243,56 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     title={(isAdmin || isSuperAdmin) ? 'Final Decision' : 'Add Review'}
                     onCancel={() => this.hideModal()}
                     footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
+                    width={700}
                 >
-                    <this.ModalContent />
+                    {this.modalContent()}
                 </Modal>
             </div>
 
         );
     }
 
-    ApplicationReadingModalContent = () => {
+    applicationReadingModalContent = () => {
         const {attentionToDetails, writing, leadership, interestInSeo, workExperience, academics} = this.state.applicationReadingInputs;
         const questions = [
             {
                 title: 'A) Attention to details:',
-                details: 'How well did s/he pay attention to details',
+                details: 'How well did this applicant pay attention to details',
                 value: attentionToDetails.value,
                 name: 'attentionToDetails',
                 maxScore: attentionToDetails.maxScore
             },
             {
                 title: 'B) Writing:',
-                details: 'How well did s/he pay attention to details',
+                details: 'What do you think about this applicant\'s writing skills?',
                 value: writing.value,
                 name: 'writing',
                 maxScore: writing.maxScore
             },
             {
                 title: 'C) Leadership',
-                details: 'How well did s/he pay attention to details',
+                details: 'How well has this applicant displayed leadership through their CV and essay(s)?',
                 value: leadership.value,
                 name: 'leadership',
                 maxScore: leadership.maxScore
             },
             {
                 title: 'D) Interest in SEO/Finance',
-                details: 'How well did s/he pay attention to details',
+                details: 'How interested is this applicant in this particular SEO opportunity?',
                 value: interestInSeo.value,
                 name: 'interestInSeo',
                 maxScore: interestInSeo.maxScore
             },
             {
                 title: 'E) Work Experience',
-                details: 'How well did s/he pay attention to details',
+                details: 'How relevant/impressive is this applicant\'s work experience?',
                 value: workExperience.value,
                 name: 'workExperience',
                 maxScore: workExperience.maxScore
             },
             {
                 title: 'F) Academics',
-                details: 'How well did s/he pay attention to details',
+                details: 'First class 1 mark, Second-upper 0.5, Others 0',
                 value: academics.value,
                 name: 'academics',
                 maxScore: academics.maxScore
@@ -306,7 +307,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                             <p>{question.details}</p>
                         </div>
                         <div>
-                            <span>Grade: </span>
                             <input type='number' min={0} max={2} value={question.value} className='score-input'
                                    onChange={e => this.onApplicationReadingInputsChanged(e, question.name)}/>
                             <span>/{question.maxScore}</span>
@@ -326,7 +326,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         );
     }
 
-    IndividualInterviewModalContent = () => {
+    individualInterviewModalContent = () => {
         const {drive, mentalAgility} = this.state.individualInterviewInputs;
 
         const questions = [
@@ -348,7 +348,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         return (
             <div>
                 {questions.map(question => (
-                    <div key={question.title} className='flex space-between margin-bottom-10'>
+                    <div key={question.title} className='flex space-between margin-bottom-10 items-start'>
                         <div className='flex-1'>
                             <div>
                                 <p className='bold margin-0'>{question.title}</p>
@@ -381,7 +381,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         );
     }
 
-    DefaultModalContent = () => {
+    defaultModalContent = () => {
 
         return (
             <div>
@@ -401,6 +401,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
         );
     }
+
     getAlumReviewActions = () => {
         const finalScoreVisible = this.state.alumReview.reviewType === 'APPLICATION_READING' ||
             this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW';
@@ -411,7 +412,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         }
         return [
             <div className='flex space-between' style={footerStyle}>
-                {finalScoreVisible && <div className='margin-right-50'>
+                {finalScoreVisible && <div className='margin-right-50 bold'>
                     Final Score: {this.state.finalScore}
                 </div>}
 
@@ -433,8 +434,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                     </Button>
                 </div>
             </div>
-
-
         ];
     }
 
@@ -459,7 +458,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     }
 
     // TODO: MAKE THE MODAL FOR EITHER ADMIN OR ALUM DIFFERENT
-    ModalContent = () => {
+    modalContent = () => {
         const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
         const isAdmin = this.props.user.roles.includes('ADMIN');
 
@@ -496,20 +495,11 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         </Select>
                     </div>
                     {this.state.alumReview.reviewType === 'APPLICATION_READING' ?
-                        <this.ApplicationReadingModalContent/> :
+                        this.applicationReadingModalContent() :
                         this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' ?
-                            <this.IndividualInterviewModalContent/> :
-                            <this.DefaultModalContent/>
+                            this.individualInterviewModalContent() :
+                            this.defaultModalContent()
                     }
-
-                    {/*{this.state.alumReview.reviewType === 'APPLICATION_READING' &&*/}
-                    {/*<this.ApplicationReadingModalContent/>}*/}
-                    {/*{this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' &&*/}
-                    {/*<this.IndividualInterviewModalContent/>}*/}
-                    {/*{this.state.alumReview.reviewType !== 'APPLICATION_READING' &&*/}
-                    {/*this.state.alumReview.reviewType !== 'INDIVIDUAL_INTERVIEW' &&*/}
-                    {/*<this.DefaultModalContent/>}*/}
-
                 </div>
             }
         </React.Fragment>
@@ -569,7 +559,7 @@ const mapDispatchToProps = (dispatch) => ({
 /**
  * The connected CandidateApplicationSummaryManagement
  */
-export const CandidateSummary = connect(
+export const CandidateApplicationSummary = connect(
     mapStateToProps,
     mapDispatchToProps
 )(withRouter(CandidateApplicationSummaryComponent));

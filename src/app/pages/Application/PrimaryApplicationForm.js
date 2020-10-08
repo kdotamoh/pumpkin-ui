@@ -41,6 +41,7 @@ export const PrimaryApplicationForm = () => {
     }
     return (
       <ApplicationSteps
+        key={'primaryApplicationForm'}
         steps={[
           {
             title: 'Basic Information',

@@ -2,10 +2,10 @@ import React from "react";
 import {Skeleton} from "antd";
 
 const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading}) => {
-    const stageStyle = {};
-    if (candidateApplicationSummary.stillBeingConsidered) {
-        stageStyle.color = "green";
-    } else {
+    const stageStyle = {color: 'orange'};
+    if (candidateApplicationSummary.decisionAtStage === 'YES') {
+        stageStyle.color = 'green';
+    } else if (candidateApplicationSummary.decisionAtStage === 'NO'){
         stageStyle.color = "red";
     }
 
@@ -89,6 +89,23 @@ const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading})
                         </div>
                     </div>
                 </div>
+
+                <div className="sub-content">
+                    <div className="sub-content-header">Academic Reference</div>
+                    <div>
+                        <div className="data-row">
+                            <div className="flex-1">Academic Reference
+                                - {candidateApplicationSummary.academicReference || 'N/A'}</div>
+                            <div className="flex-1">Academic Reference Email
+                                - {candidateApplicationSummary.academicReferenceEmail || 'N/A'}</div>
+                        </div>
+                        <div className="data-row">
+                            <div className="flex-1">Academic Reference Phone
+                                - {candidateApplicationSummary.academicReferencePhone || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+
             </React.Fragment>
     )
 }

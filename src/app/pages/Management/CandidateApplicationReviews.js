@@ -426,7 +426,7 @@ export class CandidateApplicationReviewsComponent extends React.Component {
             <Menu.Item>
               <Link
                 to={{
-                  pathname: `/candidate-application-summary/${record.applicationReference}`,
+                  pathname: `/application-summary/${record.applicationReference}`,
                 }}
               >
                 View applicant detail

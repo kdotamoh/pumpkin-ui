@@ -32,10 +32,15 @@ export const LoginPage = () => {
       const user = await login({ username: email, password });
       // await dispatch(fetchUser({ username: email, password }));
       dispatch(setUser(user)); // TODO: use a thunk instead?
+      console.log(user);
 
-      user.roles.includes('ADMIN')
-        ? history.push('/employees')
-        : history.push('/applications'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
+      if (user.promptUserToChangePassword) {
+        history.push('/change-password');
+      } else {
+        user.roles.includes('ADMIN')
+          ? history.push('/employees')
+          : history.push('/applications'); // TODO: Not sure if this is the right page for an alum. Also means protecting routes so alums can't access employee routes
+      }
     } catch (err) {
       console.error(err);
     }
@@ -104,7 +109,7 @@ export const LoginPage = () => {
               />
               Remember me
             </label>
-            <Link style={{ color: 'rgb(223, 226, 229)' }} to="#/">
+            <Link style={{ color: 'rgb(134, 134, 134)' }} to="/password-reset">
               Forgot password?
             </Link>
           </div>

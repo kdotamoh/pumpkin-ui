@@ -75,7 +75,7 @@ export const ApplicationSteps = (params) => {
           {current > 0 && (
             <Button onClick={() => setCurrent(current - 1)}>Previous</Button>
           )}
-          {current === 0 && (
+          {params.key === 'primaryApplicationForm' && current === 0 && (
             <Button
               type="primary"
               htmlType="submit"

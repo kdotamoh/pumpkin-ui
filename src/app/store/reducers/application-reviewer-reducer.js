@@ -1,16 +1,20 @@
 import { ApplicationReviewerKeys } from '../actions/action-constants';
 
-export const initialReviwerState = {
+export const initialReviewerState = {
   available: [],
   current: {},
+  hasReviewersBeenLoaded: false,
+  cycleReference: '',
+  cyclesHaveBeenLoaded: false
 };
 
-export const applicationReviewerReducer = (state = initialReviwerState, action) => {
+export const applicationReviewerReducer = (state = initialReviewerState, action) => {
   switch (action.type) {
     case ApplicationReviewerKeys.SET_APPLICATION_REVIEWERS: {
       return {
         ...state,
         available: action.applicationReviewers,
+        hasReviewersBeenLoaded: true
       };
     }
     case ApplicationReviewerKeys.SET_CURRENT_APPLICATION_REVIEWER: {
@@ -19,6 +23,21 @@ export const applicationReviewerReducer = (state = initialReviwerState, action) 
         current: action.record,
       };
     }
+    case  ApplicationReviewerKeys.SET_CYCLE_REFERENCE : {
+      return {
+        ...state,
+        cycleReference: action.cycleReference
+      }
+    }
+
+    case ApplicationReviewerKeys.SET_CYCLES_HAS_BEEN_LOADED: {
+      return {
+        ...state,
+        cyclesHaveBeenLoaded: action.cyclesHaveBeenLoaded
+      }
+    }
+
+
     default:
       return state;
   }

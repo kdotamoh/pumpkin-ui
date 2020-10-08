@@ -1,8 +1,10 @@
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import { ApplicationLayout } from '../layouts/ApplicationLayout';
 import { LoginPage } from '../pages/LoginPage';
+import PasswordReset from 'app/pages/PasswordReset';
+import ChangePassword from 'app/pages/ChangePassword';
 import { ApplicationReviewerManagement } from '../pages/Management/ApplicationReviewerManagement';
-import { CandidateApplicationReviews} from '../pages/Management/CandidateApplicationReviews';
+import { CandidateApplicationReviews } from '../pages/Management/CandidateApplicationReviews';
 import { EmployeeManagement } from '../pages/Management/EmployeeManagement';
 import { AlumManagement } from '../pages/Management/AlumManagement';
 import { ApplicationTrackManagement } from '../pages/Management/ApplicationTrackManagement';
@@ -15,8 +17,8 @@ import { SecondaryApplicationForm } from 'app/pages/Application/SecondaryApplica
 import { PrimaryApplicationForm } from 'app/pages/Application/PrimaryApplicationForm';
 import AddCycle from 'app/pages/Cycle/AddCycle';
 import UpdateCycle from 'app/pages/Cycle/UpdateCycle';
-import {CandidateApplicationManagement} from "../pages/Management/CandidateApplicationManagement";
-import {CandidateSummary} from "../pages/Management/CandidateSummary";
+import { CandidateApplicationManagement } from '../pages/Management/CandidateApplicationManagement';
+import { CandidateApplicationSummary } from '../pages/Management/CandidateApplicationSummary';
 
 export const authorized = [
   {
@@ -75,9 +77,9 @@ export const authorized = [
     component: CandidateApplicationManagement,
   },
   {
-    path: '/candidate-application-summary/:reference',
+    path: '/application-summary/:reference',
     layout: DefaultLayout,
-    component: CandidateSummary,
+    component: CandidateApplicationSummary,
   },
 ];
 
@@ -94,6 +96,14 @@ export const unauthorized = [
   {
     path: '/activate-account',
     component: ActivationPage,
+  },
+  {
+    path: '/password-reset',
+    component: PasswordReset,
+  },
+  {
+    path: '/change-password',
+    component: ChangePassword,
   },
   {
     path: '/apply/additional-essay',
@@ -114,5 +124,5 @@ export const unauthorized = [
     path: '/application-form',
     layout: ApplicationLayout,
     component: PrimaryApplicationForm,
-  }
+  },
 ];
