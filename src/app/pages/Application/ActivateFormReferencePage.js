@@ -56,7 +56,7 @@ const ActivateFormReferencePage = () => {
           <ul>
             {questions.map((essay) => (
               <li key={essay.code}>
-                {essay.question} <em>({essay.wordCount}) words</em>
+                {essay.question} <em>({essay.wordCount} words)</em>
               </li>
             ))}
           </ul>
@@ -68,10 +68,7 @@ const ActivateFormReferencePage = () => {
             <li>Your CV</li>
             <li>A recent photograph of yourself</li>
           </ul>
-          <p>
-            This website works best in Chrome. Be sure to backup whatever
-            information you submit.
-          </p>
+          <p>This website works best in Chrome.</p>
           <p>
             If you have any questions, send an email to{' '}
             <a href="mailto:info@seo-africa.org"> info@seo-africa.org</a>.
