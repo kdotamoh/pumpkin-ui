@@ -9,7 +9,7 @@ import {
     getReviewTypes
 } from '../../store/actions/candidate-application-actions';
 import '../../../style/candidate-application.css';
-import {Tabs, Button, Modal, Select, Input} from 'antd';
+import {Tabs, Button, Modal, Select, Input, message} from 'antd';
 import CandidateApplicationDetails from './Components/CandidateApplicationDetails';
 import CandidateApplicationEssays from './Components/CandidateApplicationEssays';
 import CandidateApplicationDocuments from './Components/CandidateApplicationDocuments';
@@ -36,6 +36,22 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         this.props.getRecruitmentCycleDetails(cycleReference);
     }
 
+    applicationReadingInputsDefaultState = {
+        attentionToDetails: {value: '', name: 'Attention to Details', maxScore: 2},
+        writing: {value: '', name: 'Writing', maxScore: 2},
+        leadership: {value: '', name: 'Leadership', maxScore: 2},
+        interestInSeo: {value: '', name: 'Interest in SEO', maxScore: 2},
+        workExperience: {value: '', name: 'Work Experience', maxScore: 1},
+        academics: {value: '', name: 'Academics', maxScore: 1}
+    }
+
+    individualInterviewInputsDefaultState = {
+        drive: {value: '', name: 'Drive', maxScore: 5},
+        mentalAgility: {value: '', name: 'Mental Agility', maxScore: 5}
+    }
+
+    gradeDefaultState = {value: '', maxScore: 5}
+
     defaultState = {
         modalVisible: false,
         alumReview: {
@@ -46,20 +62,10 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         cycleStageCode: '',
         seoRemark: '',
         cycleReference: '',
-        applicationReadingInputs: {
-            attentionToDetails: {value: '', name: 'Attention to Details', maxScore: 2},
-            writing: {value: '', name: 'Writing', maxScore: 2},
-            leadership: {value: '', name: 'Leadership', maxScore: 2},
-            interestInSeo: {value: '', name: 'Interest in SEO', maxScore: 2},
-            workExperience: {value: '', name: 'Work Experience', maxScore: 1},
-            academics: {value: '', name: 'Academics', maxScore: 1}
-        },
-        individualInterviewInputs: {
-            drive: {value: '', name: 'Drive', maxScore: 5},
-            mentalAgility: {value: '', name: 'Mental Agility', maxScore: 5}
-        },
+        applicationReadingInputs: this.applicationReadingInputsDefaultState,
+        individualInterviewInputs: this.individualInterviewInputsDefaultState,
         finalScore: 0,
-        grade: {value: '', maxScore: 5},
+        grade: this.gradeDefaultState,
         comments: ''
     }
 
@@ -83,6 +89,15 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         let alumReview = {...this.state.alumReview};
         alumReview[target] = code;
         this.setState({alumReview, finalScore: 0, comments: ''});
+        this.resetReviewInputs();
+    }
+
+    resetReviewInputs = () => {
+        this.setState({
+            applicationReadingInputs: this.applicationReadingInputsDefaultState,
+            individualInterviewInputs: this.individualInterviewInputsDefaultState,
+            grade: this.gradeDefaultState
+        })
     }
 
     onCycleStageCodeChanged = (cycleStageCode, dropdownData) => {
@@ -95,17 +110,24 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             const {reviewType} = alumReview;
             let request = {...alumReview, decision, cycleStageCode: this.state.cycleStageCode};
 
+            let currentReviewInputs = {};
             if (reviewType === 'APPLICATION_READING') {
+                currentReviewInputs = applicationReadingInputs;
                 const applicationReadingGrades = Object.values(applicationReadingInputs);
                 const applicationReviewDetails = this.buildGradesRequestFromInputs(applicationReadingGrades);
                 request = {...request, finalScore, applicationReviewDetails, remarks: comments}
             } else if (reviewType === 'INDIVIDUAL_INTERVIEW') {
+                currentReviewInputs = individualInterviewInputs;
                 const individualInterviewGrades = Object.values(individualInterviewInputs);
                 const applicationReviewDetails = this.buildGradesRequestFromInputs(individualInterviewGrades);
                 request = {...request, finalScore, applicationReviewDetails, remarks: comments}
             } else {
                 const {grade} = this.state;
+                currentReviewInputs = {grade};
                 request = {...request, finalScore: grade.value}
+            }
+            if (!this.isValidScoresEntered(currentReviewInputs)) {
+                return message.error(`Cannot add Review: Ensure the inputs are valid`);
             }
 
             CandidateApplicationService.addReview(request).then(res => {
@@ -116,6 +138,16 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         } catch (e) {
 
         }
+    }
+
+    isValidScoresEntered = (currentReviewInputs) => {
+        const valuesArray = Object.values(currentReviewInputs);
+        for (let obj of valuesArray) {
+            if (obj.value.trim() === "" || isNaN(Number(obj.value)) || Number(obj.value) > obj.maxScore) {
+                return false;
+            }
+        }
+        return true;
     }
 
     buildGradesRequestFromInputs = (grades) => {
@@ -205,7 +237,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                         <div className='displayed_reference_row'>
                             <p>Reference - {this.props.match.params.reference}</p>
                             <Button onClick={() => this.showModal()}
-                                className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
+                                    className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
                                 {(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}
                             </Button>
                         </div>
@@ -489,7 +521,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                             {this.getDropdownChildren(this.props.stages)}
                         </Select>
                         <Select defaultValue='Select review type' style={{width: 200}}
-
                                 onSelect={(code) => this.onReviewTypeSelected(code, 'reviewType')}>
                             {this.getDropdownChildren(this.props.reviewTypes)}
                         </Select>

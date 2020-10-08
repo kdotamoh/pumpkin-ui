@@ -103,7 +103,6 @@ export class CandidateApplicationManagementComponent extends React.Component {
         };
     }
 
-    // TODO: MAKE SURE THE DATA BEING DISPLAYED ON THE TABLE IS FINE (EVEN WHEN LESS THAN 20)
     render() {
 
         return (
@@ -129,6 +128,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
     }
 
     onSearchCandidateApplications = () => {
+        this.setState({currentPage: 1})
         this.props.searchCandidateApplications(this.props.searchFilters, this.props.cycleReference);
     }
 
@@ -266,16 +266,18 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                 <Button type="primary" onClick={() => this.onSearchCandidateApplications()}>
                                     Apply Filter
                                 </Button>
-                                <Button onClick={() => this.onRecruitmentCycleSelected(this.props.cycleReference)}>
+                                <Button style={{marginRight: (isSuperAdmin || isAdmin) ? "5px" : "15px"}}
+                                        onClick={() => this.onRecruitmentCycleSelected(this.props.cycleReference)}>
                                     Clear Filter
                                 </Button>
+                                {(isSuperAdmin || isAdmin) &&
                                 <Button type="link"
                                         onClick={() => exportCandidates({
                                             ...this.props.searchFilters,
                                             recruitmentCycleCode: this.props.cycleReference
                                         })}>
                                     Export to Csv
-                                </Button>
+                                </Button>}
                             </div>
                         </div>
                     </div>
