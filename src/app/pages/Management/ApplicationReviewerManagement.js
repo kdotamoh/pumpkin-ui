@@ -114,7 +114,8 @@ export class ApplicationReviewerManagementComponent extends React.Component {
         const totalReviewers = this.props.recruitmentCycleSummary.totalReviewers;
         const pendingReviews = this.props.recruitmentCycleSummary
             .totalPendingReviews;
-        const approvedReviews = this.props.recruitmentCycleSummary.totalApproved;
+        const totalReviews = this.props.recruitmentCycleSummary.totalReviews;
+        console.log(this.props.recruitmentCycleSummary)
         return (
             <div style={{display: 'flex'}}>
                 {this.props.cyclesHaveBeenLoaded && (
@@ -143,8 +144,8 @@ export class ApplicationReviewerManagementComponent extends React.Component {
                                 type="primary"
                             />
                             <SummaryBadgeComponent
-                                title="Total Approved"
-                                count={approvedReviews}
+                                title="Total Reviews"
+                                count={totalReviews}
                                 type="success"
                             />
                             <SummaryBadgeComponent

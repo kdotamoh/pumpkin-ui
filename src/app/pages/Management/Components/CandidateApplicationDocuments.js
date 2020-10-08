@@ -28,7 +28,7 @@ const CandidateApplicationDocuments = ({candidateApplicationSummary, application
                     <img src={Picture} alt="Paper" />
                 </div>
                 <div>
-                    <p>Applicant Passport</p>
+                    <p>Applicant Photograph</p>
                     <button className="btn"
                             type="submit"
                             onClick={() => downloadCandidateDocument(candidateApplicationSummary.linkToHeadShot, applicationReference)}>
