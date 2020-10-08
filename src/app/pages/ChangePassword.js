@@ -110,7 +110,7 @@ const ActivationPage = () => {
                   message: 'Must contain at least one uppercase character.',
                 },
                 {
-                  pattern: new RegExp(/\W/g), // TODO: match a specific set of characters. this allows '.' for instance, which the server rejects
+                  pattern: new RegExp(/[\W_]+/g), // TODO: match a specific set of characters. this allows '.' for instance, which the server rejects
                   message: 'Must contain at least one special character.',
                 },
               ]}
@@ -141,7 +141,7 @@ const ActivationPage = () => {
                   message: 'Must contain at least one uppercase character.',
                 },
                 {
-                  pattern: new RegExp(/\W/g), // TODO: match a specific set of characters. this allows '.' for instance, which the server rejects
+                  pattern: new RegExp(/[\W_]+/g), // TODO: match a specific set of characters. this allows '.' for instance, which the server rejects
                   message: 'Must contain at least one special character.',
                 },
               ]}
