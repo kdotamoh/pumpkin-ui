@@ -56,7 +56,7 @@ const ActivateFormReferencePage = () => {
           <ul>
             {questions.map((essay) => (
               <li key={essay.code}>
-                {essay.question} <em>({essay.wordCount}) words</em>
+                {essay.question} <em>({essay.wordCount} words)</em>
               </li>
             ))}
           </ul>
