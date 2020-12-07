@@ -12,46 +12,46 @@ import store from './app/store';
 import PublicRoute from 'app/hocs/PublicRoute';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Router>
-        <Switch>
-          {unauthorized.map((route) => (
-            <PublicRoute
-              key={route.path}
-              path={route.path}
-              exact={route.exact}
-              Component={(props) => {
-                return route.layout ? (
-                  <route.layout {...props}>
-                    <route.component {...props} />
-                  </route.layout>
-                ) : (
+  // <React.StrictMode>
+  <Provider store={store}>
+    <Router>
+      <Switch>
+        {unauthorized.map((route) => (
+          <PublicRoute
+            key={route.path}
+            path={route.path}
+            exact={route.exact}
+            Component={(props) => {
+              return route.layout ? (
+                <route.layout {...props}>
                   <route.component {...props} />
-                );
-              }}
-            />
-          ))}
-          {authorized.map((route) => (
-            <PrivateRoute
-              key={route.path}
-              path={route.path}
-              exact={route.exact}
-              Component={(props) => {
-                return route.layout ? (
-                  <route.layout {...props}>
-                    <route.component {...props} />
-                  </route.layout>
-                ) : (
+                </route.layout>
+              ) : (
+                <route.component {...props} />
+              );
+            }}
+          />
+        ))}
+        {authorized.map((route) => (
+          <PrivateRoute
+            key={route.path}
+            path={route.path}
+            exact={route.exact}
+            Component={(props) => {
+              return route.layout ? (
+                <route.layout {...props}>
                   <route.component {...props} />
-                );
-              }}
-            />
-          ))}
-        </Switch>
-      </Router>
-    </Provider>
-  </React.StrictMode>,
+                </route.layout>
+              ) : (
+                <route.component {...props} />
+              );
+            }}
+          />
+        ))}
+      </Switch>
+    </Router>
+  </Provider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 

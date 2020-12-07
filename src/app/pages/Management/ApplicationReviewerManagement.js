@@ -175,6 +175,8 @@ ApplicationReviewerManagementComponent.propTypes = {
   setCurrentApplicationReviewer: PropTypes.func.isRequired,
   hasReviewersBeenLoaded: PropTypes.bool,
   cyclesHaveBeenLoaded: PropTypes.bool,
+  cycleReference: PropTypes.string,
+  setCycleReference: PropTypes.func,
   setCyclesHaveBeenLoaded: PropTypes.func.isRequired,
 };
 
