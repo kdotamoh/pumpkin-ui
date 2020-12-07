@@ -1,5 +1,5 @@
-import React from "react";
-import {Skeleton} from "antd";
+import React from 'react';
+import {Skeleton} from 'antd';
 
 const CandidateApplicationEssays = ({candidateApplicationSummary, pageLoading}) => {
     return (
@@ -19,7 +19,7 @@ const CandidateApplicationEssays = ({candidateApplicationSummary, pageLoading}) 
                             </div>
                         </div>
                         <div
-                            className={`word_count_row ${essay.responseWordCount >= essay.essayQuestionWordCount / 2 ? "text-green" : "text-red"}`}>
+                            className={`word_count_row ${essay.responseWordCount >= essay.essayQuestionWordCount / 2 ? 'text-green' : 'text-red'}`}>
                             Word Count: {essay.responseWordCount} words
                         </div>
                     </div>

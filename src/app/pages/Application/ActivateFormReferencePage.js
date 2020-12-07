@@ -30,7 +30,7 @@ const ActivateFormReferencePage = () => {
   const cycleRef = urlParams.get('cycle');
   React.useEffect(() => {
     validateRef(dispatch, cycleRef);
-  }, []);
+  }, [dispatch, cycleRef]);
   const formStatus = useSelector((state) => state.applicationForm.formStatus);
   const questions = useSelector(
     (state) => state.applicationForm.essayQuestions

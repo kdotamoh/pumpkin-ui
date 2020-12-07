@@ -1,9 +1,9 @@
-import {downloadCandidateDocument} from "../../../../api/candidate-application";
-import React from "react";
-import {Skeleton} from "antd";
-import Picture from "../../../../assets/svg/picture 1.svg" ;
-import Paper from "../../../../assets/svg/paper 1.svg" ;
-import Download from "../../../../assets/svg/download 1.svg";
+import {downloadCandidateDocument} from '../../../../api/candidate-application';
+import React from 'react';
+import {Skeleton} from 'antd';
+import Picture from '../../../../assets/svg/picture 1.svg' ;
+import Paper from '../../../../assets/svg/paper 1.svg' ;
+import Download from '../../../../assets/svg/download 1.svg';
 
 const CandidateApplicationDocuments = ({candidateApplicationSummary, applicationReference, pageLoading}) => (
     pageLoading ?

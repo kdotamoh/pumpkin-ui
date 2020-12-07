@@ -51,7 +51,7 @@ export const getCandidateSummary = async (reference) => {
 export const getCountriesForSearch = async () => {
   try {
     const { data } = await client.get(
-      `/candidate-application/search/countries/`,
+      '/candidate-application/search/countries/',
       {
         headers: {
           user_token: getToken(),
@@ -140,6 +140,7 @@ export const getApplicationStages = async () => {
         user_token: getToken(),
       },
     });
+    return data;
   } catch (err) {
     const {
       data: { responseMessage },
@@ -156,6 +157,7 @@ export const addReview = async (review) => {
       },
     });
     message.success('Review added successfully');
+    return data;
   } catch (err) {
     const {
       data: { responseMessage },
@@ -178,6 +180,7 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
       }
     );
     message.success('Decision added');
+    return data;
   } catch (err) {
     const {
       data: { responseMessage },
@@ -189,7 +192,7 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
 
 export const seeMoreReviewDetails = async (reviewCode) => {
   try {
-    const { data } = await client.get(`/candidate-review/details`, {
+    const { data } = await client.get('/candidate-review/details', {
       headers: {
         user_token: getToken(),
       },
@@ -213,7 +216,8 @@ export const exportCandidates = async (searchKeys) => {
   searchKeys.universityName = searchKeys.university;
 
   // let url = `${baseURL}/candidate-application/export`;
-  let url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export`;
+  let url =
+    'https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export';
 
   const keys = Object.keys(searchKeys);
   let query = '';

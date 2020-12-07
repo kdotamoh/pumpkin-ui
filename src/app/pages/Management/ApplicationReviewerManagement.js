@@ -113,7 +113,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
     }
 
     const showSummary =
-      this.props.recruitmentCycleSummary.totalReviewers != undefined;
+      this.props.recruitmentCycleSummary.totalReviewers !== undefined;
     const totalReviewers = this.props.recruitmentCycleSummary.totalReviewers;
     const pendingReviews = this.props.recruitmentCycleSummary
       .totalPendingReviews;

@@ -11,13 +11,13 @@ import {
     setCurrentCandidate,
     setCycleReference
 } from 'app/store/actions/candidate-application-actions';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 import {Select, Input, Button, Modal} from 'antd';
-import {getCycles} from "../../store/actions/cycle-actions";
-import "../../../style/candidate-application.css";
-import {exportCandidates} from "../../../api/candidate-application";
-import {onSearchFilterSelected, onTextInputChanged} from "../../store/actions/candidate-application-actions";
-import TextArea from "antd/es/input/TextArea";
+import {getCycles} from '../../store/actions/cycle-actions';
+import '../../../style/candidate-application.css';
+import {exportCandidates} from '../../../api/candidate-application';
+import {onSearchFilterSelected, onTextInputChanged} from '../../store/actions/candidate-application-actions';
+import TextArea from 'antd/es/input/TextArea';
 
 export class CandidateApplicationManagementComponent extends React.Component {
 
@@ -183,7 +183,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
 
                         <div className="flex flex-end margin-bottom-40">
                             {(isSuperAdmin || isAdmin) && <Button type="link"
-                                                                  style={{fontSize: "16px"}}
+                                                                  style={{fontSize: '16px'}}
                                                                   className="semi-bold"
                                                                   onClick={() => this.setState({bulkRejectModalVisible: true})}
                                                                   danger>
@@ -243,8 +243,8 @@ export class CandidateApplicationManagementComponent extends React.Component {
                     pageHeaderDataLoaded &&
                     <div>
                         <div className="applicants_page_subheader_row space-between">
-                            <div style={{display: "flex"}}>
-                                <div style={{marginRight: "10px"}}>
+                            <div style={{display: 'flex'}}>
+                                <div style={{marginRight: '10px'}}>
                                     <p className="">Country of Study</p>
                                     <Select value={this.props.dropdownValues.country}
                                             style={dropDownStyle}
@@ -262,11 +262,11 @@ export class CandidateApplicationManagementComponent extends React.Component {
                                 </div>
                                 <p className="filter_count">Displaying {this.props.displayingCandidates} of {this.props.totalCandidates} applicants</p>
                             </div>
-                            <div className="subheader_actions" style={{justifyContent: "flex-end"}}>
+                            <div className="subheader_actions" style={{justifyContent: 'flex-end'}}>
                                 <Button type="primary" onClick={() => this.onSearchCandidateApplications()}>
                                     Apply Filter
                                 </Button>
-                                <Button style={{marginRight: (isSuperAdmin || isAdmin) ? "5px" : "15px"}}
+                                <Button style={{marginRight: (isSuperAdmin || isAdmin) ? '5px' : '15px'}}
                                         onClick={() => this.onRecruitmentCycleSelected(this.props.cycleReference)}>
                                     Clear Filter
                                 </Button>
@@ -302,7 +302,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
                               onChange={this.onCommentChange}
                               placeholder="Comment"
                               rows={5}/>
-                    <p style={{color: "red"}}>Clicking reject will automatically reject all the applicant currently on
+                    <p style={{color: 'red'}}>Clicking reject will automatically reject all the applicant currently on
                         the specified stage.</p>
 
                 </Modal>
