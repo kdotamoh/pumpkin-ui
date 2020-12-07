@@ -87,7 +87,6 @@ export class SideBarComponent extends React.Component {
         )}
         <Menu.Item
           onClick={() => {
-            console.log('clicked');
             store.dispatch(unsetUser());
           }}
           key="logout"

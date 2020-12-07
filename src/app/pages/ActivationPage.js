@@ -43,7 +43,6 @@ const ActivationPage = () => {
 
   const handleSubmit = async (values) => {
     const data = { ...values, phoneNumber: countryCode + values.phoneNumber };
-    // console.log(data);
     setSubmitting(true);
     // setStatus('loading');
     const { requestSuccessful } = await activateUser(ref, data);
@@ -84,7 +83,7 @@ const ActivationPage = () => {
   // }
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.error('Failed:', errorInfo);
   };
 
   if (status === 'success') {

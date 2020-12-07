@@ -129,7 +129,6 @@ class Cycle extends React.Component {
       if (res) {
         this.props.history.push('/cycles');
       }
-      console.log(res);
     } catch (err) {
       console.error(err);
     }
