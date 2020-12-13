@@ -44,7 +44,7 @@ PublicRoute.propTypes = {
   getApplicationEssayQuestions: PropTypes.func.isRequired,
   getApplicationTracks: PropTypes.func.isRequired,
   path: PropTypes.string,
-  exact: PropTypes.string,
+  exact: PropTypes.bool,
 };
 
 /**

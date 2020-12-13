@@ -18,7 +18,7 @@ export const downloadFile = (url, headers, fileName, fileType) => {
         const data = window.URL.createObjectURL(newBlob);
         const link = document.createElement('a');
         link.href = data;
-        link.download = fileName + "." + fileType;
+        link.download = fileName + '.' + fileType;
         link.click();
         setTimeout(function () {
             window.URL.revokeObjectURL(data);

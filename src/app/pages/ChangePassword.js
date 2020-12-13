@@ -45,7 +45,7 @@ const ActivationPage = () => {
   }
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.error('Failed:', errorInfo);
   };
 
   if (status === 'success') {
