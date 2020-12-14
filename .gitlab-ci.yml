@@ -2,9 +2,9 @@ deploy_staging:
   type: deploy
   script:
     - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/seo-pumpkin-ui-staging.git
-    # - git push -f heroku HEAD:review-dev
-    - git show-ref
-    - git push -f heroku refs/remotes/origin/review-dev:master
+    - git push -f heroku HEAD:review-dev:master
+    # - git show-ref
+    # - git push -f heroku refs/remotes/origin/review-dev:master
   only:
     - review-dev
 
