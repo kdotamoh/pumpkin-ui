@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import {
   getCandidateApplicationSummary,
@@ -15,6 +15,7 @@ import CandidateApplicationEssays from './Components/CandidateApplicationEssays'
 import CandidateApplicationDocuments from './Components/CandidateApplicationDocuments';
 import CandidateApplicationReviews from './Components/CandidateApplicationReviews';
 import * as CandidateApplicationService from '../../../api/candidate-application';
+import { Radio } from 'antd';
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -43,20 +44,37 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       value: '',
       name: 'Attention to Details',
       maxScore: 2,
+      type: 'text',
     },
-    writing: { value: '', name: 'Writing', maxScore: 2 },
-    leadership: { value: '', name: 'Leadership', maxScore: 2 },
-    interestInSeo: { value: '', name: 'Interest in SEO', maxScore: 2 },
-    workExperience: { value: '', name: 'Work Experience', maxScore: 1 },
-    academics: { value: '', name: 'Academics', maxScore: 1 },
+    writing: { value: '', name: 'Writing', maxScore: 2, type: 'text' },
+    leadership: { value: '', name: 'Leadership', maxScore: 2, type: 'text' },
+    interestInSeo: {
+      value: '',
+      name: 'Interest in SEO',
+      maxScore: 2,
+      type: 'text',
+    },
+    workExperience: {
+      value: '',
+      name: 'Work Experience',
+      maxScore: 1,
+      type: 'text',
+    },
+    academics: { value: '', name: 'Academics', maxScore: 1, type: 'text' },
   };
 
   individualInterviewInputsDefaultState = {
-    drive: { value: '', name: 'Drive', maxScore: 5 },
-    mentalAgility: { value: '', name: 'Mental Agility', maxScore: 5 },
+    drive: { value: '', name: 'Drive', maxScore: 5, type: 'text' },
+    mentalAgility: {
+      value: '',
+      name: 'Mental Agility',
+      maxScore: 5,
+      type: 'text',
+    },
+    personalImpact: { value: '', name: 'Personal Impact', type: 'option' },
   };
 
-  gradeDefaultState = { value: '', maxScore: 5 };
+  gradeDefaultState = { value: '', maxScore: 5, type: 'text' };
 
   defaultState = {
     modalVisible: false,
@@ -161,11 +179,11 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         request = { ...request, finalScore: grade.value };
       }
       if (!this.isValidScoresEntered(currentReviewInputs)) {
-        return message.error('Cannot add Review: Ensure the inputs are valid');
+        return message.error(`Cannot add Review: Ensure your inputs are valid`);
       }
 
       CandidateApplicationService.addReview(request).then((res) => {
-        if (!res) {
+        if (res && res.requestSuccessful) {
           this.componentDidMount();
         }
       });
@@ -174,11 +192,17 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
   isValidScoresEntered = (currentReviewInputs) => {
     const valuesArray = Object.values(currentReviewInputs);
+
     for (let obj of valuesArray) {
+      if (obj.type === 'option' && !obj.value) {
+        message.error(`Ensure you have selected an option`);
+        return false;
+      }
       if (
-        obj.value.trim() === '' ||
-        isNaN(Number(obj.value)) ||
-        Number(obj.value) > obj.maxScore
+        obj.type !== 'option' &&
+        (obj.value.trim() === '' ||
+          isNaN(Number(obj.value)) ||
+          Number(obj.value) > obj.maxScore)
       ) {
         return false;
       }
@@ -191,7 +215,10 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     for (let grade of grades) {
       data.push({
         name: grade.name,
-        grade: `${grade.value}/${grade.maxScore}`,
+        grade:
+          grade.type === 'option'
+            ? `${grade.value}`
+            : `${grade.value}/${grade.maxScore}`,
       });
     }
     return data;
@@ -228,11 +255,15 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     this.setState({ applicationReadingInputs, finalScore });
   };
 
-  onIndividualInterviewInputsChanged = (e, target) => {
+  onIndividualInterviewInputsChanged = (e, type, target) => {
     let individualInterviewInputs = { ...this.state.individualInterviewInputs };
     individualInterviewInputs[target].value = e.target.value;
-    const finalScore = this.getFinalScore(individualInterviewInputs);
-    this.setState({ individualInterviewInputs, finalScore });
+    if (type === 'option') {
+      this.setState({ individualInterviewInputs });
+    } else if (type === 'text') {
+      const finalScore = this.getFinalScore(individualInterviewInputs);
+      this.setState({ individualInterviewInputs, finalScore });
+    }
   };
 
   onCommentChange = (e) => {
@@ -361,7 +392,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       },
       {
         title: 'B) Writing:',
-        details: 'What do you think about this applicant\'s writing skills?',
+        details: "What do you think about this applicant's writing skills?",
         value: writing.value,
         name: 'writing',
         maxScore: writing.maxScore,
@@ -384,7 +415,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       },
       {
         title: 'E) Work Experience',
-        details: 'How relevant/impressive is this applicant\'s work experience?',
+        details: "How relevant/impressive is this applicant's work experience?",
         value: workExperience.value,
         name: 'workExperience',
         maxScore: workExperience.maxScore,
@@ -425,7 +456,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         ))}
 
         <div className="flex">
-          <span className="margin-right-10">Comments</span>
+          <span className="margin-right-10">Overall/Final Comments</span>
           <input
             style={{ width: '200px' }}
             className="single-line-text"
@@ -443,20 +474,30 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     const questions = [
       {
-        title: 'A) Assess the candidate\'s DRIVE:',
+        title: "A) Assess the candidate's DRIVE:",
         details:
-          'How well did s/he demonstrate drive towards goals, resilience, level of Preparation?',
+          'Did candidate demonstrate drive towards goals, resilience and high levels of preparation?',
         value: drive.value,
         name: 'drive',
         maxScore: drive.maxScore,
+        type: 'text',
       },
       {
-        title: 'B) Assess the candidate\'s MENTAL AGILITY',
+        title: "B) Assess the candidate's MENTAL AGILITY",
         details:
-          'How well did s/he pay demonstrate mental agility towards pro-activeness/Attention to Detail/Analytical Skills/Quick Study?',
+          'Did candidate demonstrate pro-activeness, attention to detail, analytical skills, finish study quickly?',
         value: mentalAgility.value,
         name: 'mentalAgility',
         maxScore: mentalAgility.maxScore,
+        type: 'text',
+      },
+      {
+        title: "B) Assess the candidate's PERSONAL IMPACT",
+        details:
+          'Did candidate demonstrate good body language, communication, report building, confidence? ',
+        value: mentalAgility.value,
+        name: 'personalImpact',
+        type: 'option',
       },
     ];
     return (
@@ -471,6 +512,25 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 <p className="bold margin-0">{question.title}</p>
                 <p>{question.details}</p>
               </div>
+
+              {question.type === 'option' && (
+                <div className="margin-bottom-10">
+                  <Radio.Group
+                    onChange={(e) =>
+                      this.onIndividualInterviewInputsChanged(
+                        e,
+                        question.type,
+                        question.name
+                      )
+                    }
+                  >
+                    <Radio value="Strong">Strong</Radio>
+                    <Radio value="Average">Average</Radio>
+                    <Radio value="Weak">Weak</Radio>
+                  </Radio.Group>
+                </div>
+              )}
+
               <div>
                 <p className="bold margin-0">Support your ratings</p>
                 <p>
@@ -479,25 +539,30 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                 </p>
               </div>
             </div>
-            <div>
-              <span>Grade: </span>
-              <input
-                type="number"
-                min={0}
-                max={5}
-                value={question.value}
-                className="score-input"
-                onChange={(e) =>
-                  this.onIndividualInterviewInputsChanged(e, question.name)
-                }
-              />
-              <span>/{question.maxScore}</span>
-            </div>
+            {question.type === 'text' && (
+              <div>
+                <span>Grade: </span>
+                <input
+                  type="number"
+                  min={0}
+                  max={5}
+                  value={question.value}
+                  className="score-input"
+                  onChange={(e) =>
+                    this.onIndividualInterviewInputsChanged(
+                      e,
+                      question.type,
+                      question.name
+                    )
+                  }
+                />
+                <span>/{question.maxScore}</span>
+              </div>
+            )}
           </div>
         ))}
-
         <div className="flex">
-          <span className="margin-right-10">Comments</span>
+          <span className="margin-right-10">Overall/Final Comments</span>
           <input
             style={{ width: '200px' }}
             className="single-line-text"
@@ -564,7 +629,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
           >
             No
           </Button>
-          ,
           <Button
             key="maybe"
             className="orange_bordered_button"
@@ -572,7 +636,6 @@ export class CandidateApplicationSummaryComponent extends React.Component {
           >
             Maybe
           </Button>
-          ,
           <Button
             key="approve"
             className="green_bordered_button"
@@ -651,7 +714,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             <div style={{ marginBottom: '20px' }}>
               <Select
                 defaultValue="Select application stage"
-                style={{ width: 200, marginLeft: 40 }}
+                style={{ width: 200, marginLeft: 0, marginRight: 40 }}
                 onSelect={(code, dropdownData) =>
                   this.onCycleStageCodeChanged(code, dropdownData)
                 }

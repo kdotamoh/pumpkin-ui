@@ -118,7 +118,6 @@ export class ApplicationReviewerManagementComponent extends React.Component {
     const pendingReviews = this.props.recruitmentCycleSummary
       .totalPendingReviews;
     const totalReviews = this.props.recruitmentCycleSummary.totalReviews;
-    // console.log(this.props.recruitmentCycleSummary)
     return (
       <div style={{ display: 'flex' }}>
         {this.props.cyclesHaveBeenLoaded && (
@@ -175,8 +174,6 @@ ApplicationReviewerManagementComponent.propTypes = {
   setCurrentApplicationReviewer: PropTypes.func.isRequired,
   hasReviewersBeenLoaded: PropTypes.bool,
   cyclesHaveBeenLoaded: PropTypes.bool,
-  cycleReference: PropTypes.string,
-  setCycleReference: PropTypes.func,
   setCyclesHaveBeenLoaded: PropTypes.func.isRequired,
 };
 
