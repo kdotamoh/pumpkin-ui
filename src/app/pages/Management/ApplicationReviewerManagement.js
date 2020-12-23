@@ -115,7 +115,6 @@ export class ApplicationReviewerManagementComponent extends React.Component {
         const pendingReviews = this.props.recruitmentCycleSummary
             .totalPendingReviews;
         const totalReviews = this.props.recruitmentCycleSummary.totalReviews;
-        console.log(this.props.recruitmentCycleSummary)
         return (
             <div style={{display: 'flex'}}>
                 {this.props.cyclesHaveBeenLoaded && (

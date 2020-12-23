@@ -33,7 +33,6 @@ export async function inviteEmployee(email, employeeId) {
 }
 
 export async function getEmployees(currentPage) {
-  console.log(currentPage);
   try {
     const { data } = await client.get('/seo-employee', {
       headers: {
