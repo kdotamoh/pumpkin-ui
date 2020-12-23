@@ -6,7 +6,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import {
   getCandidateApplicationSummary,
   getRecruitmentCycleDetails,
-  getReviewTypes
+  getReviewTypes,
 } from '../../store/actions/candidate-application-actions';
 import '../../../style/candidate-application.css';
 import { Tabs, Button, Modal, Select, Input, message } from 'antd';
@@ -21,35 +21,57 @@ const { TextArea } = Input;
 const { TabPane } = Tabs;
 
 export class CandidateApplicationSummaryComponent extends React.Component {
-
   componentDidMount() {
     this.resetModal();
-    this.props.getCandidateApplicationSummary(this.props.match.params.reference).then((data) => {
-      this.setState({ pageLoading: false });
-      this.loadDetailsForReviewModal();
-    });
+    this.props
+      .getCandidateApplicationSummary(this.props.match.params.reference)
+      .then((data) => {
+        this.setState({ pageLoading: false });
+        this.loadDetailsForReviewModal();
+      });
   }
 
   loadDetailsForReviewModal = () => {
-    const cycleReference = this.props.candidateApplicationSummary.recruitmentCycleCode;
+    const cycleReference = this.props.candidateApplicationSummary
+      .recruitmentCycleCode;
     this.setState({ cycleReference });
     this.props.getReviewTypes();
     this.props.getRecruitmentCycleDetails(cycleReference);
   };
 
   applicationReadingInputsDefaultState = {
-    attentionToDetails: { value: '', name: 'Attention to Details', maxScore: 2, type: 'text' },
+    attentionToDetails: {
+      value: '',
+      name: 'Attention to Details',
+      maxScore: 2,
+      type: 'text',
+    },
     writing: { value: '', name: 'Writing', maxScore: 2, type: 'text' },
     leadership: { value: '', name: 'Leadership', maxScore: 2, type: 'text' },
-    interestInSeo: { value: '', name: 'Interest in SEO', maxScore: 2, type: 'text' },
-    workExperience: { value: '', name: 'Work Experience', maxScore: 1, type: 'text' },
-    academics: { value: '', name: 'Academics', maxScore: 1, type: 'text' }
+    interestInSeo: {
+      value: '',
+      name: 'Interest in SEO',
+      maxScore: 2,
+      type: 'text',
+    },
+    workExperience: {
+      value: '',
+      name: 'Work Experience',
+      maxScore: 1,
+      type: 'text',
+    },
+    academics: { value: '', name: 'Academics', maxScore: 1, type: 'text' },
   };
 
   individualInterviewInputsDefaultState = {
     drive: { value: '', name: 'Drive', maxScore: 5, type: 'text' },
-    mentalAgility: { value: '', name: 'Mental Agility', maxScore: 5, type: 'text' },
-    personalImpact: { value: '', name: 'Personal Impact', type: 'option' }
+    mentalAgility: {
+      value: '',
+      name: 'Mental Agility',
+      maxScore: 5,
+      type: 'text',
+    },
+    personalImpact: { value: '', name: 'Personal Impact', type: 'option' },
   };
 
   gradeDefaultState = { value: '', maxScore: 5, type: 'text' };
@@ -59,7 +81,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     alumReview: {
       remarks: '',
       reviewType: '',
-      applicationReference: this.props.match.params.reference
+      applicationReference: this.props.match.params.reference,
     },
     cycleStageCode: '',
     seoRemark: '',
@@ -68,7 +90,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     individualInterviewInputs: this.individualInterviewInputsDefaultState,
     finalScore: 0,
     grade: this.gradeDefaultState,
-    comments: ''
+    comments: '',
   };
 
   showModal = () => {
@@ -83,7 +105,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     super(props);
     this.state = {
       pageLoading: true,
-      ...this.defaultState
+      ...this.defaultState,
     };
   }
 
@@ -98,7 +120,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     this.setState({
       applicationReadingInputs: this.applicationReadingInputsDefaultState,
       individualInterviewInputs: this.individualInterviewInputsDefaultState,
-      grade: this.gradeDefaultState
+      grade: this.gradeDefaultState,
     });
   };
 
@@ -108,21 +130,49 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
   onAddReview = async (decision) => {
     try {
-      const { alumReview, finalScore, individualInterviewInputs, applicationReadingInputs, comments } = this.state;
+      const {
+        alumReview,
+        finalScore,
+        individualInterviewInputs,
+        applicationReadingInputs,
+        comments,
+      } = this.state;
       const { reviewType } = alumReview;
-      let request = { ...alumReview, decision, cycleStageCode: this.state.cycleStageCode };
+      let request = {
+        ...alumReview,
+        decision,
+        cycleStageCode: this.state.cycleStageCode,
+      };
 
       let currentReviewInputs = {};
       if (reviewType === 'APPLICATION_READING') {
         currentReviewInputs = applicationReadingInputs;
-        const applicationReadingGrades = Object.values(applicationReadingInputs);
-        const applicationReviewDetails = this.buildGradesRequestFromInputs(applicationReadingGrades);
-        request = { ...request, finalScore, applicationReviewDetails, remarks: comments };
+        const applicationReadingGrades = Object.values(
+          applicationReadingInputs
+        );
+        const applicationReviewDetails = this.buildGradesRequestFromInputs(
+          applicationReadingGrades
+        );
+        request = {
+          ...request,
+          finalScore,
+          applicationReviewDetails,
+          remarks: comments,
+        };
       } else if (reviewType === 'INDIVIDUAL_INTERVIEW') {
         currentReviewInputs = individualInterviewInputs;
-        const individualInterviewGrades = Object.values(individualInterviewInputs);
-        const applicationReviewDetails = this.buildGradesRequestFromInputs(individualInterviewGrades);
-        request = { ...request, finalScore, applicationReviewDetails, remarks: comments };
+        const individualInterviewGrades = Object.values(
+          individualInterviewInputs
+        );
+        const applicationReviewDetails = this.buildGradesRequestFromInputs(
+          individualInterviewGrades
+        );
+        request = {
+          ...request,
+          finalScore,
+          applicationReviewDetails,
+          remarks: comments,
+        };
       } else {
         const { grade } = this.state;
         currentReviewInputs = { grade };
@@ -132,14 +182,12 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         return message.error(`Cannot add Review: Ensure your inputs are valid`);
       }
 
-      CandidateApplicationService.addReview(request).then(res => {
-        if (!res) {
+      CandidateApplicationService.addReview(request).then((res) => {
+        if (res && res.requestSuccessful) {
           this.componentDidMount();
         }
       });
-    } catch (e) {
-
-    }
+    } catch (e) {}
   };
 
   isValidScoresEntered = (currentReviewInputs) => {
@@ -150,7 +198,12 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         message.error(`Ensure you have selected an option`);
         return false;
       }
-      if (obj.type !== 'option' && (obj.value.trim() === '' || isNaN(Number(obj.value)) || Number(obj.value) > obj.maxScore)) {
+      if (
+        obj.type !== 'option' &&
+        (obj.value.trim() === '' ||
+          isNaN(Number(obj.value)) ||
+          Number(obj.value) > obj.maxScore)
+      ) {
         return false;
       }
     }
@@ -162,7 +215,10 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     for (let grade of grades) {
       data.push({
         name: grade.name,
-        grade: grade.type === 'option' ? `${grade.value}` : `${grade.value}/${grade.maxScore}`
+        grade:
+          grade.type === 'option'
+            ? `${grade.value}`
+            : `${grade.value}/${grade.maxScore}`,
       });
     }
     return data;
@@ -173,18 +229,19 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       const request = {
         cycleStageCode: this.state.cycleStageCode,
         seoRemarks: this.state.seoRemark,
-        seoDecision
+        seoDecision,
       };
 
-      CandidateApplicationService.makeFinalDecision(this.props.match.params.reference, request).then(res => {
+      CandidateApplicationService.makeFinalDecision(
+        this.props.match.params.reference,
+        request
+      ).then((res) => {
         if (!res) {
           this.resetModal();
           this.componentDidMount();
         }
       });
-    } catch (e) {
-
-    }
+    } catch (e) {}
   };
 
   resetModal = () => {
@@ -237,136 +294,176 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     return (
       <div>
-        <div className='management-component__container candidate_application_container'>
-          <div className='management-component__header' style={{ paddingLeft: '0px' }}>
+        <div className="management-component__container candidate_application_container">
+          <div
+            className="management-component__header"
+            style={{ paddingLeft: '0px' }}
+          >
             <div style={{ display: 'flex' }}>
               <ArrowLeftOutlined
                 style={{ marginRight: 24, marginTop: 4 }}
-                onClick={() => this.props.history.goBack()} />
-              <h4 className='management-component__h4'>{headerTitle}</h4>
+                onClick={() => this.props.history.goBack()}
+              />
+              <h4 className="management-component__h4">{headerTitle}</h4>
             </div>
           </div>
 
-          <div className='management-component__header' style={{ paddingLeft: '0px' }}>
-            <div className='displayed_reference_row'>
+          <div
+            className="management-component__header"
+            style={{ paddingLeft: '0px' }}
+          >
+            <div className="displayed_reference_row">
               <p>Reference - {this.props.match.params.reference}</p>
-              <Button onClick={() => this.showModal()}
-                      className={`${isSuperAdmin || isAdmin ? 'green_bordered_button' : 'blue_bordered_button'}`}>
-                {(isSuperAdmin || isAdmin) ? 'Make Final Decision' : 'Review'}
+              <Button
+                onClick={() => this.showModal()}
+                className={`${
+                  isSuperAdmin || isAdmin
+                    ? 'green_bordered_button'
+                    : 'blue_bordered_button'
+                }`}
+              >
+                {isSuperAdmin || isAdmin ? 'Make Final Decision' : 'Review'}
               </Button>
             </div>
           </div>
 
-          <Tabs type='card' className='tab-container'>
-            <TabPane tab='Application Details' key='1'>
+          <Tabs type="card" className="tab-container">
+            <TabPane tab="Application Details" key="1">
               <CandidateApplicationDetails
                 candidateApplicationSummary={candidateApplicationSummary}
-                pageLoading={pageLoading} />
+                pageLoading={pageLoading}
+              />
             </TabPane>
-            <TabPane tab='Essays' key='2'>
+            <TabPane tab="Essays" key="2">
               <CandidateApplicationEssays
                 candidateApplicationSummary={candidateApplicationSummary}
-                pageLoading={pageLoading} />
+                pageLoading={pageLoading}
+              />
             </TabPane>
 
-            <TabPane tab='Uploaded Documents' key='3'>
+            <TabPane tab="Uploaded Documents" key="3">
               <CandidateApplicationDocuments
                 candidateApplicationSummary={candidateApplicationSummary}
                 applicationReference={applicationReference}
-                pageLoading={pageLoading} />
+                pageLoading={pageLoading}
+              />
             </TabPane>
 
-            {(isSuperAdmin || isAdmin) && <TabPane tab='Reviews' key='4'>
-              <CandidateApplicationReviews
-                candidateApplicationSummary={candidateApplicationSummary}
-                pageLoading={pageLoading} />
-            </TabPane>}
+            {(isSuperAdmin || isAdmin) && (
+              <TabPane tab="Reviews" key="4">
+                <CandidateApplicationReviews
+                  candidateApplicationSummary={candidateApplicationSummary}
+                  pageLoading={pageLoading}
+                />
+              </TabPane>
+            )}
           </Tabs>
         </div>
 
         <Modal
           visible={this.state.modalVisible}
-          title={(isAdmin || isSuperAdmin) ? 'Final Decision' : 'Add Review'}
+          title={isAdmin || isSuperAdmin ? 'Final Decision' : 'Add Review'}
           onCancel={() => this.hideModal()}
-          footer={(isAdmin || isSuperAdmin) ? adminActions : alumniActions}
+          footer={isAdmin || isSuperAdmin ? adminActions : alumniActions}
           width={700}
         >
           {this.modalContent()}
         </Modal>
       </div>
-
     );
   }
 
   applicationReadingModalContent = () => {
-    const { attentionToDetails, writing, leadership, interestInSeo, workExperience, academics } = this.state.applicationReadingInputs;
+    const {
+      attentionToDetails,
+      writing,
+      leadership,
+      interestInSeo,
+      workExperience,
+      academics,
+    } = this.state.applicationReadingInputs;
     const questions = [
       {
         title: 'A) Attention to details:',
         details: 'How well did this applicant pay attention to details',
         value: attentionToDetails.value,
         name: 'attentionToDetails',
-        maxScore: attentionToDetails.maxScore
+        maxScore: attentionToDetails.maxScore,
       },
       {
         title: 'B) Writing:',
-        details: 'What do you think about this applicant\'s writing skills?',
+        details: "What do you think about this applicant's writing skills?",
         value: writing.value,
         name: 'writing',
-        maxScore: writing.maxScore
+        maxScore: writing.maxScore,
       },
       {
         title: 'C) Leadership',
-        details: 'How well has this applicant displayed leadership through their CV and essay(s)?',
+        details:
+          'How well has this applicant displayed leadership through their CV and essay(s)?',
         value: leadership.value,
         name: 'leadership',
-        maxScore: leadership.maxScore
+        maxScore: leadership.maxScore,
       },
       {
         title: 'D) Interest in SEO/Finance',
-        details: 'How interested is this applicant in this particular SEO opportunity?',
+        details:
+          'How interested is this applicant in this particular SEO opportunity?',
         value: interestInSeo.value,
         name: 'interestInSeo',
-        maxScore: interestInSeo.maxScore
+        maxScore: interestInSeo.maxScore,
       },
       {
         title: 'E) Work Experience',
-        details: 'How relevant/impressive is this applicant\'s work experience?',
+        details: "How relevant/impressive is this applicant's work experience?",
         value: workExperience.value,
         name: 'workExperience',
-        maxScore: workExperience.maxScore
+        maxScore: workExperience.maxScore,
       },
       {
         title: 'F) Academics',
         details: 'First class 1 mark, Second-upper 0.5, Others 0',
         value: academics.value,
         name: 'academics',
-        maxScore: academics.maxScore
-      }
+        maxScore: academics.maxScore,
+      },
     ];
     return (
       <div>
-        {questions.map(question => (
-          <div key={question.title} className='flex space-between margin-bottom-10'>
+        {questions.map((question) => (
+          <div
+            key={question.title}
+            className="flex space-between margin-bottom-10"
+          >
             <div>
-              <p className='bold margin-0'>{question.title}</p>
+              <p className="bold margin-0">{question.title}</p>
               <p>{question.details}</p>
             </div>
             <div>
-              <input type='number' min={0} max={2} value={question.value} className='score-input'
-                     onChange={e => this.onApplicationReadingInputsChanged(e, question.name)} />
+              <input
+                type="number"
+                min={0}
+                max={2}
+                value={question.value}
+                className="score-input"
+                onChange={(e) =>
+                  this.onApplicationReadingInputsChanged(e, question.name)
+                }
+              />
               <span>/{question.maxScore}</span>
             </div>
           </div>
         ))}
 
-        <div className='flex'>
-          <span className='margin-right-10'>Overall/Final Comments</span>
-          <input style={{ width: '200px' }}
-                 className='single-line-text'
-                 type='text'
-                 value={this.state.comments}
-                 onChange={this.onCommentChange} />
+        <div className="flex">
+          <span className="margin-right-10">Overall/Final Comments</span>
+          <input
+            style={{ width: '200px' }}
+            className="single-line-text"
+            type="text"
+            value={this.state.comments}
+            onChange={this.onCommentChange}
+          />
         </div>
       </div>
     );
@@ -377,98 +474,139 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
     const questions = [
       {
-        title: 'A) Assess the candidate\'s DRIVE:',
-        details: 'Did candidate demonstrate drive towards goals, resilience and high levels of preparation?',
+        title: "A) Assess the candidate's DRIVE:",
+        details:
+          'Did candidate demonstrate drive towards goals, resilience and high levels of preparation?',
         value: drive.value,
         name: 'drive',
         maxScore: drive.maxScore,
-        type: 'text'
+        type: 'text',
       },
       {
-        title: 'B) Assess the candidate\'s MENTAL AGILITY',
-        details: 'Did candidate demonstrate pro-activeness, attention to detail, analytical skills, finish study quickly?',
+        title: "B) Assess the candidate's MENTAL AGILITY",
+        details:
+          'Did candidate demonstrate pro-activeness, attention to detail, analytical skills, finish study quickly?',
         value: mentalAgility.value,
         name: 'mentalAgility',
         maxScore: mentalAgility.maxScore,
-        type: 'text'
+        type: 'text',
       },
       {
-        title: 'B) Assess the candidate\'s PERSONAL IMPACT',
-        details: 'Did candidate demonstrate good body language, communication, report building, confidence? ',
+        title: "B) Assess the candidate's PERSONAL IMPACT",
+        details:
+          'Did candidate demonstrate good body language, communication, report building, confidence? ',
         value: mentalAgility.value,
         name: 'personalImpact',
-        type: 'option'
-      }
+        type: 'option',
+      },
     ];
     return (
       <div>
-        {questions.map(question => (
-          <div key={question.title} className='flex space-between margin-bottom-10 items-start'>
-            <div className='flex-1'>
+        {questions.map((question) => (
+          <div
+            key={question.title}
+            className="flex space-between margin-bottom-10 items-start"
+          >
+            <div className="flex-1">
               <div>
-                <p className='bold margin-0'>{question.title}</p>
+                <p className="bold margin-0">{question.title}</p>
                 <p>{question.details}</p>
               </div>
 
-              {question.type === 'option' &&
-              <div className="margin-bottom-10">
-                <Radio.Group onChange={e => this.onIndividualInterviewInputsChanged(e, question.type, question.name)}>
-                  <Radio value='Strong'>Strong</Radio>
-                  <Radio value='Average'>Average</Radio>
-                  <Radio value='Weak'>Weak</Radio>
-                </Radio.Group>
-              </div>}
+              {question.type === 'option' && (
+                <div className="margin-bottom-10">
+                  <Radio.Group
+                    onChange={(e) =>
+                      this.onIndividualInterviewInputsChanged(
+                        e,
+                        question.type,
+                        question.name
+                      )
+                    }
+                  >
+                    <Radio value="Strong">Strong</Radio>
+                    <Radio value="Average">Average</Radio>
+                    <Radio value="Weak">Weak</Radio>
+                  </Radio.Group>
+                </div>
+              )}
 
               <div>
-                <p className='bold margin-0'>Support your ratings</p>
-                <p>Note the strongest piece of evidence and Opportunity missed or negative indication of
-                  DRIVE</p>
+                <p className="bold margin-0">Support your ratings</p>
+                <p>
+                  Note the strongest piece of evidence and Opportunity missed or
+                  negative indication of DRIVE
+                </p>
               </div>
-
             </div>
-            {question.type === 'text' && <div>
-              <span>Grade: </span>
-              <input type='number' min={0} max={5} value={question.value} className='score-input'
-                     onChange={e => this.onIndividualInterviewInputsChanged(e, question.type, question.name)} />
-              <span>/{question.maxScore}</span>
-            </div>}
+            {question.type === 'text' && (
+              <div>
+                <span>Grade: </span>
+                <input
+                  type="number"
+                  min={0}
+                  max={5}
+                  value={question.value}
+                  className="score-input"
+                  onChange={(e) =>
+                    this.onIndividualInterviewInputsChanged(
+                      e,
+                      question.type,
+                      question.name
+                    )
+                  }
+                />
+                <span>/{question.maxScore}</span>
+              </div>
+            )}
           </div>
         ))}
-        <div className='flex'>
-          <span className='margin-right-10'>Overall/Final Comments</span>
-          <input style={{ width: '200px' }}
-                 className='single-line-text'
-                 type='text'
-                 value={this.state.comments}
-                 onChange={this.onCommentChange} />
+        <div className="flex">
+          <span className="margin-right-10">Overall/Final Comments</span>
+          <input
+            style={{ width: '200px' }}
+            className="single-line-text"
+            type="text"
+            value={this.state.comments}
+            onChange={this.onCommentChange}
+          />
         </div>
       </div>
     );
   };
 
   defaultModalContent = () => {
-
     return (
       <div>
         <div style={{ marginBottom: '20px' }}>
           <span>Grade: </span>
-          <input type='number' min={0} max={5} value={this.state.grade.value} className='score-input'
-                 onChange={this.onGradeChanged} />
+          <input
+            type="number"
+            min={0}
+            max={5}
+            value={this.state.grade.value}
+            className="score-input"
+            onChange={this.onGradeChanged}
+          />
           <span>/5</span>
         </div>
-        <TextArea value={this.state.alumReview.remarks}
-                  onChange={e => {
-                    this.setState({ alumReview: { ...this.state.alumReview, remarks: e.target.value } });
-                  }}
-                  placeholder='Review'
-                  rows={5} />
+        <TextArea
+          value={this.state.alumReview.remarks}
+          onChange={(e) => {
+            this.setState({
+              alumReview: { ...this.state.alumReview, remarks: e.target.value },
+            });
+          }}
+          placeholder="Review"
+          rows={5}
+        />
       </div>
-
     );
   };
 
   getAlumReviewActions = () => {
-    const finalScoreVisible = this.state.alumReview.reviewType === 'APPLICATION_READING' ||
+    const finalScoreVisible =
+      this.state.alumReview.reviewType === 'APPLICATION_READING' ||
       this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW';
     const footerStyle = {};
 
@@ -476,49 +614,63 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       footerStyle['justifyContent'] = 'flex-end';
     }
     return [
-      <div className='flex space-between' style={footerStyle}>
-        {finalScoreVisible && <div className='margin-right-50 bold'>
-          Final Score: {this.state.finalScore}
-        </div>}
+      <div className="flex space-between" style={footerStyle}>
+        {finalScoreVisible && (
+          <div className="margin-right-50 bold">
+            Final Score: {this.state.finalScore}
+          </div>
+        )}
 
         <div>
-          <Button key='reject'
-                  className='red_bordered_button'
-                  onClick={() => this.onAddReview('NO')}>
+          <Button
+            key="reject"
+            className="red_bordered_button"
+            onClick={() => this.onAddReview('NO')}
+          >
             No
           </Button>
-          <Button key='maybe'
-                  className='orange_bordered_button'
-                  onClick={() => this.onAddReview('MAYBE')}>
+          <Button
+            key="maybe"
+            className="orange_bordered_button"
+            onClick={() => this.onAddReview('MAYBE')}
+          >
             Maybe
           </Button>
-          <Button key='approve'
-                  className='green_bordered_button'
-                  onClick={() => this.onAddReview('YES')}>
+          <Button
+            key="approve"
+            className="green_bordered_button"
+            onClick={() => this.onAddReview('YES')}
+          >
             Yes
           </Button>
         </div>
-      </div>
+      </div>,
     ];
   };
 
   getAdminFinalDecisionActions = () => {
     return [
-      <Button key='reject'
-              className='red_bordered_button'
-              onClick={() => this.onMakeSeoDecision('REJECTED')}>
+      <Button
+        key="reject"
+        className="red_bordered_button"
+        onClick={() => this.onMakeSeoDecision('REJECTED')}
+      >
         Reject
       </Button>,
-      <Button key='maybe'
-              className='orange_bordered_button'
-              onClick={() => this.onMakeSeoDecision('MAYBE')}>
+      <Button
+        key="maybe"
+        className="orange_bordered_button"
+        onClick={() => this.onMakeSeoDecision('MAYBE')}
+      >
         Maybe
       </Button>,
-      <Button key='approve'
-              className='green_bordered_button'
-              onClick={() => this.onMakeSeoDecision('APPROVED')}>
+      <Button
+        key="approve"
+        className="green_bordered_button"
+        onClick={() => this.onMakeSeoDecision('APPROVED')}
+      >
         Approve
-      </Button>
+      </Button>,
     ];
   };
 
@@ -527,56 +679,73 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     const isSuperAdmin = this.props.user.roles.includes('SUPER_ADMIN');
     const isAdmin = this.props.user.roles.includes('ADMIN');
 
-    return <React.Fragment>
-      {(isAdmin || isSuperAdmin) ?
-        <div>
-          <p className='text-12'>Considering <span style={{ color: 'blue' }}>ALL</span> reviews
-            give for this candidate's current stage, what is your final decision?</p>
-          <p className='text-12 text-red'>Note: Your final decision would determine if this
-            applicant would be
-            moving to the next stage</p>
-          <div style={{ marginBottom: '20px' }}>
-            <Select defaultValue='Select application stage'
-                    onSelect={(code, dropdownData) => this.onCycleStageCodeChanged(code, dropdownData)}>
-              {this.getDropdownChildren(this.props.stages)}
-            </Select>
+    return (
+      <React.Fragment>
+        {isAdmin || isSuperAdmin ? (
+          <div>
+            <p className="text-12">
+              Considering <span style={{ color: 'blue' }}>ALL</span> reviews
+              give for this candidate's current stage, what is your final
+              decision?
+            </p>
+            <p className="text-12 text-red">
+              Note: Your final decision would determine if this applicant would
+              be moving to the next stage
+            </p>
+            <div style={{ marginBottom: '20px' }}>
+              <Select
+                defaultValue="Select application stage"
+                onSelect={(code, dropdownData) =>
+                  this.onCycleStageCodeChanged(code, dropdownData)
+                }
+              >
+                {this.getDropdownChildren(this.props.stages)}
+              </Select>
+            </div>
+            <TextArea
+              value={this.state.seoRemark}
+              onChange={(e) => this.setState({ seoRemark: e.target.value })}
+              placeholder="Remark"
+              rows={5}
+            />
           </div>
-          <TextArea value={this.state.seoRemark}
-                    onChange={e => this.setState({ seoRemark: e.target.value })}
-                    placeholder='Remark'
-                    rows={5} />
-        </div> :
-
-        <div>
-          <div style={{ marginBottom: '20px' }}>
-            <Select defaultValue='Select application stage' style={{ width: 200, marginLeft: 0, marginRight: 40 }}
-                    onSelect={(code, dropdownData) => this.onCycleStageCodeChanged(code, dropdownData)}>
-              {this.getDropdownChildren(this.props.stages)}
-            </Select>
-            <Select defaultValue='Select review type' style={{ width: 200 }}
-                    onSelect={(code) => this.onReviewTypeSelected(code, 'reviewType')}>
-              {this.getDropdownChildren(this.props.reviewTypes)}
-            </Select>
+        ) : (
+          <div>
+            <div style={{ marginBottom: '20px' }}>
+              <Select
+                defaultValue="Select application stage"
+                style={{ width: 200, marginLeft: 0, marginRight: 40 }}
+                onSelect={(code, dropdownData) =>
+                  this.onCycleStageCodeChanged(code, dropdownData)
+                }
+              >
+                {this.getDropdownChildren(this.props.stages)}
+              </Select>
+              <Select
+                defaultValue="Select review type"
+                style={{ width: 200 }}
+                onSelect={(code) =>
+                  this.onReviewTypeSelected(code, 'reviewType')
+                }
+              >
+                {this.getDropdownChildren(this.props.reviewTypes)}
+              </Select>
+            </div>
+            {this.state.alumReview.reviewType === 'APPLICATION_READING'
+              ? this.applicationReadingModalContent()
+              : this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW'
+              ? this.individualInterviewModalContent()
+              : this.defaultModalContent()}
           </div>
-          {this.state.alumReview.reviewType === 'APPLICATION_READING' ?
-            this.applicationReadingModalContent() :
-            this.state.alumReview.reviewType === 'INDIVIDUAL_INTERVIEW' ?
-              this.individualInterviewModalContent() :
-              this.defaultModalContent()
-          }
-        </div>
-      }
-    </React.Fragment>;
+        )}
+      </React.Fragment>
+    );
   };
 
   getDropdownChildren = (data) => {
     let children = [];
     for (let i of data) {
-      children.push(
-        <Select.Option key={i.code}>
-          {i.name}
-        </Select.Option>
-      );
+      children.push(<Select.Option key={i.code}>{i.name}</Select.Option>);
     }
     return children;
   };
@@ -584,10 +753,18 @@ export class CandidateApplicationSummaryComponent extends React.Component {
   getTitle = () => {
     let title = 'APPLICANT';
     const { currentCandidate, candidateApplicationSummary } = this.props;
-    if (currentCandidate && currentCandidate.firstName && currentCandidate.lastName) {
+    if (
+      currentCandidate &&
+      currentCandidate.firstName &&
+      currentCandidate.lastName
+    ) {
       const { firstName, lastName } = currentCandidate;
       title += ' - ' + firstName + ' ' + lastName;
-    } else if (candidateApplicationSummary && candidateApplicationSummary.firstName && candidateApplicationSummary.lastName) {
+    } else if (
+      candidateApplicationSummary &&
+      candidateApplicationSummary.firstName &&
+      candidateApplicationSummary.lastName
+    ) {
       const { firstName, lastName } = candidateApplicationSummary;
       title += ' - ' + firstName + ' ' + lastName;
     }
@@ -599,7 +776,7 @@ CandidateApplicationSummaryComponent.propTypes = {
   getCandidateApplicationSummary: PropTypes.func.isRequired,
   getReviewTypes: PropTypes.func.isRequired,
   getApplicationStages: PropTypes.func.isRequired,
-  getRecruitmentCycleDetails: PropTypes.func.isRequired
+  getRecruitmentCycleDetails: PropTypes.func.isRequired,
 };
 
 /**
@@ -607,17 +784,20 @@ CandidateApplicationSummaryComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
   currentCandidate: state.candidateApplications.current,
-  candidateApplicationSummary: state.candidateApplications.candidateApplicationSummary,
+  candidateApplicationSummary:
+    state.candidateApplications.candidateApplicationSummary,
   reviewTypes: state.candidateApplications.reviewTypes,
   stages: state.candidateApplications.stages,
-  user: state.user
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getCandidateApplicationSummary: (reference) => dispatch(getCandidateApplicationSummary(reference)),
+  getCandidateApplicationSummary: (reference) =>
+    dispatch(getCandidateApplicationSummary(reference)),
   getReviewTypes: () => dispatch(getReviewTypes()),
   getApplicationStages: () => dispatch(getReviewTypes()),
-  getRecruitmentCycleDetails: (cycleReference) => dispatch(getRecruitmentCycleDetails(cycleReference))
+  getRecruitmentCycleDetails: (cycleReference) =>
+    dispatch(getRecruitmentCycleDetails(cycleReference)),
 });
 
 /**

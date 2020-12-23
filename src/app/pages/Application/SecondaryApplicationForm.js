@@ -19,7 +19,7 @@ export const SecondaryApplicationForm = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(validateEssayQuestion(questionCode));
-  }, []);
+  }, [dispatch, questionCode]);
   const essayQuestionStatus = useSelector(
     (state) => state.applicationForm.essayQuestionStatus.valid
   );

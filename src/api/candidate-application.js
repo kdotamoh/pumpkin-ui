@@ -7,8 +7,6 @@ function getToken() {
   return store ? store.getState().user.userToken : undefined;
 }
 
-const baseURL = `${process.env.REACT_APP_BASE_URL}/api/v1`;
-
 export const getCandidates = async (cycleReference, currentPage) => {
   try {
     const { data } = await client.get('/candidate-application/all', {
@@ -51,7 +49,7 @@ export const getCandidateSummary = async (reference) => {
 export const getCountriesForSearch = async () => {
   try {
     const { data } = await client.get(
-      `/candidate-application/search/countries/`,
+      '/candidate-application/search/countries/',
       {
         headers: {
           user_token: getToken(),
@@ -140,6 +138,7 @@ export const getApplicationStages = async () => {
         user_token: getToken(),
       },
     });
+    return data;
   } catch (err) {
     const {
       data: { responseMessage },
@@ -156,6 +155,7 @@ export const addReview = async (review) => {
       },
     });
     message.success('Review added successfully');
+    return data;
   } catch (err) {
     const {
       data: { responseMessage },
@@ -178,6 +178,7 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
       }
     );
     message.success('Decision added');
+    return data;
   } catch (err) {
     const {
       data: { responseMessage },
@@ -189,7 +190,7 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
 
 export const seeMoreReviewDetails = async (reviewCode) => {
   try {
-    const { data } = await client.get(`/candidate-review/details`, {
+    const { data } = await client.get('/candidate-review/details', {
       headers: {
         user_token: getToken(),
       },
@@ -212,8 +213,7 @@ export const exportCandidates = async (searchKeys) => {
   searchKeys.currentStage = searchKeys.stageCode;
   searchKeys.universityName = searchKeys.university;
 
-  // let url = `${baseURL}/candidate-application/export`;
-  let url = `https://seo-pumpkin-service-staging.herokuapp.com/api/v1/candidate-application/export`;
+  let url = `${process.env.REACT_APP_API_BASE}/candidate-application/export`;
 
   const keys = Object.keys(searchKeys);
   let query = '';
@@ -237,7 +237,9 @@ export const exportCandidates = async (searchKeys) => {
 };
 
 export const downloadCandidateDocument = (fileUrl, reference) => {
-  const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
+  const url = `${
+    process.env.REACT_APP_API_BASE
+  }/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
   const fileFullPath = fileUrl.split('/').pop();
 
   let fileName = '';

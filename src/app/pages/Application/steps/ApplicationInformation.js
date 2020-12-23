@@ -82,8 +82,10 @@ export const ApplicationInformation = (params) => {
     (state) => state.applicationForm.candidatePhoto
   );
   const [fileListState, updateFileListState] = useState(null);
+  // eslint-disable-next-line
   const [fileState, updateFileState] = useState(null);
   const [photoFileListState, updatePhotoFileListState] = useState(null);
+  // eslint-disable-next-line
   const [photoFileState, updatePhotoFileState] = useState(null);
 
   const handleFileChange = (file) => {
@@ -99,7 +101,8 @@ export const ApplicationInformation = (params) => {
     const isDocOrPdf =
       fileList[0].type === 'application/pdf' ||
       fileList[0].type === 'application/msword' ||
-      fileList[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      fileList[0].type ===
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
     if (!isDocOrPdf) {
       message.error('Please upload only pdf/doc/docx file');

@@ -17,7 +17,7 @@ export const PrimaryApplicationForm = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     validateRef(dispatch);
-  }, []);
+  }, [dispatch]);
   const formValid = useSelector(
     (state) => state.applicationForm.formStatus.valid
   );
@@ -57,6 +57,7 @@ export const PrimaryApplicationForm = () => {
           },
         ]}
         onFinish={(values) => {
+          /* eslint-disable array-callback-return */
           const essayToSbumit = [...essays];
           essayToSbumit.map((essay) => {
             delete values[essay.essayQuestionCode];
@@ -69,6 +70,7 @@ export const PrimaryApplicationForm = () => {
 
           const cycleReference = sessionStorage.getItem('cycleReference');
           dispatch(submitCandidateApplicationForm(cycleReference, values));
+          /* eslint-enable array-callback-return */
         }}
       />
     );

@@ -32,7 +32,6 @@ export const LoginPage = () => {
       const user = await login({ username: email, password });
       // await dispatch(fetchUser({ username: email, password }));
       dispatch(setUser(user)); // TODO: use a thunk instead?
-      console.log(user);
 
       if (user.promptUserToChangePassword) {
         history.push('/change-password');

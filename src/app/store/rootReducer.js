@@ -10,7 +10,7 @@ import { cycleReducer } from './reducers/cycle-reducer';
 import { majorReducer } from './reducers/major-reducer';
 import { applicationReviewerReducer } from './reducers/application-reviewer-reducer';
 import { candidateApplicationReviewReducer } from './reducers/candidate-application-review-reducer';
-import {candidateApplicationReducer} from "./reducers/candidate-application-reducer";
+import {candidateApplicationReducer} from './reducers/candidate-application-reducer';
 
 const rootReducer = combineReducers({
   user: authReducer,

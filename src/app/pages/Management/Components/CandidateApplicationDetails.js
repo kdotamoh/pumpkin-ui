@@ -1,12 +1,12 @@
-import React from "react";
-import {Skeleton} from "antd";
+import React from 'react';
+import {Skeleton} from 'antd';
 
 const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading}) => {
     const stageStyle = {color: 'orange'};
     if (candidateApplicationSummary.decisionAtStage === 'YES') {
         stageStyle.color = 'green';
     } else if (candidateApplicationSummary.decisionAtStage === 'NO'){
-        stageStyle.color = "red";
+        stageStyle.color = 'red';
     }
 
     return (
@@ -30,7 +30,7 @@ const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading})
                             <div className="flex-1">Phone Number
                                 - {candidateApplicationSummary.phoneNumber}</div>
                             <div className="flex-1">Secondary Phone Number
-                                - {candidateApplicationSummary.secondaryPhoneNumber || "N/A"}</div>
+                                - {candidateApplicationSummary.secondaryPhoneNumber || 'N/A'}</div>
                         </div>
                         <div className="data-row">
                             <div className="flex-1">Email - {candidateApplicationSummary.email}</div>
@@ -56,7 +56,7 @@ const CandidateApplicationDetails = ({candidateApplicationSummary, pageLoading})
                         </div>
                         <div className="data-row">
                             <div className="flex-1">Applied Using This Link
-                                - {candidateApplicationSummary.applicationForm || "N/A"}</div>
+                                - {candidateApplicationSummary.applicationForm || 'N/A'}</div>
                         </div>
                     </div>
                 </div>
