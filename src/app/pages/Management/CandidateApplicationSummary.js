@@ -60,18 +60,38 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       maxScore: 1,
       type: 'text',
     },
-    academics: { value: '', name: 'Academics', maxScore: 1, type: 'text' },
+    academics: {
+      value: '',
+      name: 'Academics',
+      maxScore: 1,
+      type: 'text',
+    },
   };
 
   individualInterviewInputsDefaultState = {
-    drive: { value: '', name: 'Drive', maxScore: 5, type: 'text' },
+    drive: {
+      value: '',
+      name: 'Drive',
+      maxScore: 5,
+      type: 'text',
+      positiveComments: '',
+      negativeComments: '',
+    },
     mentalAgility: {
       value: '',
       name: 'Mental Agility',
       maxScore: 5,
       type: 'text',
+      positiveComments: '',
+      negativeComments: '',
     },
-    personalImpact: { value: '', name: 'Personal Impact', type: 'option' },
+    personalImpact: {
+      value: '',
+      name: 'Personal Impact',
+      type: 'option',
+      positiveComments: '',
+      negativeComments: '',
+    },
   };
 
   gradeDefaultState = { value: '', maxScore: 5, type: 'text' };
@@ -215,6 +235,8 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     for (let grade of grades) {
       data.push({
         name: grade.name,
+        positiveComments: grade.positiveComments,
+        negativeComments: grade.negativeComments,
         grade:
           grade.type === 'option'
             ? `${grade.value}`
@@ -264,6 +286,18 @@ export class CandidateApplicationSummaryComponent extends React.Component {
       const finalScore = this.getFinalScore(individualInterviewInputs);
       this.setState({ individualInterviewInputs, finalScore });
     }
+  };
+
+  onPositiveCommentChanged = (e, target) => {
+    let individualInterviewInputs = { ...this.state.individualInterviewInputs };
+    individualInterviewInputs[target].positiveComments = e.target.value;
+    this.setState({ individualInterviewInputs });
+  };
+
+  onNegativeCommentChanged = (e, target) => {
+    let individualInterviewInputs = { ...this.state.individualInterviewInputs };
+    individualInterviewInputs[target].negativeComments = e.target.value;
+    this.setState({ individualInterviewInputs });
   };
 
   onCommentChange = (e) => {
@@ -443,9 +477,11 @@ export class CandidateApplicationSummaryComponent extends React.Component {
               <input
                 type="number"
                 min={0}
-                max={2}
+                max={question.maxScore}
                 value={question.value}
-                className="score-input"
+                className={`score-input ${
+                  question.value > question.maxScore ? 'red_border' : ''
+                }`}
                 onChange={(e) =>
                   this.onApplicationReadingInputsChanged(e, question.name)
                 }
@@ -455,7 +491,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
           </div>
         ))}
 
-        <div className="flex">
+        <div className="flex margin-top-50">
           <span className="margin-right-10">Overall/Final Comments</span>
           <input
             style={{ width: '200px' }}
@@ -470,7 +506,11 @@ export class CandidateApplicationSummaryComponent extends React.Component {
   };
 
   individualInterviewModalContent = () => {
-    const { drive, mentalAgility } = this.state.individualInterviewInputs;
+    const {
+      drive,
+      mentalAgility,
+      personalImpact,
+    } = this.state.individualInterviewInputs;
 
     const questions = [
       {
@@ -492,10 +532,10 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         type: 'text',
       },
       {
-        title: "B) Assess the candidate's PERSONAL IMPACT",
+        title: "C) Assess the candidate's PERSONAL IMPACT",
         details:
           'Did candidate demonstrate good body language, communication, report building, confidence? ',
-        value: mentalAgility.value,
+        value: personalImpact.value,
         name: 'personalImpact',
         type: 'option',
       },
@@ -503,16 +543,17 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     return (
       <div>
         {questions.map((question) => (
-          <div
-            key={question.title}
-            className="flex space-between margin-bottom-10 items-start"
-          >
-            <div className="flex-1">
-              <div>
-                <p className="bold margin-0">{question.title}</p>
-                <p>{question.details}</p>
+          <div className="margin-bottom-20">
+            <div
+              key={question.title}
+              className="flex space-between items-start"
+            >
+              <div className="flex-1">
+                <div>
+                  <p className="bold margin-0">{question.title}</p>
+                  <p>{question.details}</p>
+                </div>
               </div>
-
               {question.type === 'option' && (
                 <div className="margin-bottom-10">
                   <Radio.Group
@@ -530,38 +571,64 @@ export class CandidateApplicationSummaryComponent extends React.Component {
                   </Radio.Group>
                 </div>
               )}
-
-              <div>
-                <p className="bold margin-0">Support your ratings</p>
-                <p>
-                  Note the strongest piece of evidence and Opportunity missed or
-                  negative indication of DRIVE
-                </p>
-              </div>
+              {question.type === 'text' && (
+                <div>
+                  <span>Grade: </span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={question.maxScore}
+                    value={question.value}
+                    className={`score-input ${
+                      question.value > question.maxScore ? 'red_border' : ''
+                    }`}
+                    onChange={(e) =>
+                      this.onIndividualInterviewInputsChanged(
+                        e,
+                        question.type,
+                        question.name
+                      )
+                    }
+                  />
+                  <span>/{question.maxScore}</span>
+                </div>
+              )}
             </div>
-            {question.type === 'text' && (
-              <div>
-                <span>Grade: </span>
+
+            <div>
+              <div className="flex margin-bottom-10">
+                <span className="margin-right-10">
+                  If yes, provide evidence
+                </span>
                 <input
-                  type="number"
-                  min={0}
-                  max={5}
-                  value={question.value}
-                  className="score-input"
+                  className="single-line-text flex flex-1"
+                  type="text"
+                  value={question.positiveComments}
                   onChange={(e) =>
-                    this.onIndividualInterviewInputsChanged(
-                      e,
-                      question.type,
-                      question.name
-                    )
+                    this.onPositiveCommentChanged(e, question.name)
                   }
                 />
-                <span>/{question.maxScore}</span>
               </div>
-            )}
+              <div className="flex">
+                <span className="margin-right-10">
+                  {`Else, note missed opportunities / negative indications of 
+                    ${question.name
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .toLowerCase()}`}
+                </span>
+                <input
+                  className="single-line-text flex flex-1"
+                  type="text"
+                  value={question.negativeComments}
+                  onChange={(e) =>
+                    this.onNegativeCommentChanged(e, question.name)
+                  }
+                />
+              </div>
+            </div>
           </div>
         ))}
-        <div className="flex">
+        <div className="flex margin-top-50">
           <span className="margin-right-10">Overall/Final Comments</span>
           <input
             style={{ width: '200px' }}
@@ -585,7 +652,9 @@ export class CandidateApplicationSummaryComponent extends React.Component {
             min={0}
             max={5}
             value={this.state.grade.value}
-            className="score-input"
+            className={`score-input ${
+              this.state.grade.value > 5 ? 'red_border' : ''
+            }`}
             onChange={this.onGradeChanged}
           />
           <span>/5</span>

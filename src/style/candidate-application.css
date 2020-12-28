@@ -190,6 +190,10 @@
     margin-bottom: 10px;
 }
 
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+
 .margin-bottom-20 {
     margin-bottom: 20px;
 }
@@ -206,6 +210,14 @@
     margin-right: 10px;
 }
 
+.margin-top-50 {
+    margin-top: 50px;
+}
+
+.neg-margin-top-10 {
+    margin-top: -10px;
+}
+
 .single-line-text {
     border: none;
     border-bottom: 1px solid black;
@@ -213,4 +225,8 @@
 
 .items-start {
     align-items: flex-start;
+}
+
+.red_border {
+    border: 1px solid red;
 }
