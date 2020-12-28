@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import client from '../api';
+import client, { baseURL } from '../api';
 import store from '../app/store';
 import { downloadFile } from '../app/utils/download-util';
 
@@ -213,7 +213,7 @@ export const exportCandidates = async (searchKeys) => {
   searchKeys.currentStage = searchKeys.stageCode;
   searchKeys.universityName = searchKeys.university;
 
-  let url = `${process.env.REACT_APP_API_BASE}/candidate-application/export`;
+  let url = `${baseURL}/candidate-application/export`;
 
   const keys = Object.keys(searchKeys);
   let query = '';
@@ -237,9 +237,7 @@ export const exportCandidates = async (searchKeys) => {
 };
 
 export const downloadCandidateDocument = (fileUrl, reference) => {
-  const url = `${
-    process.env.REACT_APP_API_BASE
-  }/api/v1/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
+  const url = `${baseURL}/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
   const fileFullPath = fileUrl.split('/').pop();
 
   let fileName = '';
