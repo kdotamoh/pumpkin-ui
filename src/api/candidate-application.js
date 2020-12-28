@@ -11,19 +11,19 @@ export const getCandidates = async (cycleReference, currentPage) => {
   try {
     const { data } = await client.get('/candidate-application/all', {
       headers: {
-        user_token: getToken(),
+        user_token: getToken()
       },
       params: {
         cycleReference,
         page: currentPage,
-        size: 10,
-      },
+        size: 10
+      }
     });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot get candidates: ${responseMessage}`);
   }
@@ -33,14 +33,14 @@ export const getCandidateSummary = async (reference) => {
   try {
     const { data } = await client.get(`/candidate-application/${reference}`, {
       headers: {
-        user_token: getToken(),
-      },
+        user_token: getToken()
+      }
     });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot get candidates: ${responseMessage}`);
   }
@@ -52,15 +52,15 @@ export const getCountriesForSearch = async () => {
       '/candidate-application/search/countries/',
       {
         headers: {
-          user_token: getToken(),
-        },
+          user_token: getToken()
+        }
       }
     );
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot get countries for search: ${responseMessage}`);
   }
@@ -70,14 +70,14 @@ export const getRecruitmentCycleDetails = async (code) => {
   try {
     const { data } = await client.get(`/recruitment/cycle/${code}`, {
       headers: {
-        user_token: getToken(),
-      },
+        user_token: getToken()
+      }
     });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot get recruitment cycle details: ${responseMessage}`);
   }
@@ -90,7 +90,7 @@ export const searchCandidateApplications = async (
   try {
     const { data } = await client.get('/candidate-application/search', {
       headers: {
-        user_token: getToken(),
+        user_token: getToken()
       },
       params: {
         recruitmentCycleCode: cycleReference,
@@ -101,14 +101,14 @@ export const searchCandidateApplications = async (
         status: searchKeys.status,
         searchKey: searchKeys.searchKey,
         page: 0,
-        size: 10,
-      },
+        size: 10
+      }
     });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot get candidates: ${responseMessage}`);
   }
@@ -118,14 +118,14 @@ export const getReviewTypes = async () => {
   try {
     const { data } = await client.get('/candidate-review/review-types', {
       headers: {
-        user_token: getToken(),
-      },
+        user_token: getToken()
+      }
     });
     const { responseBody } = data;
     return responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot load review types: ${responseMessage}`);
   }
@@ -135,13 +135,13 @@ export const getApplicationStages = async () => {
   try {
     const { data } = await client.get('/candidate-application/search', {
       headers: {
-        user_token: getToken(),
-      },
+        user_token: getToken()
+      }
     });
     return data;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot load application stages: ${responseMessage}`);
   }
@@ -151,14 +151,14 @@ export const addReview = async (review) => {
   try {
     const { data } = await client.post('/candidate-review', review, {
       headers: {
-        user_token: getToken(),
-      },
+        user_token: getToken()
+      }
     });
     message.success('Review added successfully');
     return data;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
 
     message.error(`Cannot add Review: ${responseMessage}`);
@@ -173,15 +173,15 @@ export const makeFinalDecision = async (applicationReference, seoDecision) => {
       seoDecision,
       {
         headers: {
-          user_token: getToken(),
-        },
+          user_token: getToken()
+        }
       }
     );
     message.success('Decision added');
     return data;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Cannot make final decision: ${responseMessage}`);
     return 'error';
@@ -192,16 +192,16 @@ export const seeMoreReviewDetails = async (reviewCode) => {
   try {
     const { data } = await client.get('/candidate-review/details', {
       headers: {
-        user_token: getToken(),
+        user_token: getToken()
       },
       params: {
-        reviewCode,
-      },
+        reviewCode
+      }
     });
     return data.responseBody;
   } catch (err) {
     const {
-      data: { responseMessage },
+      data: { responseMessage }
     } = err.response;
     message.error(`Could not view more details: ${responseMessage}`);
     return 'error';
@@ -239,7 +239,7 @@ export const exportCandidates = async (searchKeys) => {
 export const downloadCandidateDocument = (fileUrl, reference) => {
   const url = `${
     process.env.REACT_APP_API_BASE
-  }/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
+  }/api/v1/candidate-application/download-file?applicationReference=${reference}&fileUrl=${fileUrl}&userToken=${getToken()}`;
   const fileFullPath = fileUrl.split('/').pop();
 
   let fileName = '';

@@ -218,19 +218,15 @@ const CandidateApplicationReviews = ({
                         </div>
                       </div>
                       {review.positiveComments && (
-                        <div className="flex neg-margin-top-10">
-                          <span
-                            style={{ marginRight: 1 }}
-                          >{`Positive Comments: `}</span>
-                          <span>{review.positiveComments}</span>
+                        <div className="neg-margin-top-10">
+                          <p className="opacity_60 margin-0 text-500">Positive Comments</p>
+                          <p className="margin-bottom-10">{review.positiveComments}</p>
                         </div>
                       )}
                       {review.negativeComments && (
-                        <div className="flex neg-margin-top-10">
-                          <span
-                            style={{ marginRight: 1 }}
-                          >{`Negative Comments: `}</span>
-                          <span>{review.negativeComments}</span>
+                        <div className="neg-margin-top-10">
+                          <p className="opacity_60 margin-0 text-500">Negative Comments</p>
+                          <p className="margin-bottom-10">{review.negativeComments}</p>
                         </div>
                       )}
                     </div>

@@ -306,7 +306,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
 
   getFinalScore = (inputs) => {
     return Object.values(inputs).reduce((acc, data) => {
-      return Number(acc) + Number(data.value);
+      return Number(acc) + (Number(data.value) || 0);
     }, 0);
   };
 
@@ -494,8 +494,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         <div className="flex margin-top-50">
           <span className="margin-right-10">Overall/Final Comments</span>
           <input
-            style={{ width: '200px' }}
-            className="single-line-text"
+            className="single-line-text flex flex-1"
             type="text"
             value={this.state.comments}
             onChange={this.onCommentChange}
@@ -543,7 +542,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
     return (
       <div>
         {questions.map((question) => (
-          <div className="margin-bottom-20">
+          <div className="margin-bottom-40">
             <div
               key={question.title}
               className="flex space-between items-start"
@@ -631,8 +630,7 @@ export class CandidateApplicationSummaryComponent extends React.Component {
         <div className="flex margin-top-50">
           <span className="margin-right-10">Overall/Final Comments</span>
           <input
-            style={{ width: '200px' }}
-            className="single-line-text"
+            className="single-line-text flex flex-1"
             type="text"
             value={this.state.comments}
             onChange={this.onCommentChange}
