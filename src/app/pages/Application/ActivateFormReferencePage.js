@@ -43,11 +43,13 @@ const ActivateFormReferencePage = () => {
           <div className="application-page-component__track-name">
             {`${formStatus.cycleDetails.year} ${formStatus.cycleDetails.name} Application`}
           </div>
+          <p>Thank you for considering applying for this position.</p>
           <p>
-            Thank you for considering applying for this position. Note that your
-            application cannot be saved and will need to be submitted
-            immediately once started. However, you can click through to see what
-            is required before submitting.
+            <strong>
+              Note that your application <u>cannot be saved</u> and will need to
+              be submitted immediately once started. However, you can click
+              through to see what is required before submitting.
+            </strong>
           </p>
           <p>
             As part of your application you will be required to answer the
@@ -56,7 +58,8 @@ const ActivateFormReferencePage = () => {
           <ul>
             {questions.map((essay) => (
               <li key={essay.code}>
-                {essay.question} <em>({essay.wordCount} words)</em>
+                {essay.question}
+                {/* <em>({essay.wordCount} words)</em> */}
               </li>
             ))}
           </ul>

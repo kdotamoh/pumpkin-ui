@@ -52,7 +52,9 @@ export const BasicInformation = (params) => {
         <Input disabled={params.disabled} />
       </Form.Item>
 
-      <small>Please use the calendar drop-down to the right</small>
+      <small style={{ color: 'red' }}>
+        Please use the calendar drop-down to the right
+      </small>
       <Form.Item
         name="dateOfBirth"
         label="Date of birth "
