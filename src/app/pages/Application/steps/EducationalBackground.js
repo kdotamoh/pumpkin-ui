@@ -211,7 +211,11 @@ export const EducationalBackground = (params) => {
       </Form.Item>
 
       <small>
-        Please choose an approximate date if you&apos;re unsure of your exact
+        <span style={{ color: 'red' }}>
+          Please use the calendar drop-down to the right.
+        </span>
+        <br />
+        Choose an approximate date if you&apos;re unsure of your exact
         graduation date.
       </small>
       <Form.Item

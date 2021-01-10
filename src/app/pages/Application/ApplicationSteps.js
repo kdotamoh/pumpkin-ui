@@ -37,7 +37,7 @@ export const ApplicationSteps = (params) => {
       : 'Application Confirmation',
     content: ApplicationConfirmation(params.steps, {
       ...stepInformation,
-      layout: 'horizontal',
+      layout: 'vertical',
       onFinish: params.onFinish,
       disabled: true,
     }),
