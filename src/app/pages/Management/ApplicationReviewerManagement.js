@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {
   getApplicationReviewers,
   searchApplicationReviewers,
-  setCurrentApplicationReviewer,
+  setCurrentApplicationReviewer
 } from 'app/store/actions/application-reviewer-actions';
 import { getRecruitmentCycleReviewSummary } from 'app/store/actions/candidate-review-actions';
 import { Select } from 'antd';
@@ -14,7 +14,7 @@ import { withRouter, Link } from 'react-router-dom';
 import SummaryBadgeComponent from './SummaryBadgeComponent';
 import {
   setCycleReference,
-  setCyclesHaveBeenLoaded,
+  setCyclesHaveBeenLoaded
 } from '../../store/actions/application-reviewer-actions';
 
 export class ApplicationReviewerManagementComponent extends React.Component {
@@ -22,22 +22,22 @@ export class ApplicationReviewerManagementComponent extends React.Component {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+      key: 'name'
     },
     {
       title: 'Email Address',
       dataIndex: 'email',
-      key: 'email',
+      key: 'email'
     },
     {
       title: 'Phone Number',
       dataIndex: 'phoneNumber',
-      key: 'phoneNumber',
+      key: 'phoneNumber'
     },
     {
       title: 'SEO Year',
       dataIndex: 'seoYear',
-      key: 'seoYear',
+      key: 'seoYear'
     },
     {
       title: 'Actions',
@@ -51,8 +51,8 @@ export class ApplicationReviewerManagementComponent extends React.Component {
         >
           View applicants
         </Link>
-      ),
-    },
+      )
+    }
   ];
 
   componentDidMount() {
@@ -68,11 +68,13 @@ export class ApplicationReviewerManagementComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 1,
+      currentPage: 1
     };
   }
 
   render() {
+    const loading = !this.props.hasReviewersBeenLoaded;
+
     return (
       <ManagementComponent
         headerTitle="LIST OF REVIEWERS"
@@ -85,6 +87,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
         currentPage={this.state.currentPage}
         total={this.props.recruitmentCycleSummary.totalReviewers}
         onPaginationChanged={this.onPaginationChanged}
+        loading={loading}
       />
     );
   }
@@ -118,6 +121,7 @@ export class ApplicationReviewerManagementComponent extends React.Component {
     const pendingReviews = this.props.recruitmentCycleSummary
       .totalPendingReviews;
     const totalReviews = this.props.recruitmentCycleSummary.totalReviews;
+
     return (
       <div style={{ display: 'flex' }}>
         {this.props.cyclesHaveBeenLoaded && (
@@ -174,7 +178,7 @@ ApplicationReviewerManagementComponent.propTypes = {
   setCurrentApplicationReviewer: PropTypes.func.isRequired,
   hasReviewersBeenLoaded: PropTypes.bool,
   cyclesHaveBeenLoaded: PropTypes.bool,
-  setCyclesHaveBeenLoaded: PropTypes.func.isRequired,
+  setCyclesHaveBeenLoaded: PropTypes.func.isRequired
 };
 
 /**
@@ -184,10 +188,10 @@ const mapStateToProps = (state) => ({
   recruitmentCycles: state.cycles.available,
   data: state.applicationReviewers.available,
   recruitmentCycleSummary:
-    state.candidateApplicationReview.recruitmentCycleReviewSummary,
+  state.candidateApplicationReview.recruitmentCycleReviewSummary,
   hasReviewersBeenLoaded: state.applicationReviewers.hasReviewersBeenLoaded,
   cycleReference: state.applicationReviewers.cycleReference,
-  cyclesHaveBeenLoaded: state.applicationReviewers.cyclesHaveBeenLoaded,
+  cyclesHaveBeenLoaded: state.applicationReviewers.cyclesHaveBeenLoaded
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -203,7 +207,7 @@ const mapDispatchToProps = (dispatch) => ({
   setCycleReference: (cycleReference) =>
     dispatch(setCycleReference(cycleReference)),
   setCyclesHaveBeenLoaded: (cyclesHaveBeenLoaded) =>
-    dispatch(setCyclesHaveBeenLoaded(cyclesHaveBeenLoaded)),
+    dispatch(setCyclesHaveBeenLoaded(cyclesHaveBeenLoaded))
 });
 
 /**

@@ -4,7 +4,8 @@ import { message } from 'antd';
 export const initialEmployeeState = {
   available: [],
   current: null,
-  total: 0
+  total: 0,
+  hasEmployeesBeenLoaded: false
 };
 
 /**
@@ -14,10 +15,17 @@ export const initialEmployeeState = {
  */
 export const employeeReducer = (state = initialEmployeeState, action) => {
   switch (action.type) {
+    case EmployeeKeys.GET_EMPLOYEES: {
+      return {
+        ...state,
+        hasEmployeesBeenLoaded: false
+      };
+    }
     case EmployeeKeys.SET_EMPLOYEES: {
       return {
         ...state,
         available: action.employees,
+        hasEmployeesBeenLoaded: true
       };
     }
     case EmployeeKeys.SET_EMPLOYEES_COUNT: {

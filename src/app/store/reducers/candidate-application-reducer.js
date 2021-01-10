@@ -31,6 +31,12 @@ export const initialCandidateApplications = {
 
 export const candidateApplicationReducer = (state = initialCandidateApplications, action) => {
     switch (action.type) {
+        case CandidateApplicationKeys.GET_CANDIDATES: {
+            return {
+                ...state,
+                candidatesHasBeenLoaded: false,
+            };
+        }
         case CandidateApplicationKeys.SET_CANDIDATES: {
             return {
                 ...state,

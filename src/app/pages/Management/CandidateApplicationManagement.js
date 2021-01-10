@@ -108,6 +108,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
   }
 
   render() {
+    const loading = !this.props.candidatesHasBeenLoaded;
     return (
       <React.Fragment>
         <ManagementComponent
@@ -120,6 +121,7 @@ export class CandidateApplicationManagementComponent extends React.Component {
           currentPage={this.state.currentPage}
           total={this.props.totalCandidates}
           onPaginationChanged={this.onPaginationChanged}
+          loading={loading}
         />
       </React.Fragment>
     );

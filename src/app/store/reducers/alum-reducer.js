@@ -4,7 +4,8 @@ import { message } from 'antd';
 export const initialAlumState = {
   available: [],
   current: null,
-  total: 0
+  total: 0,
+  hasAlumDataBeenLoaded: false
 };
 
 /**
@@ -14,10 +15,17 @@ export const initialAlumState = {
  */
 export const alumReducer = (state = initialAlumState, action) => {
   switch (action.type) {
+    case AlumKeys.GET_ALUMNI: {
+      return {
+        ...state,
+        hasAlumDataBeenLoaded: false
+      };
+    }
     case AlumKeys.SET_ALUMNI: {
       return {
         ...state,
         available: action.alumni,
+        hasAlumDataBeenLoaded: true
       };
     }
 

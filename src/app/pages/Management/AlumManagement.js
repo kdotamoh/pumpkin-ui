@@ -69,6 +69,8 @@ export class AlumManagementComponent extends React.Component {
     }
 
     render() {
+        const loading = !this.props.hasAlumDataBeenLoaded;
+
         return (
             <React.Fragment>
                 <ManagementComponent
@@ -85,6 +87,7 @@ export class AlumManagementComponent extends React.Component {
                     currentPage={this.state.currentPage}
                     total={this.props.totalAlumni}
                     onPaginationChanged={this.onPaginationChanged}
+                    loading={loading}
                 />
             </React.Fragment>
         );
@@ -169,7 +172,8 @@ AlumManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
     data: state.alumni.available,
-    totalAlumni: state.alumni.total
+    totalAlumni: state.alumni.total,
+    hasAlumDataBeenLoaded: state.alumni.hasAlumDataBeenLoaded
 });
 const mapDispatchToProps = (dispatch) => ({
     getAlumni: (currentPage) => dispatch(getAlumni(currentPage - 1)),

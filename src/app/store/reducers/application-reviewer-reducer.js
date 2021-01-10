@@ -10,6 +10,12 @@ export const initialReviewerState = {
 
 export const applicationReviewerReducer = (state = initialReviewerState, action) => {
   switch (action.type) {
+    case ApplicationReviewerKeys.GET_APPLICATION_REVIEWERS: {
+      return {
+        ...state,
+        hasReviewersBeenLoaded: false
+      };
+    }
     case ApplicationReviewerKeys.SET_APPLICATION_REVIEWERS: {
       return {
         ...state,

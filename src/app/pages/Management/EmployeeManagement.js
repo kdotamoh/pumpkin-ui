@@ -70,6 +70,8 @@ export class EmployeeManagementComponent extends React.Component {
     }
 
     render() {
+        const loading = !this.props.hasEmployeesBeenLoaded;
+
         return (
             <ManagementComponent
                 headerTitle="LIST OF EMPLOYEES"
@@ -85,6 +87,7 @@ export class EmployeeManagementComponent extends React.Component {
                 currentPage={this.state.currentPage}
                 total={this.props.totalEmployees}
                 onPaginationChanged={this.onPaginationChanged}
+                loading={loading}
             />
         );
     }
@@ -168,7 +171,8 @@ EmployeeManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
     data: state.employees.available,
-    totalEmployees: state.employees.total
+    totalEmployees: state.employees.total,
+    hasEmployeesBeenLoaded: state.employees.hasEmployeesBeenLoaded
 });
 const mapDispatchToProps = (dispatch) => ({
     getEmployees: (currentPage) => dispatch(getEmployees(currentPage - 1)),

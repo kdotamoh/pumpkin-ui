@@ -14,7 +14,7 @@ export async function getApplicationReviewers(cycleReference, currentPage) {
       },
       params: {
         page: currentPage,
-        size: 20,
+        size: 10,
         cycleReference,
       },
     });
@@ -36,7 +36,7 @@ export async function searchApplicationReviewers(cycleReference, searchKey) {
       },
       params: {
         page: 0,
-        size: 20,
+        size: 10,
         cycleReference,
         searchKey,
       },
