@@ -60,6 +60,8 @@ export class RecruitmentCycleManagementComponent extends React.Component {
     }
   }
   render() {
+    const loading = !this.props.hasCyclesBeenLoaded;
+
     return (
       <ManagementComponent
         headerTitle="RECRUITMENT CYCLES"
@@ -79,6 +81,7 @@ export class RecruitmentCycleManagementComponent extends React.Component {
         currentPage={this.state.currentPage}
         total={this.props.totalAlumni}
         onPaginationChanged={this.onPaginationChanged}
+        loading={loading}
       />
     );
   }
@@ -166,7 +169,8 @@ RecruitmentCycleManagementComponent.propTypes = {
 const mapStateToProps = (state) => ({
   data: state.cycles.available,
   currentCycle: state.cycles.current,
-  totalCycles: state.cycles.total
+  totalCycles: state.cycles.total,
+  hasCyclesBeenLoaded: state.cycles.hasCyclesBeenLoaded
 });
 const mapDispatchToProps = (dispatch) => ({
   getCycles: (currentPage) => dispatch(getCycles(currentPage - 1)),

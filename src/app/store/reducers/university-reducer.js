@@ -4,7 +4,8 @@ import { message } from 'antd';
 export const initialUniversityState = {
   available: [],
   current: null,
-  total: 0
+  total: 0,
+  hasUniversitiesBeenLoaded: false
 };
 /**
  * Manages the SEO Approved Universities
@@ -14,10 +15,17 @@ export const initialUniversityState = {
 
 export const universityReducer = (state = initialUniversityState, action) => {
   switch (action.type) {
+    case UniversityKeys.GET_UNIVERSITIES: {
+      return {
+        ...state,
+        hasUniversitiesBeenLoaded: false
+      };
+    }
     case UniversityKeys.SET_UNIVERSITIES: {
       return {
         ...state,
         available: action.universities,
+        hasUniversitiesBeenLoaded: true
       };
     }
     case UniversityKeys.SET_UNIVERSITIES_COUNT: {

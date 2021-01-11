@@ -4,7 +4,8 @@ import { message } from 'antd';
 export const initialTrackState = {
   available: [],
   current: null,
-  total: 0
+  total: 0,
+  hasTracksBeenLoaded: false
 };
 
 /**
@@ -14,10 +15,17 @@ export const initialTrackState = {
  */
 export const trackReducer = (state = initialTrackState, action) => {
   switch (action.type) {
+    case TrackKeys.GET_TRACKS: {
+      return {
+        ...state,
+        hasTracksBeenLoaded: false
+      };
+    }
     case TrackKeys.SET_TRACKS: {
       return {
         ...state,
         available: action.tracks,
+        hasTracksBeenLoaded: true
       };
     }
     case TrackKeys.SET_TRACKS_COUNT: {

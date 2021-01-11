@@ -48,6 +48,7 @@ export class MajorManagementComponent extends React.Component {
     };
   }
   render() {
+    const loading = !this.props.hasMajorsBeenLoaded;
     return (
       <React.Fragment>
         <ManagementComponent
@@ -64,6 +65,7 @@ export class MajorManagementComponent extends React.Component {
           currentPage={this.state.currentPage}
           total={this.props.totalMajors}
           onPaginationChanged={this.onPaginationChanged}
+          loading={loading}
         />
       </React.Fragment>
     );
@@ -137,7 +139,8 @@ MajorManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
   data: state.majors.available,
-  totalMajors: state.majors.total
+  totalMajors: state.majors.total,
+  hasMajorsBeenLoaded: state.majors.hasMajorsBeenLoaded
 });
 const mapDispatchToProps = (dispatch) => ({
   getMajors: (currentPage) => dispatch(getMajors(currentPage - 1)),

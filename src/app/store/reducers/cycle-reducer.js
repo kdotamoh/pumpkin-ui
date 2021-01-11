@@ -4,14 +4,22 @@ import { message } from 'antd';
 export const initialCycleState = {
   available: [],
   current: null,
+  hasCyclesBeenLoaded: false
 };
 
 export const cycleReducer = (state = initialCycleState, action) => {
   switch (action.type) {
+    case CycleKeys.GET_CYCLES: {
+      return {
+        ...state,
+        hasCyclesBeenLoaded: false
+      };
+    }
     case CycleKeys.SET_CYCLES: {
       return {
         ...state,
         available: action.cycles,
+        hasCyclesBeenLoaded: true
       };
     }
     case CycleKeys.DELETE_CYCLE: {

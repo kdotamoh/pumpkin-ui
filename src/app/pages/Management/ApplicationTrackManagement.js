@@ -47,6 +47,8 @@ export class ApplicationTrackManagementComponent extends React.Component {
     }
   }
   render() {
+    const loading = !this.props.hasTracksBeenLoaded;
+
     return (
       <React.Fragment>
         <ManagementComponent
@@ -63,6 +65,7 @@ export class ApplicationTrackManagementComponent extends React.Component {
           currentPage={this.state.currentPage}
           total={this.props.totalTracks}
           onPaginationChanged={this.onPaginationChanged}
+          loading={loading}
         />
       </React.Fragment>
     );
@@ -139,6 +142,7 @@ const mapStateToProps = (state) => ({
   data: state.tracks.available,
   totalTracks: state.tracks.total,
   currentTrack: state.tracks.current,
+  hasTracksBeenLoaded: state.tracks.hasTracksBeenLoaded
 });
 const mapDispatchToProps = (dispatch) => ({
   getTracks: (currentPage) => dispatch(getTracks(currentPage -1)),

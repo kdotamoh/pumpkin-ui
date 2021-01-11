@@ -38,7 +38,7 @@ export async function getTracks(currentPage) {
       },
       params: {
         page: currentPage,
-        size: 100,
+        size: 10,
       },
     });
     const { responseBody } = data;

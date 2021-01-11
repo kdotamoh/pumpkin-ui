@@ -53,6 +53,7 @@ export class UniversitySetupManagementComponent extends React.Component {
     };
   }
   render() {
+    const loading = !this.props.hasUniversitiesBeenLoaded;
     return (
       <React.Fragment>
         <ManagementComponent
@@ -69,6 +70,7 @@ export class UniversitySetupManagementComponent extends React.Component {
           currentPage={this.state.currentPage}
           total={this.props.totalUniversities}
           onPaginationChanged={this.onPaginationChanged}
+          loading={loading}
         />
       </React.Fragment>
     );
@@ -157,7 +159,8 @@ UniversitySetupManagementComponent.propTypes = {
  */
 const mapStateToProps = (state) => ({
   data: state.universities.available,
-  totalUniversities: state.universities.total
+  totalUniversities: state.universities.total,
+  hasUniversitiesBeenLoaded: state.universities.hasUniversitiesBeenLoaded
 });
 const mapDispatchToProps = (dispatch) => ({
   getUniversities: (currentPage) => dispatch(getUniversities(currentPage - 1)),
